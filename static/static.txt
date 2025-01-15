@@ -1,0 +1,1 @@
+all the static files are present in this folder.
