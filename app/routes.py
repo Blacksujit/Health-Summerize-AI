@@ -50,9 +50,9 @@ def index():
     return render_template('index.html')  # Your index page template
 
 # Route for the Protect Page
-@main.route('/protect')
-def protect():
-    return render_template('protect.html')  # Make sure to create 'protect.html'
+@main.route('/summerize')
+def summerize():
+    return render_template('summerize.html')  # Make sure to create 'protect.html'
 
 # Route for the About Page
 @main.route('/about')

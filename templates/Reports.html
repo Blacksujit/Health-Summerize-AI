@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Basic Meta -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Mobile Metas -->
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- Site Metas -->
+      <title>Summary Report</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+      <!-- Custom CSS -->
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+      <!-- Responsive CSS -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+      <!-- Favicon -->
+      <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
+   </head>
+   <body>
+      <!-- Header Section -->
+      <div class="header_section header_bg">
+         <div class="container-fluid">
+            <div class="main">
+               <div class="logo">
+                  <a href="{{ url_for('main.index') }}">
+                  <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                  </a>
+               </div>
+               <div class="menu_text">
+                  <ul>
+                     <div class="menu_main">
+                        <ul>
+                           <li><a href="#">Login</a></li>
+                           <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                        </ul>
+                     </div>
+                     <div id="myNav" class="overlay">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <div class="overlay-content">
+                           <a href="{{ url_for('main.index') }}">Home</a>
+                           <a href="{{ url_for('main.summerize') }}">Summarize</a>
+                           <a href="{{ url_for('main.about') }}">About</a>
+                           <a href="{{ url_for('main.doctors') }}">Doctors</a>
+                           <a href="{{ url_for('main.news') }}">News</a>
+                        </div>
+                     </div>
+                     <span onclick="openNav()">
+                        <img src="{{ url_for('static', filename='images/toogle-icon.png') }}" class="toggle_menu">
+                     </span>
+                     <span onclick="openNav()">
+                        <img src="{{ url_for('static', filename='images/toogle-icon1.png') }}" class="toggle_menu_1">
+                     </span>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Header Section End -->
+      
+      <!-- Report Section Start -->
+      <div class="protect_section layout_padding">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                  <h1 class="protect_taital">Detailed EHR Summary Report</h1>
+                  <p class="protect_text">Here is the summary of your uploaded file, prompt, or document:</p>
+               </div>
+            </div>
+            <div class="protect_section_2 layout_padding">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="summary_report">
+                        <h2 class="summary_heading">Summary Overview</h2>
+                        <p class="summary_text">{{ summary }}</p>
+                        <hr>
+                        <h2 class="summary_heading">Key Points</h2>
+                        <ul class="summary_list">
+                           {% for point in key_points %}
+                           <li>{{ point }}</li>
+                           {% endfor %}
+                        </ul>
+                        <hr>
+                        <h2 class="summary_heading">Additional Notes</h2>
+                        <p class="summary_text">{{ additional_notes }}</p>
+                     </div>
+                     <div class="action_buttons">
+                        <a href="{{ url_for('main.summerize') }}" class="btn btn-secondary">Back to Summarize</a>
+                        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Home</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Report Section End -->
+
+      <!-- Footer Section -->
+      <div class="footer_section layout_padding margin_top90">
+         <div class="container">
+            <div class="footer_section_2">
+               <div class="row">
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">Resources</h2>
+                     <div class="footer_menu">
+                        <ul>
+                           <li><a href="#">What we do</a></li>
+                           <li><a href="#">Media</a></li>
+                           <li><a href="#">Travel Advice</a></li>
+                           <li><a href="#">Protection</a></li>
+                           <li><a href="#">Care</a></li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">About</h2>
+                     <p class="footer_text">Lorem Ipsum is simply dummy text used as a default model in design templates.</p>
+                  </div>
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">Contact Us</h2>
+                     <div class="location_text">
+                        <ul>
+                           <li><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i> Location</a></li>
+                           <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> Call +01 1234567890</a></li>
+                           <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> demo@gmail.com</a></li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">Countries</h2>
+                     <div class="map_image"><img src="{{ url_for('static', filename='images/map-bg.png') }}" alt="Map"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Footer Section End -->
+
+      <!-- Copyright Section -->
+      <div class="copyright_section">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                  <p class="copyright_text">© 2020 All Rights Reserved.<a href="https://html.design"> Free HTML Templates</a></p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Copyright Section End -->
+
+      <!-- Javascript Files --><script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+      <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
+      <script>
+         $(document).ready(function(){
+         $(".fancybox").fancybox({
+         openEffect: "none",
+         closeEffect: "none"
+         });
+              
+         $(".zoom").hover(function(){
+              
+         $(this).addClass('transition');
+         }, function(){
+              
+         $(this).removeClass('transition');
+         });
+         });
+      </script> 
+      <script>
+         function openNav() {
+         document.getElementById("myNav").style.width = "100%";
+         }
+         function closeNav() {
+         document.getElementById("myNav").style.width = "0%";
+         }
+      </script>
+   </body>
+</html>
