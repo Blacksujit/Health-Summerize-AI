@@ -36,7 +36,7 @@
       <div class="header_section">
          <div class="container-fluid">
                <div class="main">
-                  <div class="logo"><a href="{{ url_for('index') }}">
+                  <div class="logo"><a href="{{ url_for('main.index') }}">
                      <img src="{{ url_for('static', filename='images/logo.png') }}">
                   </a>
                </div>
@@ -53,11 +53,11 @@
                         <div id="myNav" class="overlay">
                            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                            <div class="overlay-content">
-                              <a href="{{ url_for('index') }}">Home</a>
-                              <a href="{{ url_for('protect') }}">Protect</a>
-                              <a href="{{ url_for('about') }}">About</a>
-                              <a href="{{ url_for('doctors') }}">Doctors</a>
-                              <a href="{{ url_for('news') }}">News</a>
+                              <a href="{{ url_for('main.index') }}">Home</a>
+                              <a href="{{ url_for('main.protect') }}">Protect</a>
+                              <a href="{{ url_for('main.about') }}">About</a>
+                              <a href="{{ url_for('main.doctors') }}">Doctors</a>
+                              <a href="{{ url_for('main.news') }}">News</a>
                            </div>  
                         </div>
                         <span class="navbar-toggler-icon"></span>
