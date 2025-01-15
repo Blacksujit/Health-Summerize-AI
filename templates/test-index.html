@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Site metas -->
+      <title>Convid</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+      <!-- Style CSS -->
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+      <!-- Responsive CSS -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+      <!-- Favicon -->
+      <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.mCustomScrollbar.min.css') }}">
+      <!-- FontAwesome -->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!-- Owl Carousel Stylesheets -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+      <!-- Fancybox -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+   </head>
+   <body>
+      <!-- Header section start -->
+      <div class="header_section">
+         <div class="container-fluid">
+            <div class="main">
+               <div class="logo">
+                  <a href="{{ url_for('index') }}">
+                     <img src="{{ url_for('static', filename='images/logo.png') }}">
+                  </a>
+               </div>
+               <div class="menu_text">
+                  <ul>
+                     <div class="togle_">
+                        <div class="menu_main">
+                           <ul>
+                              <li><a href="#">Login</a></li>
+                              <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div id="myNav" class="overlay">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <div class="overlay-content">
+                           <a href="{{ url_for('index') }}">Home</a>
+                           <a href="{{ url_for('protect') }}">Protect</a>
+                           <a href="{{ url_for('about') }}">About</a>
+                           <a href="{{ url_for('doctors') }}">Doctors</a>
+                           <a href="{{ url_for('news') }}">News</a>
+                        </div>
+                     </div>
+                     <span class="navbar-toggler-icon"></span>
+                     <span onclick="openNav()">
+                        <img src="{{ url_for('static', filename='images/toogle-icon.png') }}" class="toggle_menu">
+                     </span>
+                     <span onclick="openNav()">
+                        <img src="{{ url_for('static', filename='images/toogle-icon1.png') }}" class="toggle_menu_1">
+                     </span>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Header section end -->
+
+      <!-- Banner section start -->
+      <div class="banner_section layout_padding">
+         <div class="container">
+            <div id="my_slider" class="carousel slide" data-ride="carousel">
+               <div class="carousel-inner">
+                  <div class="carousel-item active">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <div class="container">
+                              <h1 class="banner_taital">Get Medical Care Early</h1>
+                              <p class="banner_text">
+                                 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
+                              </p>
+                              <div class="more_bt"><a href="#">Read More</a></div>
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="banner_img">
+                              <img src="{{ url_for('static', filename='images/banner-img.png') }}">
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Additional Carousel Items -->
+                  <div class="carousel-item">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <div class="container">
+                              <h1 class="banner_taital">Get Medical Care Early</h1>
+                              <p class="banner_text">
+                                 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
+                              </p>
+                              <div class="more_bt"><a href="#">Read More</a></div>
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="banner_img">
+                              <img src="{{ url_for('static', filename='images/banner-img.png') }}">
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
+                  <i class="fa fa-angle-left"></i>
+               </a>
+               <a class="carousel-control-next" href="#my_slider" role="button" data-slide="next">
+                  <i class="fa fa-angle-right"></i>
+               </a>
+            </div>
+         </div>
+      </div>
+      <!-- Banner section end -->
+
+      <!-- Protect section start -->
+      <div class="protect_section layout_padding">
+         <div class="container">
+            <h1 class="protect_taital">How to Protect Yourself</h1>
+            <p class="protect_text">
+               English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.
+            </p>
+         </div>
+      </div>
+      <!-- Protect section end -->
+
+      <!-- Footer section start -->
+      <div class="footer_section layout_padding">
+         <div class="container">
+            <div class="footer_section_2">
+               <div class="row">
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">Resources</h2>
+                     <div class="footer_menu">
+                        <ul>
+                           <li><a href="#">What we do</a></li>
+                           <li><a href="#">Media</a></li>
+                           <li><a href="#">Travel Advice</a></li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-6">
+                     <h2 class="useful_text">About</h2>
+                     <p class="footer_text">
+                        Many desktop publishing packages and web page editors now use Lorem Ipsum.
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Footer section end -->
+
+      <!-- Javascript -->
+      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+   </body>
+</html>
