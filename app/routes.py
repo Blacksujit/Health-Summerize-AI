@@ -62,40 +62,52 @@ def index():
     return render_template('index.html')  # Your index page template
 
 # Route for the Protect Page
-@main.route('/summerize',methods=['GET', 'POST'])
+@main.route('/summerize', methods=['GET', 'POST'])
 def summerize():
     if request.method == 'POST':
         file = request.files.get('file')
         text_input = request.form.get('text')
         medical_nlp = MedicalNLPipeline()
-        
-        # Validate input
-        if file and allowed_file(file.filename):
-            # Save the uploaded file
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(UPLOAD_FOLDER)
-            file.save(filepath)
+
+        try:
+            # Validate input
+            if file and allowed_file(file.filename):
+                # Save the uploaded file
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
+                
+                # Process the uploaded file
+                result = medical_nlp.process_document(file_path=filepath)
             
-            # Process the uploaded file
-            result = medical_nlp.process_document(file_path=filepath)
-        elif text_input:
-            # Process the entered text
-            result = medical_nlp.process_document(prompt=text_input)
-        else:
-            flash('Please provide a file or enter text for summarization.')
-            return redirect(url_for('summarize'))
-        
-        # Pass results to the reports.html template
-        return render_template(
-            'reports.html',
-            summary=result['summary'],
-            key_points=result['engineered_prompt'].values(),
-            additional_notes="Sentiment: " + result['sentiment']['label'] +
-                             ", Confidence: " + str(result['sentiment']['confidence'])
-        )
-    
+            elif text_input:
+                # Process the entered text
+                result = medical_nlp.process_document(prompt=text_input)
+            
+            else:
+                flash('Please provide a valid file or text input for summarization.')
+                return redirect(url_for('main.summerize'))
+
+            # Extract sentiment results
+            sentiment_data = result.get('sentiment', {})
+            sentiment_label = sentiment_data.get('label', 'Unknown')
+            sentiment_score = sentiment_data.get('score') or sentiment_data.get('confidence', 'N/A')
+
+            # Pass results to the reports.html template
+            return render_template(
+                'reports.html',
+                summary=result.get('summary', 'No summary available'),
+                key_points=result.get('engineered_prompt', {}).values(),
+                additional_notes=f"Sentiment: {sentiment_label}, Score: {sentiment_score}"
+            )
+        except Exception as e:
+            logging.error(f"Error in processing: {str(e)}")
+            flash(f"An error occurred: {str(e)}")
+            return redirect(url_for('main.summerize'))
+
     # Render the summarize page
     return render_template('summerize.html')
+
 
 @main.route('/Reports')
 def Reports():

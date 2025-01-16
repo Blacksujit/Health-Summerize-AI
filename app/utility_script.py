@@ -33,6 +33,9 @@ import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import re
 import logging
+import shutil
+
+shutil.rmtree('~/.cache/huggingface', ignore_errors=True)
 logging.basicConfig(level=logging.INFO)
 print("imported all packages")
 
@@ -510,46 +513,41 @@ def extract_entities(text):
 # summarization_tokenizer = T5Tokenizer.from_pretrained("t5-small")
 # summarization_model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
-def summarize_text(text, max_input_length=1024, max_summary_length=150, temperature=1.0, top_k=50, top_p=0.95, beam_width=8, no_repeat_ngram_size=2):
+def summarize_text(text, max_input_length=1024, max_summary_length=150, beam_width=4, no_repeat_ngram_size=2, length_penalty=2.0):
     """
     Summarizes text using a pre-trained T5 model with advanced parameters.
-
+    
     Args:
         text (str): Input text to summarize.
         max_input_length (int): Maximum length of the input text (default 1024 tokens).
         max_summary_length (int): Maximum length of the summary (default 150 tokens).
-        temperature (float): Temperature for sampling (default 1.0).
-        top_k (int): Top-k sampling (default 50).
-        top_p (float): Top-p sampling (default 0.95).
-        beam_width (int): Number of beams for beam search (default 8).
+        beam_width (int): Number of beams for beam search (default 4).
         no_repeat_ngram_size (int): N-gram size to avoid repetition (default 2).
-
+        length_penalty (float): Length penalty to control summary verbosity (default 2.0).
+    
     Returns:
         str: Summarized text.
     """
-    # Tokenize the input text with truncation and padding
-    inputs = summarization_tokenizer(
-        "summarize: " + text,
-        return_tensors="pt",
-        max_length=max_input_length,
-        truncation=True,
-        padding="max_length"  # Ensures consistent length and generates attention mask
+    if not text.strip():
+        raise ValueError("Input text is empty. Please provide valid text to summarize.")
+    
+    # Tokenize the input text with truncation if it's too long
+    inputs = summarization_tokenizer.encode(
+        "summarize: " + text, 
+        return_tensors="pt", 
+        max_length=max_input_length, 
+        truncation=True
     )
     
-    # Generate the summary with advanced settings
+    # Generate the summary
     outputs = summarization_model.generate(
-        inputs["input_ids"],
-        pad_token_id=summarization_tokenizer.pad_token_id,  # Explicitly set pad_token_id
-        attention_mask=inputs["attention_mask"],  # Pass the attention mask
+        inputs,
         max_length=max_summary_length, 
         min_length=25,
-        length_penalty=2.0, 
+        length_penalty=length_penalty, 
         num_beams=beam_width,
-        no_repeat_ngram_size=no_repeat_ngram_size, 
-        early_stopping=True,
-        temperature=temperature,
-        top_k=top_k,
-        top_p=top_p
+        no_repeat_ngram_size=no_repeat_ngram_size,
+        early_stopping=True
     )
     
     # Decode and return the summary
@@ -654,7 +652,7 @@ class MedicalNLPipeline:
         print("Cleaned Text:", cleaned_text)
 
 
-        # Step 4: Prompt Engineering (Enhance or Format Text)
+        # # Step 4: Prompt Engineering (Enhance or Format Text)
         engineered_prompt = apply_prompt_engineering(cleaned_text)
         print("Engineered Prompt:", engineered_prompt)
     
