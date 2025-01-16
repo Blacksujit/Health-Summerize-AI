@@ -21,6 +21,10 @@ from pathlib import Path
 import mimetypes
 from flask import session
 import pandas as pd
+from flask import Flask, render_template, request, redirect, url_for, flash
+import os
+from werkzeug.utils import secure_filename
+from .utility_script import MedicalNLPipeline
 # from PyQt5.QtWebEngineWidgets import QApplication
 # from PyQt5.QtCore import QUrl
 # from .second_utility import create_scenario_based_infographic_video , create_animated_pie_chart , parse_user_input , generate_audio_from_text, generate_narration, add_auto_generated_audio_to_video
@@ -42,6 +46,14 @@ BASE_DIR = Path(__file__).resolve().parent
 # UPLOADS_FOLDER = os.path.join(os.getcwd(), 'uploads', 'videos')
 # All the routes will be displayed Here means defined here 
 
+# Configure file upload settings
+UPLOAD_FOLDER = 'C:\\Users\\HP\\OneDrive\\Desktop\\Machine Learning Projects\\Health-Summerize-AI\\uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json'}
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Utility to check allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Route for the Index Page
@@ -50,9 +62,44 @@ def index():
     return render_template('index.html')  # Your index page template
 
 # Route for the Protect Page
-@main.route('/summerize')
+@main.route('/summerize',methods=['GET', 'POST'])
 def summerize():
-    return render_template('summerize.html')  # Make sure to create 'protect.html'
+    if request.method == 'POST':
+        file = request.files.get('file')
+        text_input = request.form.get('text')
+        medical_nlp = MedicalNLPipeline()
+        
+        # Validate input
+        if file and allowed_file(file.filename):
+            # Save the uploaded file
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(UPLOAD_FOLDER)
+            file.save(filepath)
+            
+            # Process the uploaded file
+            result = medical_nlp.process_document(file_path=filepath)
+        elif text_input:
+            # Process the entered text
+            result = medical_nlp.process_document(prompt=text_input)
+        else:
+            flash('Please provide a file or enter text for summarization.')
+            return redirect(url_for('summarize'))
+        
+        # Pass results to the reports.html template
+        return render_template(
+            'reports.html',
+            summary=result['summary'],
+            key_points=result['engineered_prompt'].values(),
+            additional_notes="Sentiment: " + result['sentiment']['label'] +
+                             ", Confidence: " + str(result['sentiment']['confidence'])
+        )
+    
+    # Render the summarize page
+    return render_template('summerize.html')
+
+@main.route('/Reports')
+def Reports():
+    return render_template('Reports.html')
 
 # Route for the About Page
 @main.route('/about')
