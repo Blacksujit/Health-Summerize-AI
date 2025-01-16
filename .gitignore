@@ -1,1 +1,11 @@
-/*__pycache__*/
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore environment folders
+env/
+venv/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
