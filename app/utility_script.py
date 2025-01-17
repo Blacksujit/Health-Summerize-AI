@@ -165,6 +165,31 @@ def extract_text_from_json(json_file: str) -> str:
         raise RuntimeError(f"Error reading JSON file: {e}")
     
     
+import re
+import logging
+
+# Pre-compile regex patterns for better performance
+PATTERNS = {
+    'names': re.compile(r"(Patient(?: Name)?:)\s+[A-Za-z ]+"),
+    'dates': re.compile(r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4}\b|\b\d{4}-\d{2}-\d{2}\b"),
+    'ids': re.compile(r"(Medical Record ID|Patient ID|Case ID): \d+"),
+    'phone': re.compile(r"\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"),
+    'email': re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
+    'icd_codes': re.compile(r"(ICD(?:-10|-9)?:?\s?)[A-Za-z0-9.]+"),
+    'medication': re.compile(r"(Medication|Drug|Prescription):\s+[A-Za-z0-9., ]+"),
+    'health_metrics': re.compile(r"(BP|Blood Pressure|BMI|Heart Rate|Respiratory Rate):\s?\d{1,3}(/\d{1,3})?"),
+    'lab_results': re.compile(r"(HbA1c|Glucose|Cholesterol|Triglycerides):?\s?\d{1,3}(\.\d+)?%?"),
+    'insurance': re.compile(r"(Insurance Policy|Policy No|Billing ID):\s?\d+"),
+    'room_ids': re.compile(r"(Room No|Hospital ID):\s?[A-Za-z0-9]+"),
+    'general_terms': re.compile(r"\b(patient|hospital|doctor|nurse|specialist|clinic|facility|caregiver|medical history|referral)\b"),
+    'conditions': re.compile(r"\b(cancer|hypertension|diabetes|heart disease|stroke|asthma|COPD|pneumonia|migraine|epilepsy)\b"),
+    'procedures': re.compile(r"\b(surgery|operation|biopsy|chemo|radiation therapy|endoscopy|CT scan|MRI|X-ray)\b"),
+    'medications': re.compile(r"\b(paracetamol|ibuprofen|aspirin|insulin|metformin|amoxicillin|prednisone|lipitor|antibiotic|painkillers)\b"),
+    'test_results': re.compile(r"\b(CBC|ECG|X-ray result|CT scan result|MRI result|blood test|urine test|pregnancy test)\b"),
+    'personal_info': re.compile(r"\b(patient name|address|phone number|email|social security number|insurance ID)\b"),
+    'procedural_terms': re.compile(r"\b(emergency|urgent care|hospitalization|outpatient|inpatient)\b"),
+}
+
 def preprocess_text(text: str, to_lowercase: bool = True) -> str:
     """
     Cleans and preprocesses raw medical text.
@@ -180,80 +205,75 @@ def preprocess_text(text: str, to_lowercase: bool = True) -> str:
     
     logging.info("Starting text preprocessing...")
 
-    # Anonymize patient names
-    text = re.sub(r"(Patient(?: Name)?:)\s+[A-Za-z ]+", r"\1 [REDACTED]", text)
-    logging.info("Patient names anonymized.")
-
-    # Anonymize dates
-    text = re.sub(r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b", "[DATE REDACTED]", text)
-    text = re.sub(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4}\b", "[DATE REDACTED]", text, flags=re.IGNORECASE)
-    text = re.sub(r"\b\d{4}-\d{2}-\d{2}\b", "[DATE REDACTED]", text)
-    logging.info("Dates anonymized.")
-
-    # Anonymize IDs (e.g., Medical Record ID)
-    text = re.sub(r"(Medical Record ID|Patient ID|Case ID): \d+", r"\1: [REDACTED]", text)
-    logging.info("IDs anonymized.")
-
-    # Anonymize phone numbers
-    text = re.sub(r"\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}", "[PHONE REDACTED]", text)
-    logging.info("Phone numbers anonymized.")
-
-    # Anonymize email addresses
-    text = re.sub(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b", "[EMAIL REDACTED]", text)
-    logging.info("Emails anonymized.")
-
-    # Anonymize ICD/Diagnosis Codes (e.g., "ICD-10: E11.9")
-    text = re.sub(r"(ICD(?:-10|-9)?:?\s?)[A-Za-z0-9.]+", r"\1[REDACTED]", text)
-    logging.info("ICD codes anonymized.")
-
-    # Anonymize prescription drug names (e.g., "Medication: Paracetamol")
-    text = re.sub(r"(Medication|Drug|Prescription):\s+[A-Za-z0-9., ]+", r"\1: [REDACTED]", text)
-    logging.info("Drug and prescription names anonymized.")
-
-    # Anonymize health metrics (e.g., "BP: 120/80", "BMI: 24.5")
-    text = re.sub(r"(BP|Blood Pressure|BMI|Heart Rate|Respiratory Rate):\s?\d{1,3}(/\d{1,3})?", r"\1: [REDACTED]", text)
-    logging.info("Health metrics anonymized.")
-
-    # Anonymize lab/test results (e.g., "HbA1c: 7.5%")
-    text = re.sub(r"(HbA1c|Glucose|Cholesterol|Triglycerides):?\s?\d{1,3}(\.\d+)?%?", r"\1: [REDACTED]", text)
-    logging.info("Lab and test results anonymized.")
-
-    # Anonymize insurance/billing information (e.g., "Policy No: 123456789")
-    text = re.sub(r"(Insurance Policy|Policy No|Billing ID):\s?\d+", r"\1: [REDACTED]", text)
-    logging.info("Insurance and billing information anonymized.")
-
-    # Anonymize room/hospital identifiers (e.g., "Room No: 12A")
-    text = re.sub(r"(Room No|Hospital ID):\s?[A-Za-z0-9]+", r"\1: [REDACTED]", text)
-    logging.info("Room and hospital identifiers anonymized.")
-
+    # Anonymize sensitive data
+    for key, pattern in PATTERNS.items():
+        if key in ['names', 'dates', 'ids', 'phone', 'email']:
+            text = re.sub(pattern, lambda m: m.group(0).split()[0] + " [REDACTED]", text)
+        else:
+            text = re.sub(pattern, lambda m: "[REDACTED]", text)
+    
     # Remove unwanted special characters
     text = re.sub(r"[^\w\s.,%-]", "", text)
     logging.info("Special characters removed.")
 
+    # Normalize whitespace
+    text = re.sub(r"\s+", " ", text).strip()
 
-    # Anonymize General Medical Terms
-    text = re.sub(r"\b(patient|hospital|doctor|nurse|specialist|clinic|facility|caregiver|medical history|referral)\b", "[REDACTED]", text)
+    # Convert to lowercase if enabled
+    if to_lowercase:
+        text = text.lower()
+    
+    logging.info("Text preprocessing complete.")
+    return text
 
-    # Anonymize Medical Conditions / Diagnoses
-    text = re.sub(r"\b(cancer|hypertension|diabetes|heart disease|stroke|asthma|COPD|pneumonia|migraine|epilepsy)\b", "[DIAGNOSIS REDACTED]", text)
 
-    # Anonymize Medical Procedures & Surgeries
-    text = re.sub(r"\b(surgery|operation|biopsy|chemo|radiation therapy|endoscopy|CT scan|MRI|X-ray)\b", "[PROCEDURE REDACTED]", text)
+# Pre-compile regex patterns for better performance
+PATTERNS = {
+    'names': re.compile(r"(Patient(?: Name)?:)\s+[A-Za-z ]+"),
+    'dates': re.compile(r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4}\b|\b\d{4}-\d{2}-\d{2}\b"),
+    'ids': re.compile(r"(Medical Record ID|Patient ID|Case ID): \d+"),
+    'phone': re.compile(r"\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"),
+    'email': re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
+    'icd_codes': re.compile(r"(ICD(?:-10|-9)?:?\s?)[A-Za-z0-9.]+"),
+    'medication': re.compile(r"(Medication|Drug|Prescription):\s+[A-Za-z0-9., ]+"),
+    'health_metrics': re.compile(r"(BP|Blood Pressure|BMI|Heart Rate|Respiratory Rate):\s?\d{1,3}(/\d{1,3})?"),
+    'lab_results': re.compile(r"(HbA1c|Glucose|Cholesterol|Triglycerides):?\s?\d{1,3}(\.\d+)?%?"),
+    'insurance': re.compile(r"(Insurance Policy|Policy No|Billing ID):\s?\d+"),
+    'room_ids': re.compile(r"(Room No|Hospital ID):\s?[A-Za-z0-9]+"),
+    'general_terms': re.compile(r"\b(patient|hospital|doctor|nurse|specialist|clinic|facility|caregiver|medical history|referral)\b"),
+    'conditions': re.compile(r"\b(cancer|hypertension|diabetes|heart disease|stroke|asthma|COPD|pneumonia|migraine|epilepsy)\b"),
+    'procedures': re.compile(r"\b(surgery|operation|biopsy|chemo|radiation therapy|endoscopy|CT scan|MRI|X-ray)\b"),
+    'medications': re.compile(r"\b(paracetamol|ibuprofen|aspirin|insulin|metformin|amoxicillin|prednisone|lipitor|antibiotic|painkillers)\b"),
+    'test_results': re.compile(r"\b(CBC|ECG|X-ray result|CT scan result|MRI result|blood test|urine test|pregnancy test)\b"),
+    'personal_info': re.compile(r"\b(patient name|address|phone number|email|social security number|insurance ID)\b"),
+    'procedural_terms': re.compile(r"\b(emergency|urgent care|hospitalization|outpatient|inpatient)\b"),
+}
 
-    # Anonymize Medications / Drugs
-    text = re.sub(r"\b(paracetamol|ibuprofen|aspirin|insulin|metformin|amoxicillin|prednisone|lipitor|antibiotic|painkillers)\b", "[MEDICATION REDACTED]", text)
+def preprocess_text(text: str, to_lowercase: bool = True) -> str:
+    """
+    Cleans and preprocesses raw medical text.
+    Enhancements:
+    - Anonymizes sensitive data (names, dates, IDs, phone numbers, emails).
+    - Handles medical-specific data: ICD codes, test results, vitals, etc.
+    - Removes unwanted special characters.
+    - Normalizes whitespace.
+    - Converts to lowercase (optional).
+    """
+    if not isinstance(text, str):
+        raise TypeError("Input text must be a string.")
+    
+    logging.info("Starting text preprocessing...")
 
-    # Anonymize Health Metrics & Vitals
-    text = re.sub(r"\b(blood pressure|BP|heart rate|BMI|pulse rate|respiratory rate|oxygen saturation|glucose level|cholesterol level|HbA1c)\b", "[HEALTH METRIC REDACTED]", text)
-
-    # Anonymize Test Results
-    text = re.sub(r"\b(CBC|ECG|X-ray result|CT scan result|MRI result|blood test|urine test|pregnancy test)\b", "[TEST RESULT REDACTED]", text)
-
-    # Anonymize Personal Information
-    text = re.sub(r"\b(patient name|address|phone number|email|social security number|insurance ID)\b", "[REDACTED]", text)
-
-    # Anonymize Procedural Terms
-    text = re.sub(r"\b(emergency|urgent care|hospitalization|outpatient|inpatient)\b", "[PROCEDURE REDACTED]", text)
+    # Anonymize sensitive data
+    for key, pattern in PATTERNS.items():
+        if key in ['names', 'dates', 'ids', 'phone', 'email']:
+            text = re.sub(pattern, lambda m: m.group(0).split()[0] + " [REDACTED]", text)
+        else:
+            text = re.sub(pattern, lambda m: "[REDACTED]", text)
+    
+    # Remove unwanted special characters
+    text = re.sub(r"[^\w\s.,%-]", "", text)
+    logging.info("Special characters removed.")
 
     # Normalize whitespace
     text = re.sub(r"\s+", " ", text).strip()
@@ -269,6 +289,8 @@ def preprocess_text(text: str, to_lowercase: bool = True) -> str:
 
 # New Prompt Engineering Step 
 
+# New Prompt Engineering Step 
+
 def apply_prompt_engineering(cleaned_text: str) -> dict:
     """
     Applies prompt engineering to guide the language model in generating outputs based on the cleaned medical text.
@@ -276,6 +298,15 @@ def apply_prompt_engineering(cleaned_text: str) -> dict:
     """
 
     logging.info("Applying prompt engineering to the cleaned text...")
+    
+    
+    # Set pad_token to eos_token (End of Sequence token) if not set already
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    # Set pad_token_id to eos_token_id if not set
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
 
     prompts = [
     "Summarize the medical document in a few sentences.",
@@ -375,14 +406,19 @@ def apply_prompt_engineering(cleaned_text: str) -> dict:
     results = {}
 
     # For each prompt, we use the model to generate a response
+    # For each prompt, we use the model to generate a response
     for prompt in prompts:
         try:
             # Prepend the cleaned text to the prompt
             full_input = f"{prompt}\n\nText: {cleaned_text}"
 
             # Tokenize the input and prepare it for the model
-            inputs = tokenizer(full_input, return_tensors="pt", truncation=True, max_length=1024).to(device)
+            inputs = tokenizer(full_input, return_tensors="pt", padding=True, truncation=True, max_length=1024).to(device)
             
+            # Explicitly set the attention mask and pad_token_id
+            inputs["attention_mask"] = inputs.get("attention_mask", torch.ones_like(inputs["input_ids"]))
+            inputs["pad_token_id"] = tokenizer.pad_token_id
+
             # Generate the output
             outputs = model.generate(inputs["input_ids"], max_length=150, num_return_sequences=1, no_repeat_ngram_size=2, top_p=0.95, temperature=0.7)
 
@@ -623,6 +659,61 @@ def analyze_sentiment(text, long_text=False, chunk_size=512, stride=256):
         return sentiment
 
 
+def generate_ehr_report(patient_info, diagnoses, medications, lab_results, notes, recommendations):
+    """
+    Generate an EHR report based on the provided information.
+    
+    Arguments:
+    - patient_info (dict): Contains patient-related information like name, age, gender.
+    - diagnoses (list): List of diagnoses.
+    - medications (list): List of medication dictionaries.
+    - lab_results (list): List of lab results.
+    - notes (str): Additional notes related to the patient's condition.
+    - recommendations (list): List of medical recommendations.
+    
+    Returns:
+    - str: Formatted EHR report as a string.
+    """
+    # Updated line for medication_str to handle medications as a list of dictionaries
+    if medications:
+        medication_str = "; ".join([f"{med['name']} ({med['dosage']}, {med['frequency']})" for med in medications if isinstance(med, dict)]) 
+    else:
+        medication_str = 'No medications prescribed.'
+    
+    # Generate lab results string
+    lab_results_str = "".join([f"- **{result['test']}**: {result['value']} {result['unit']} (Normal: {result['normal_range']}, Flag: {result['flag']})\n" for result in lab_results]) if lab_results else 'No lab results available.'
+    
+    # Generate recommendations string
+    recommendation_str = "".join([f"- {rec}\n" for rec in recommendations]) if recommendations else 'No recommendations provided.'
+
+    # Construct the final EHR report
+    report = f"""
+    Patient Info:
+    - Name: {patient_info.get('name', 'Unknown')}
+    - Age: {patient_info.get('age', 'Unknown')}
+    - Gender: {patient_info.get('gender', 'Unknown')}
+
+    Diagnoses:
+    {"; ".join(diagnoses) if diagnoses else 'No diagnoses provided.'}
+
+    Medications:
+    {medication_str}
+
+    Lab Results:
+    {lab_results_str}
+
+    Recommendations:
+    {recommendation_str}
+
+    Notes:
+    {notes if notes else 'No additional notes.'}
+    """
+    
+    return report
+
+
+
+
 
 class MedicalNLPipeline:
     def process_document(self, file_path: str = None, prompt: str = None):
@@ -651,15 +742,13 @@ class MedicalNLPipeline:
         cleaned_text = preprocess_text(extracted_text)
         print("Cleaned Text:", cleaned_text)
 
-
-        # # Step 4: Prompt Engineering (Enhance or Format Text)
+        # Step 4: Prompt Engineering (Enhance or Format Text)
         engineered_prompt = apply_prompt_engineering(cleaned_text)
         print("Engineered Prompt:", engineered_prompt)
     
         # Step 5: Extract Entities using NER pipeline
         categorized_entities = extract_entities(cleaned_text)
         print("Categorized Entities:", categorized_entities)
-        
     
         # Step 6: Summarize the text
         summary = summarize_text(cleaned_text)
@@ -669,48 +758,50 @@ class MedicalNLPipeline:
         sentiment_result = analyze_sentiment(cleaned_text)
         print("Sentiment Analysis:", sentiment_result)
         
+        # Step 8: Generate a structured report
+        report = generate_ehr_report(
+            patient_info=categorized_entities.get('patient_info', {}),
+            diagnoses=categorized_entities.get('diagnoses', []),
+            medications=categorized_entities.get('medications', []),
+            lab_results=categorized_entities.get('lab_results', []),
+            notes=summary,
+            recommendations=categorized_entities.get('recommendations', [])
+        )
+        print("Generated Report:")
+        print(report)
 
-        # Step 8: Return all results as a dictionary for easy access
+        # Step 9: Return all results, including the report
         return {
             'extracted_text': extracted_text,
             'cleaned_text': cleaned_text,
             'engineered_prompt': engineered_prompt,
             'categorized_entities': categorized_entities,
             'summary': summary,
-            'sentiment': sentiment_result
-        }
+            'sentiment': sentiment_result,
+            'report': report
+        }      
         
-        
-        
+
         
 # Testing code commented out only use when there is the model testing going on -------------------------------- --------------------------------            --------------------------------
 
 
-# # # Example Usage
-# Using the EHR text 
-# # raw_text = ''
-
-# # # Instantiate the Medical NLP pipeline
-# # medical_nlp = MedicalNLPipeline()
-
-# # # Process the medical document
-# # result = medical_nlp.process_document(raw_text)
-
-# # # Output the results
-# # print("Final Output:")
-# # print(result)
-
-# Example Usage
-# file_path = "/kaggle/input/final-dataset/medical_document.txt"  # Can be .txt, .json, or .pdf
-
-# # Instantiate the Medical NLP pipeline
+# # Instantiate the pipeline
 # medical_nlp = MedicalNLPipeline()
 
-# # Process the medical document with file or prompt
-# result = medical_nlp.process_document(file_path=file_path)  # Or use: result = medical_nlp.process_document(prompt=prompt_text)
 
-# # Output the results
-# print("Final Output:")
-# print(result)
+# # Process a document
+# result = medical_nlp.process_document(file_path="/kaggle/input/final-dataset/medical_document.txt")
+
+# # Access the generated report
+# print("Structured Report:")
+# print(result['report'])
+
+# # Optional: Save the report as a JSON file
+# with open("ehr_report.json", "w") as f:
+#     import json
+#     json.dump(result['report'], f, indent=4)
+# print("Report saved to ehr_report.json")
+
 
 # Testing code commented out only use when there is the model testing going on ---------------------------------------------------------------------------------------- 
