@@ -28,7 +28,7 @@
             <div class="main">
                <div class="logo">
                   <a href="{{ url_for('main.index') }}">
-                  <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
                   </a>
                </div>
                <div class="menu_text">
@@ -61,40 +61,33 @@
          </div>
       </div>
       <!-- Header Section End -->
-      
+
       <!-- Report Section Start -->
       <div class="protect_section layout_padding">
          <div class="container">
             <div class="row">
                <div class="col-sm-12">
-                  <h1 class="protect_taital">Detailed EHR Summary Report</h1>
-                  <p class="protect_text">Here is the summary of your uploaded file, prompt, or document:</p>
+                  <h1 class="protect_taital">Summarized EHR Report</h1>
+                  <p class="protect_text">Below is the professionally generated summary report tailored for medical professionals:</p>
                </div>
             </div>
             <div class="protect_section_2 layout_padding">
                <div class="row">
                   <div class="col-md-12">
                      <div class="summary_report">
-                        <!-- Updates: Fallback values for missing data -->
-<h2 class="summary_heading">Summary Overview</h2>
-<p class="summary_text">{{ summary if summary else "Summary not available." }}</p>
-<hr>
-<h2 class="summary_heading">Key Points</h2>
-<ul class="summary_list">
-   {% if key_points %}
-   {% for point in key_points %}
-   <li>{{ point }}</li>
-   {% endfor %}
-   {% else %}
-   <li>No key points available.</li>
-   {% endif %}
-</ul>
-<hr>
-<h2 class="summary_heading">Additional Notes</h2>
-<p class="summary_text">{{ additional_notes if additional_notes else "No additional notes available." }}</p>
+                        <!-- Displaying the Final Report -->
+                        <h2 class="summary_heading">Generated Report</h2>
+                        <pre>{{ report if report else "No structured report available." }}</pre>
+                        <hr>
 
+                        <!-- Sentiment Analysis -->
+                        <h2 class="summary_heading">Sentiment Analysis</h2>
+                        <p><strong>Label:</strong> {{ sentiment_label }}</p>
+                        <p><strong>Confidence:</strong> {{ sentiment_score }}</p>
                      </div>
-                     <div class="action_buttons">
+
+                     <!-- Action Buttons -->
+                     <div class="action_buttons mt-4">
                         <a href="{{ url_for('main.summerize') }}" class="btn btn-secondary">Back to Summarize</a>
                         <a href="{{ url_for('main.index') }}" class="btn btn-primary">Home</a>
                      </div>
@@ -138,7 +131,9 @@
                   </div>
                   <div class="col-lg-3 col-sm-6">
                      <h2 class="useful_text">Countries</h2>
-                     <div class="map_image"><img src="{{ url_for('static', filename='images/map-bg.png') }}" alt="Map"></div>
+                     <div class="map_image">
+                        <img src="{{ url_for('static', filename='images/map-bg.png') }}" alt="Map">
+                     </div>
                   </div>
                </div>
             </div>
@@ -151,21 +146,20 @@
          <div class="container">
             <div class="row">
                <div class="col-sm-12">
-                  <p class="copyright_text">© 2020 All Rights Reserved.<a href="https://html.design"> Free HTML Templates</a></p>
+                  <p class="copyright_text">© 2025 All Rights Reserved.<a href="https://html.design"> Free HTML Templates</a></p>
                </div>
             </div>
          </div>
       </div>
-      <!-- Copyright Section End -->
 
-      <!-- Javascript Files --><script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+      <!-- Javascript Files -->
+      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
       <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-      <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
       <script>
          $(document).ready(function(){
          $(".fancybox").fancybox({
