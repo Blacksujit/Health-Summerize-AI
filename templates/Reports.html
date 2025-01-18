@@ -8,7 +8,7 @@
       <!-- Mobile Metas -->
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- Site Metas -->
-      <title>Summary Report</title>
+      <title>Summarized Report</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -67,29 +67,29 @@
          <div class="container">
             <div class="row">
                <div class="col-sm-12">
-                  <h1 class="protect_taital">Summarized EHR Report</h1>
-                  <p class="protect_text">Below is the professionally generated summary report tailored for medical professionals:</p>
+                  <h1 class="protect_taital text-center">Summarized EHR Report</h1>
+                  <p class="protect_text text-center">Below is the professionally generated summary report tailored for medical professionals:</p>
                </div>
             </div>
             <div class="protect_section_2 layout_padding">
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="summary_report">
+               <div class="row justify-content-center">
+                  <div class="col-md-10">
+                     <div class="summary_report p-4 shadow rounded bg-white">
                         <!-- Displaying the Final Report -->
-                        <h2 class="summary_heading">Generated Report</h2>
-                        <pre>{{ report if report else "No structured report available." }}</pre>
+                        <h2 class="summary_heading text-primary">Generated Report</h2>
+                        <pre class="bg-light p-3 rounded">{{ report if report else "No structured report available." }}</pre>
                         <hr>
 
                         <!-- Sentiment Analysis -->
-                        <h2 class="summary_heading">Sentiment Analysis</h2>
+                        <h2 class="summary_heading text-primary">Sentiment Analysis</h2>
                         <p><strong>Label:</strong> {{ sentiment_label }}</p>
                         <p><strong>Confidence:</strong> {{ sentiment_score }}</p>
                      </div>
 
                      <!-- Action Buttons -->
-                     <div class="action_buttons mt-4">
-                        <a href="{{ url_for('main.summerize') }}" class="btn btn-secondary">Back to Summarize</a>
-                        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Home</a>
+                     <div class="action_buttons mt-4 text-center">
+                        <a href="{{ url_for('main.summerize') }}" class="btn btn-secondary btn-lg">Back to Summarize</a>
+                        <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">Home</a>
                      </div>
                   </div>
                </div>
@@ -166,12 +166,9 @@
          openEffect: "none",
          closeEffect: "none"
          });
-              
-         $(".zoom").hover(function(){
-              
+               $(".zoom").hover(function(){
          $(this).addClass('transition');
          }, function(){
-              
          $(this).removeClass('transition');
          });
          });
@@ -195,5 +192,6 @@
         });
         
       </script>
-   </body>
-</html>
+   </body>   
+</html>   
+
