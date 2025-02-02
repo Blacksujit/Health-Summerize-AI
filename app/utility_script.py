@@ -33,7 +33,9 @@ import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import re
 import logging
+from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForSequenceClassification, GPT2LMHeadModel, GPT2Tokenizer, LongformerTokenizer, LongformerForSequenceClassification
 import shutil
+
 
 shutil.rmtree('~/.cache/huggingface', ignore_errors=True)
 logging.basicConfig(level=logging.INFO)
@@ -42,49 +44,38 @@ print("imported all packages")
 
 
 
-# Load ALL necessary Models
 # Load Sentiment Analysis Pipeline
 sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
 
-# Load BioBERT Model
-
+# Load BioBERT Model for NER
 ner_model = AutoModelForTokenClassification.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
 ner_tokenizer = AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
 
 # Create an NER Pipeline
-# ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer)
 ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, grouped_entities=True)
-
 
 # Load T5 Model for Summarization
 summarization_model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")  # Use 't5-large' for better performance
 summarization_tokenizer = AutoTokenizer.from_pretrained("t5-base")
 
-
 # Load models for Context-Aware Sentiment Analysis
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-sentiment_model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
+context_sentiment_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
+context_sentiment_model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
 
 # Load Longformer model for handling long text
 longformer_tokenizer = LongformerTokenizer.from_pretrained("allenai/longformer-base-4096")
 longformer_model = LongformerForSequenceClassification.from_pretrained("allenai/longformer-base-4096")
 
-# # Pipeline for Sentence Level Sentiment Analysis (DistilBERT)
-# sentiment_pipeline = pipeline("sentiment-analysis", model=sentiment_model, tokenizer=tokenizer)
-
 # Initialize the GPT-2 model and tokenizer from Hugging Face
-model_name = "gpt2"  # You can also use "gpt2-medium", "gpt2-large", or "gpt2-xl" for larger models
-model = GPT2LMHeadModel.from_pretrained(model_name)
-tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-
+gpt2_model_name = "gpt2"  # You can also use "gpt2-medium", "gpt2-large", or "gpt2-xl" for larger models
+gpt2_model = GPT2LMHeadModel.from_pretrained(gpt2_model_name)
+gpt2_tokenizer = GPT2Tokenizer.from_pretrained(gpt2_model_name)
 
 
 # Move the model to the GPU if available (optional but recommended for large models)
+# Move the model to the GPU if available (optional but recommended for large models)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-
-
-
+gpt2_model.to(device)
 
 # Max File size
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
@@ -291,22 +282,35 @@ def preprocess_text(text: str, to_lowercase: bool = True) -> str:
 
 # New Prompt Engineering Step 
 
-def apply_prompt_engineering(cleaned_text: str) -> dict:
+# New Prompt Engineering Step 
+
+logging.basicConfig(level=logging.INFO)
+
+def apply_prompt_engineering(cleaned_text: str , max_new_tokens=150, top_p=0.95, temperature=0.7) -> dict:
     """
     Applies prompt engineering to guide the language model in generating outputs based on the cleaned medical text.
-    Uses a pretrained GPT-2 model to generate results.
+
+    Args:
+        cleaned_text (str): The preprocessed medical text.
+        tokenizer: Pretrained tokenizer for text processing.
+        model: Pretrained language model for text generation.
+        max_new_tokens (int): Maximum number of tokens to generate.
+        top_p (float): Top-p sampling parameter for text generation.
+        temperature (float): Temperature parameter for text generation.
+
+    Returns:
+        dict: A dictionary where keys are prompts and values are generated outputs or error messages.
     """
+    if not isinstance(cleaned_text, str) or not cleaned_text.strip():
+        raise ValueError("cleaned_text must be a non-empty string.")
 
     logging.info("Applying prompt engineering to the cleaned text...")
-    
-    
-    # Set pad_token to eos_token (End of Sequence token) if not set already
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
 
-    # Set pad_token_id to eos_token_id if not set
-    if tokenizer.pad_token_id is None:
-        tokenizer.pad_token_id = tokenizer.eos_token_id
+    # Set pad_token to eos_token if not set already
+    if gpt2_tokenizer.pad_token is None:
+        gpt2_tokenizer.pad_token = gpt2_tokenizer.eos_token
+    if gpt2_tokenizer.pad_token_id is None:
+        gpt2_tokenizer.pad_token_id = gpt2_tokenizer.eos_token_id
 
     prompts = [
     "Summarize the medical document in a few sentences.",
@@ -403,39 +407,31 @@ def apply_prompt_engineering(cleaned_text: str) -> dict:
     ]
     
     # Initialize the dictionary to store results
+    # Initialize the dictionary to store results
     results = {}
-
-    # For each prompt, we use the model to generate a response
-    # For each prompt, we use the model to generate a response
     for prompt in prompts:
         try:
-            # Prepend the cleaned text to the prompt
+            logging.info(f"Processing prompt: {prompt}")
             full_input = f"{prompt}\n\nText: {cleaned_text}"
+            inputs = gpt2_tokenizer(full_input, return_tensors="pt", truncation=True, padding=True, max_length=1024)
 
-            # Tokenize the input and prepare it for the model
-            inputs = tokenizer(full_input, return_tensors="pt", padding=True, truncation=True, max_length=1024).to(device)
-            
-            # Explicitly set the attention mask and pad_token_id
-            inputs["attention_mask"] = inputs.get("attention_mask", torch.ones_like(inputs["input_ids"]))
-            inputs["pad_token_id"] = tokenizer.pad_token_id
+            outputs = gpt2_model.generate(
+                inputs["input_ids"],
+                do_sample=True,
+                max_new_tokens=max_new_tokens,
+                no_repeat_ngram_size=2,
+                top_p=top_p,
+                temperature=temperature,
+            )
 
-            # Generate the output
-            outputs = model.generate(inputs["input_ids"], max_length=150, num_return_sequences=1, no_repeat_ngram_size=2, top_p=0.95, temperature=0.7)
-
-            # Decode the output text
-            result = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
-
-            # Store the result in the dictionary
+            result = gpt2_tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
             results[prompt] = result
-            logging.info(f"Prompt '{prompt}' processed successfully.")
-        
-        except Exception as e:
-            logging.error(f"Error while processing prompt '{prompt}': {str(e)}")
+        except RuntimeError as e:
+            logging.error(f"Runtime error while processing prompt: {prompt}. Error: {str(e)}")
             results[prompt] = f"Error: {str(e)}"
 
-    logging.info("Prompt engineering applied successfully.")
     return results
-
+ 
 
 
 def extract_entities(text):
@@ -534,22 +530,10 @@ def extract_entities(text):
         categorized_entities[category] = list(categorized_entities[category])
 
     return categorized_entities
-
-
-
-# from transformers import T5Tokenizer, T5ForConditionalGeneration
-
-# # Load pre-trained model and tokenizer for T5 summarization
-# summarization_tokenizer = T5Tokenizer.from_pretrained("t5-small")
-# summarization_model = T5ForConditionalGeneration.from_pretrained("t5-small")
-
-# from transformers import T5Tokenizer, T5ForConditionalGeneration
-
-# # Load pre-trained model and tokenizer for T5 summarization
-# summarization_tokenizer = T5Tokenizer.from_pretrained("t5-small")
-# summarization_model = T5ForConditionalGeneration.from_pretrained("t5-small")
-
-def summarize_text(text, max_input_length=1024, max_summary_length=150, beam_width=4, no_repeat_ngram_size=2, length_penalty=2.0):
+ 
+ 
+ 
+def summarize_text(text, max_input_length=3000, max_summary_length=100, beam_width=4, no_repeat_ngram_size=2, length_penalty=2.0):
     """
     Summarizes text using a pre-trained T5 model with advanced parameters.
     
