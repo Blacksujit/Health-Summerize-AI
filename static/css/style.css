@@ -975,7 +975,7 @@ textarea#comment::placeholder {
     padding-top: 20px;
 }
 
-.location_text a {
+.location_text a {  
     color: #fffcfc;
 }
 
@@ -1000,7 +1000,7 @@ textarea#comment::placeholder {
 }
 
 .copyright_text {
-    width: 100%;
+    width: 100%;    
     float: left;
     font-size: 16px;
     color: #000;
@@ -1021,3 +1021,4 @@ textarea#comment::placeholder {
 .margin_top90{
     margin-top: 90px;
 }
+

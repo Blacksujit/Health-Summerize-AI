@@ -1,0 +1,822 @@
+/*--------------------------------------------------------------------- File Name: style.scss ---------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------- Variables ---------------------------------------------------------------------*/
+
+$primary-color: #3674f2;
+$secondary-color: #a258ed;
+$text-color: #666666;
+$background-color: #ffffff;
+$dark-color: #250d52;
+$light-color: #f9f9f9;
+$font-family: 'Poppins', sans-serif;
+$font-size: 14px;
+$line-height: 1.80857;
+$transition-duration: 0.3s;
+$border-radius: 8px;
+
+/*--------------------------------------------------------------------- Mixins ---------------------------------------------------------------------*/
+
+@mixin transition($property: all, $duration: $transition-duration, $easing: ease-in-out) {
+    transition: $property $duration $easing;
+}
+
+@mixin box-shadow($x: 0px, $y: 0px, $blur: 8px, $spread: 0px, $color: rgba(0, 0, 0, 0.1)) {
+    box-shadow: $x $y $blur $spread $color;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*--------------------------------------------------------------------- Import Fonts ---------------------------------------------------------------------*/
+
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
+
+/*--------------------------------------------------------------------- Import Files ---------------------------------------------------------------------*/
+
+@import 'css/animate.min.css';
+@import 'css/normalize.css';
+@import 'css/icomoon.css';
+@import 'css/font-awesome.min.css';
+@import 'css/meanmenu.css';
+@import 'css/owl.carousel.min.css';
+@import 'css/swiper.min.css';
+@import 'css/slick.css';
+@import 'css/jquery.fancybox.min.css';
+@import 'css/jquery-ui.css';
+@import 'css/nice-select.css';
+
+/*--------------------------------------------------------------------- Skeleton ---------------------------------------------------------------------*/
+
+* {
+    box-sizing: border-box !important;
+    @include transition(all, 0.5s);
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden !important;
+}
+
+body {
+    color: $text-color;
+    font-size: $font-size;
+    font-family: $font-family;
+    line-height: $line-height;
+    font-weight: normal;
+    overflow-x: hidden !important;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #1f1f1f;
+    text-decoration: none !important;
+    outline: none !important;
+    @include transition(all, $transition-duration);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0;
+    font-weight: normal;
+    position: relative;
+    padding: 0 0 10px 0;
+    line-height: normal;
+    color: #111111;
+    margin: 0;
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+h4 { font-size: 16px; }
+h5 { font-size: 14px; }
+h6 { font-size: 13px; }
+
+ul, li, ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+p {
+    margin: 20px 0;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+button {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    background-color: transparent;
+    @include transition(all, $transition-duration);
+}
+
+.full {
+    width: 100%;
+    float: left;
+}
+
+.layout_padding {
+    padding-top: 90px;
+    padding-bottom: 90px;
+}
+
+/* Header Section */
+
+.header_section {
+    width: 100%;
+    background-image: url('../images/banner-bg.png');
+    background-size: cover;
+    background-position: center;
+    padding: 20px 0;
+}
+
+.header_bg {
+    background-image: url('../images/header-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.logo {
+    width: 86%;
+    float: left;
+    position: relative;
+}
+
+.menu_text {
+    float: right;
+    width: 30%;
+}
+
+.menu_text ul {
+    @include flex-center;
+}
+
+.menu_text li {
+    font-size: 20px;
+    color: #385a64;
+}
+
+.menu_text li a {
+    color: #385a64;
+    padding-left: 20px;
+    @include transition(color, $transition-duration);
+}
+
+.menu_text li a:hover {
+    color: $primary-color;
+}
+
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    @include transition(width, 0.5s);
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+    color: #f1f1f1;
+}
+
+.overlay a {
+    padding: 0;
+    text-decoration: none;
+    font-size: 22px;
+    color: #f1f1f1;
+    display: block;
+    @include transition(color, $transition-duration);
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.toggle_menu {
+    top: 8px;
+    position: relative;
+    left: 0;
+    cursor: pointer;
+}
+
+.toggle_menu_1 {
+    display: none;
+}
+
+/* Banner Section */
+
+.banner_section {
+    width: 100%;
+    padding-bottom: 80px;
+    background-image: url('../images/banner-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.banner_img {
+    width: 80%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.banner_taital {
+    font-size: 60px;
+    color: #fef6fc;
+    font-weight: bold;
+    line-height: 1.2;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.banner_text {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #fef6fc;
+    text-align: center;
+}
+
+.more_bt {
+    width: 150px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+
+.more_bt a {
+    width: 100%;
+    font-size: 16px;
+    color: $background-color;
+    background-color: $secondary-color;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 40px;
+    text-transform: uppercase;
+    @include transition(background-color, $transition-duration);
+}
+
+.more_bt a:hover {
+    background-color: $primary-color;
+}
+
+/* Protect Section */
+
+.protect_section {
+    width: 100%;
+    padding: 90px 0;
+    background-color: $light-color;
+}
+
+.protect_taital {
+    font-size: 40px;
+    color: #081419;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.protect_text {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #081419;
+    text-align: center;
+}
+
+.protect_section_2 {
+    width: 100%;
+    padding: 90px 0;
+}
+
+.hands_text {
+    font-size: 30px;
+    color: #081419;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 40px;
+    position: relative;
+}
+
+.hands_text a {
+    color: #081419;
+    @include transition(color, $transition-duration);
+}
+
+.hands_text a:hover {
+    color: $secondary-color;
+}
+
+.hands_text::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 2px;
+    background-color: #111111;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+}
+
+.hands_text_2 {
+    font-size: 30px;
+    color: #081419;
+    text-align: center;
+    font-weight: bold;
+    margin: 40px 80px;
+    position: relative;
+}
+
+.hands_text_2 a {
+    color: #081419;
+    @include transition(color, $transition-duration);
+}
+
+.hands_text_2 a:hover {
+    color: $secondary-color;
+}
+
+.hands_text_2::after {
+    content: '';
+    position: absolute;
+    width: 130px;
+    height: 2px;
+    background-color: #111111;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+}
+
+/* About Section */
+
+.about_section {
+    width: 100%;
+    padding: 90px 0;
+    background-color: $background-color;
+}
+
+.about_taital {
+    font-size: 40px;
+    font-weight: bold;
+    color: #151515;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.about_text {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #151515;
+    text-align: center;
+}
+
+.read_bt {
+    width: 150px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+
+.read_bt a {
+    width: 100%;
+    font-size: 16px;
+    color: $background-color;
+    background-color: $primary-color;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 40px;
+    text-transform: uppercase;
+    @include transition(background-color, $transition-duration);
+}
+
+.read_bt a:hover {
+    background-color: $secondary-color;
+}
+
+.about_tag {
+    margin-bottom: 10px;
+    font-size: 40px;
+    font-weight: 600;
+    color: $background-color;
+    text-align: center;
+}
+
+.about_taital_main {
+    width: 100%;
+    padding: 100px 0;
+    background-color: $primary-color;
+}
+
+.about_menu {
+    width: 100%;
+    text-align: center;
+}
+
+.about_menu ul {
+    @include flex-center;
+}
+
+.about_menu li {
+    font-size: 18px;
+    color: $background-color;
+    padding-right: 10px;
+}
+
+.about_menu li a {
+    color: $background-color;
+    @include transition(color, $transition-duration);
+}
+
+.about_menu li a:hover {
+    color: #000;
+}
+
+/* Doctor Section */
+
+.doctors_section {
+    width: 100%;
+    padding-bottom: 90px;
+    background-image: linear-gradient(90deg, #7d56c9 18%, rgba(76, 90, 90, 0) 4%), url('../images/doctor-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.taital_left {
+    width: 14%;
+    margin-top: 80px;
+}
+
+.taital_right {
+    width: 86%;
+    padding-left: 100px;
+}
+
+.doctor_taital {
+    font-size: 30px;
+    color: $background-color;
+    font-weight: bold;
+    text-align: center;
+}
+
+.doctor_text {
+    width: 50%;
+    font-size: 14px;
+    color: $background-color;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.readmore_bt {
+    width: 170px;
+    margin: 50px auto 0;
+    text-align: center;
+}
+
+.readmore_bt a {
+    width: 100%;
+    font-size: 16px;
+    color: $background-color;
+    background-color: $primary-color;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 30px;
+    text-transform: uppercase;
+    @include transition(background-color, $transition-duration);
+}
+
+.readmore_bt a:hover {
+    background-color: $secondary-color;
+}
+
+.play_icon {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+    text-align: center;
+}
+
+.play_icon::before {
+    content: '';
+    position: absolute;
+    top: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 90px;
+    background-color: $background-color;
+    border-radius: 50%;
+    animation: fadeEffect 1.3s infinite ease;
+    @include box-shadow;
+    z-index: -1;
+}
+
+@keyframes fadeEffect {
+    0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* News Section */
+
+.news_section {
+    width: 100%;
+    padding-bottom: 190px;
+    background-image: url('../images/news-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.news_taital {
+    font-size: 40px;
+    color: #081419;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.news_text {
+    width: 60%;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #151515;
+    text-align: center;
+}
+
+.news_section_2 {
+    width: 100%;
+}
+
+.box_main {
+    width: 60%;
+    margin: 0 auto;
+    background-color: $background-color;
+    @include box-shadow;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: $border-radius;
+}
+
+.image_1 {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    top: -20px;
+}
+
+.lorem_text {
+    width: 100%;
+    font-size: 16px;
+    color: #081419;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.read_btn {
+    width: 170px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10px;
+    position: relative;
+    top: 20px;
+}
+
+.read_btn a {
+    width: 100%;
+    font-size: 16px;
+    color: $background-color;
+    background-color: $primary-color;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 30px;
+    @include transition(background-color, $transition-duration);
+}
+
+.read_btn a:hover {
+    background-color: $secondary-color;
+}
+
+.design_text {
+    width: 100%;
+    font-size: 24px;
+    font-weight: bold;
+    color: #151515;
+    text-align: center;
+    padding-top: 20px;
+}
+
+#main_slider a.carousel-control-prev,
+#main_slider a.carousel-control-next {
+    position: absolute;
+    top: 105%;
+    width: 55px;
+    height: 55px;
+    background: $background-color;
+    opacity: 1;
+    font-size: 30px;
+    color: #000;
+    border-radius: 50%;
+    margin: 0 auto;
+    @include box-shadow;
+    @include transition(background-color, $transition-duration);
+}
+
+#main_slider a.carousel-control-prev {
+    left: 50%;
+    transform: translateX(-150%);
+}
+
+#main_slider a.carousel-control-next {
+    right: 50%;
+    transform: translateX(150%);
+}
+
+#main_slider a.carousel-control-prev:hover,
+#main_slider a.carousel-control-next:hover {
+    background: $secondary-color;
+    color: $background-color;
+}
+
+/* Update Section */
+
+.update_section {
+    width: 100%;
+    padding-bottom: 100px;
+    background-color: $light-color;
+}
+
+.update_taital {
+    font-size: 40px;
+    color: #242424;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.update_mail {
+    color: #969695;
+    width: 60%;
+    height: 55px;
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid #5e90f4;
+    margin: 30px auto 0;
+    display: block;
+    border-radius: $border-radius;
+}
+
+textarea#comment::placeholder {
+    color: #969695;
+}
+
+.subscribe_bt {
+    width: 200px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+
+.subscribe_bt a {
+    width: 100%;
+    font-size: 16px;
+    color: $background-color;
+    background-color: $dark-color;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+    @include transition(background-color, $transition-duration);
+}
+
+.subscribe_bt a:hover {
+    background-color: $primary-color;
+}
+
+/* Footer Section */
+
+.footer_section {
+    width: 100%;
+    padding: 60px 0 100px;
+    background-color: $dark-color;
+}
+
+.footer_section_2 {
+    width: 100%;
+    padding-top: 50px;
+}
+
+.useful_text {
+    font-size: 24px;
+    color: $background-color;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.footer_text {
+    font-size: 13px;
+    color: $background-color;
+    margin: 0;
+    padding-top: 10px;
+}
+
+.footer_menu {
+    width: 100%;
+}
+
+.footer_menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+.footer_menu li {
+    font-size: 16px;
+    color: $background-color;
+    margin-bottom: 10px;
+}
+
+.footer_menu li a {
+    color: $background-color;
+    @include transition(color, $transition-duration);
+}
+
+.footer_menu li a:hover {
+    color: $primary-color;
+}
+
+.location_text {
+    font-size: 16px;
+    color: $background-color;
+    padding-top: 10px;
+}
+
+.location_text a {
+    color: $background-color;
+    @include transition(color, $transition-duration);
+}
+
+.location_text a:hover {
+    color: $primary-color;
+}
+
+.padding_15 {
+    padding-left: 10px;
+}
+
+/* Copyright Section */
+
+.copyright_section {
+    width: 100%;
+    padding: 20px 0;
+    background-color: $background-color;
+}
+
+.copyright_text {
+    font-size: 16px;
+    color: #000;
+    margin: 0;
+    text-align: center;
+}
+
+.copyright_text a {
+    color: #000;
+    @include transition(color, $transition-duration);
+}
+
+.copyright_text a:hover {
+    color: $primary-color;
+}
+
+/* Margin Top */
+
+.margin_top90 {
+    margin-top: 90px;
+}
