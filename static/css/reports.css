@@ -1,0 +1,117 @@
+/* General Page Styling */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Main Report Container */
+.protect_section {
+    padding: 60px 0;
+}
+
+.summary_report {
+    border-left: 5px solid #007bff;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Report Heading */
+.protect_taital {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Report Content */
+.summary_heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+/* Preformatted Report Content */
+pre {
+    font-size: 1rem;
+    background: #f4f4f4;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Sentiment Analysis Section */
+.sentiment-analysis {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #28a745;
+}
+
+/* Action Buttons */
+.action_buttons {
+    margin-top: 20px;
+}
+
+.action_buttons .btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+/* Flash Message Styling */
+.flash-message {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.flash-message.error {
+    background: #dc3545;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .summary_report {
+        padding: 15px;
+    }
+    .protect_taital {
+        font-size: 1.8rem;
+    }
+    .summary_heading {
+        font-size: 1.3rem;
+    }
+    .action_buttons .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
