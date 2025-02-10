@@ -25,8 +25,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 from werkzeug.utils import secure_filename
 from .utility_script import MedicalNLPipeline
-import pdfkit
-from pathlib import Path
+
 
 main = Blueprint('main', __name__)
 
@@ -44,8 +43,6 @@ BASE_DIR = Path(__file__).resolve().parent
 UPLOAD_FOLDER = 'C:\\Users\\HP\\OneDrive\\Desktop\\Machine Learning Projects\\Health-Summerize-AI\\uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json'}
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# Path to wkhtmltopdf executable
-PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf="C:\\Downloads\\wkhtmltox-0.12.6-1.msvc2015-win64.exe")
 
 # Utility to check allowed file extensions
 def allowed_file(filename):
@@ -59,7 +56,6 @@ def index():
 
 # Route for the Protect Page
 
-# Route for the Summarize Page
 @main.route('/summerize', methods=['GET', 'POST'])
 def summerize():
     if request.method == 'POST':
@@ -96,6 +92,7 @@ def summerize():
                 sentiment_score = sentiment_data.get('score') or sentiment_data.get('confidence', 'N/A')
 
                 # Pass relevant data to the reports.html template (excluding verbose summary)
+                # Pass data to template
                 return render_template(
                     'reports.html',
                     report=report,
@@ -111,26 +108,19 @@ def summerize():
     # Render the summarize page
     return render_template('summerize.html')
 
+
+
 @main.route('/Reports')
 def Reports():
     return render_template('Reports.html')
 
-@main.route('/download_report', methods=['POST'])
+
+@main.route('/download_report')
 def download_report():
-    report_content = request.form.get('report_content')
-    sentiment_label = request.form.get('sentiment_label')
-    sentiment_score = request.form.get('sentiment_score')
+    # Replace `report_path` with the actual path where the report is saved
+    report_path = os.path.join(UPLOAD_FOLDER, "generated_report.txt")
+    return send_file(report_path, as_attachment=True)
 
-    rendered = render_template('Reports.html', report=report_content, sentiment_label=sentiment_label, sentiment_score=sentiment_score)
-    pdf = pdfkit.from_string(rendered, False, configuration=PDFKIT_CONFIG)
-
-    response = send_file(
-        pdf,
-        as_attachment=True,
-        download_name='report.pdf',
-        mimetype='application/pdf'
-    )
-    return response
 
 # Route for the About Page
 @main.route('/about')
