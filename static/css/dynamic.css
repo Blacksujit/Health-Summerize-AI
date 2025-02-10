@@ -1,0 +1,182 @@
+/* Dynamic CSS for HealthSummarizeAI */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Header Section */
+.header_section {
+    background: #007bff;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.header_section .navbar-brand img {
+    max-width: 150px;
+}
+
+.header_section .navbar-nav .nav-link {
+    color: #fff;
+    font-size: 16px;
+    margin-right: 20px;
+}
+
+.header_section .navbar-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Banner Section */
+.banner_section {
+    background: url('{{ url_for("static", filename="images/hospital_bg.png") }}') no-repeat center center/cover;
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.banner_section h1 {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.banner_section .breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.banner_section .breadcrumb-item a {
+    color: #fff;
+}
+
+.banner_section .breadcrumb-item.active {
+    color: #ccc;
+}
+
+/* Summarize Section */
+.summarize_section {
+    background: #fff;
+    padding: 50px 0;
+}
+
+.summarize_section h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.summarize_section p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.summarize_section .form-group {
+    margin-bottom: 20px;
+}
+
+.summarize_section .form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.summarize_section .form-group input,
+.summarize_section .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.summarize_section .btn-primary {
+    background: #007bff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.summarize_section .btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Footer Section */
+.footer_section {
+    background: #333;
+    color: #fff;
+    padding: 50px 0;
+}
+
+.footer_section h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer_section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer_section ul li {
+    margin-bottom: 10px;
+}
+
+.footer_section ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer_section ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer_section p {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.footer_section .img-fluid {
+    max-width: 100%;
+}
+
+/* Custom Popup */
+.custom-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff9800;
+    color: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.custom-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.custom-popup .popup-content {
+    font-size: 16px;
+}
+
+.custom-popup .popup-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
