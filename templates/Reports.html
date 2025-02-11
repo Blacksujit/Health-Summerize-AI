@@ -79,9 +79,14 @@
 
                     <!-- Action Buttons -->
                     <div class="action_buttons mt-4 text-center">
+                        <form action="{{ url_for('main.download_report') }}" method="post">
+                            <input type="hidden" name="report_content" value="{{ report }}">
+                            <input type="hidden" name="sentiment_label" value="{{ sentiment_label }}">
+                            <input type="hidden" name="sentiment_score" value="{{ sentiment_score }}">
+                            <button type="submit" class="btn btn-success btn-lg">Download PDF</button>
+                        </form>
                         <a href="{{ url_for('main.summerize') }}" class="btn btn-secondary btn-lg">Back to Summarize</a>
                         <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">Home</a>
-                        <a href="#" class="btn btn-success btn-lg" id="downloadReport">Download PDF</a>
                     </div>
                 </div>
             </div>
