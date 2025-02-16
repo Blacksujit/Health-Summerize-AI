@@ -1,54 +1,21 @@
-/* Dynamic CSS for HealthSummarizeAI Reports */
+/* Modern CSS for HealthSummarizeAI Reports */
 
 /* General Styles */
 body {
-    font-family: 'Source Sans Pro', sans-serif;
-    background-color: #001f3f;
-    color: #fff;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4rem;
-    overflow-x: auto;
-    position: relative;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        45deg,
-        rgba(34, 211, 238, 0.1),
-        rgba(168, 85, 247, 0.1),
-        rgba(236, 72, 153, 0.1)
-    );
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    z-index: -2;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 /* Header Section */
 .header_section {
-    background: #007bff;
+    background: #343a40;
     color: #fff;
-    padding: 20px 0;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header_section .navbar-brand img {
@@ -59,102 +26,121 @@ body::before {
     color: #fff;
     font-size: 16px;
     margin-right: 20px;
+    transition: color 0.3s ease;
 }
 
 .header_section .navbar-nav .nav-link:hover {
-    text-decoration: underline;
+    color: #ffdd57;
 }
 
 /* Report Section */
 .report_section {
-    background: url('{{ url_for("static", filename="images/hospital_bg.png") }}') no-repeat center center/cover;
+    padding: 80px 0;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: #fff;
-    padding: 100px 0;
-    text-align: center;
 }
 
 .report_title {
     font-size: 48px;
-    font-weight: bold;
-    background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .report_subtitle {
     font-size: 18px;
-    color: #ccc;
+    color: #e0e0e0;
     margin-bottom: 40px;
 }
 
 .summary_report {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.8);
     color: #333;
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .summary_heading {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 20px;
+    color: #6a11cb;
+}
+
+.report-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Roboto', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sentiment-analysis {
+    margin-top: 20px;
+}
+
+.sentiment-analysis p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.sentiment-label, .sentiment-score {
+    font-weight: 600;
+    color: #28a745;
+}
+
+/* Action Buttons */
+.action_buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .action_buttons .btn {
     margin: 10px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
-    border-radius: 4px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.action_buttons .btn-primary {
-    background: #007bff;
-    border: none;
-    color: #fff;
-}
-
-.action_buttons .btn-primary:hover {
-    background: #0056b3;
-}
-
-.action_buttons .btn-secondary {
-    background: #6c757d;
-    border: none;
-    color: #fff;
-}
-
-.action_buttons .btn-secondary:hover {
-    background: #5a6268;
+.action_buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .action_buttons .btn-success {
     background: #28a745;
     border: none;
-    color: #fff;
 }
 
-.action_buttons .btn-success:hover {
-    background: #218838;
+.action_buttons .btn-secondary {
+    background: #6c757d;
+    border: none;
+}
+
+.action_buttons .btn-primary {
+    background: #007bff;
+    border: none;
 }
 
 /* Footer Section */
 .footer_section {
-    background: #333;
+    background: #343a40;
     color: #fff;
     padding: 50px 0;
 }
 
 .footer_section h2 {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 20px;
 }
 
@@ -171,17 +157,14 @@ body::before {
 .footer_section ul li a {
     color: #fff;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .footer_section ul li a:hover {
-    text-decoration: underline;
+    color: #ffdd57;
 }
 
 .footer_section p {
     font-size: 14px;
     color: #ccc;
-}
-
-.footer_section .img-fluid {
-    max-width: 100%;
 }

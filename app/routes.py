@@ -91,13 +91,19 @@ def summerize():
                 report = result.get('report', 'No structured report available.')
                 sentiment_score = sentiment_data.get('score') or sentiment_data.get('confidence', 'N/A')
 
-                # Pass relevant data to the reports.html template (excluding verbose summary)
-                # Pass data to template
+                # Save the report as a file
+                report_filename = f"report_{uuid.uuid4().hex}.txt"  # Generate a unique filename
+                report_filepath = os.path.join(UPLOAD_FOLDER, report_filename)
+                with open(report_filepath, 'w') as f:
+                    f.write(report)  # Save the report content to the file
+
+                # Pass relevant data to the reports.html template
                 return render_template(
                     'reports.html',
                     report=report,
                     sentiment_label=sentiment_label,
-                    sentiment_score=sentiment_score
+                    sentiment_score=sentiment_score,
+                    report_filename=report_filename  # Pass the filename to the template
                 )
 
         except Exception as e:
@@ -109,17 +115,14 @@ def summerize():
     return render_template('summerize.html')
 
 
-
 @main.route('/Reports')
 def Reports():
     return render_template('Reports.html')
 
 
-@main.route('/download_report')
-def download_report():
-    # Replace `report_path` with the actual path where the report is saved
-    report_path = os.path.join(UPLOAD_FOLDER, "generated_report.txt")
-    return send_file(report_path, as_attachment=True)
+@main.route('/download_report/<filename>')
+def download_report(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
 
 
 # Route for the About Page
