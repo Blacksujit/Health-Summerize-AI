@@ -25,7 +25,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 from werkzeug.utils import secure_filename
 from .utility_script import MedicalNLPipeline
-
+from flask import Flask, render_template, request, redirect, url_for
+import sqlite3
 
 main = Blueprint('main', __name__)
 
@@ -54,6 +55,50 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')  # Your index page template
 
+
+    
+    
+# Route for the Doctors Page
+@main.route('/doctors', methods=['GET'])
+def doctors():
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute('SELECT * FROM appointments')
+    appointments = c.fetchall()
+    conn.close()
+    return render_template('doctors.html', appointments=appointments)
+
+# Route for Booking an Appointment
+@main.route('/book', methods=['POST'])
+def book():
+    doctor = request.form['doctor']
+    patient = request.form['patient']
+    time = request.form['time']
+    appointment_id = str(uuid.uuid4())
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute('INSERT INTO appointments (doctor, patient, time, appointment_id) VALUES (?, ?, ?, ?)', (doctor, patient, time, appointment_id))
+    conn.commit()
+    conn.close()
+    flash(f'Appointment booked successfully! Your appointment ID is {appointment_id}', 'success')
+    return redirect(url_for('main.doctors'))
+
+# Route for Validating Appointment ID
+@main.route('/validate_appointment', methods=['POST'])
+def validate_appointment():
+    appointment_id = request.form['appointment_id']
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute('SELECT * FROM appointments WHERE appointment_id = ?', (appointment_id,))
+    appointment = c.fetchone()
+    conn.close()
+    if appointment:
+        return jsonify({'status': 'success', 'appointment': appointment})
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid appointment ID'})
 # Route for the Protect Page
 
 @main.route('/summerize', methods=['GET', 'POST'])
@@ -130,10 +175,10 @@ def download_report(filename):
 def about():
     return render_template('about.html')  # Make sure to create 'about.html'
 
-# Route for the Doctors Page
-@main.route('/doctors')
-def doctors():
-    return render_template('doctors.html')  # Make sure to create 'doctors.html'
+# # Route for the Doctors Page
+# @main.route('/doctors')
+# def doctors():
+#     return render_template('doctors.html')  # Make sure to create 'doctors.html'
 
 # Route for the News Page
 @main.route('/news')

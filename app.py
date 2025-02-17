@@ -25,6 +25,13 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import sys
+from flask import Flask, render_template, request, redirect, url_for
+import sqlite3
+from app import create_app, init_db
+import os
+import logging
+from PyQt5.QtWidgets import QApplication
+import sys
 
 # class MainWindow(QMainWindow):
 #     def __init__(self):
@@ -40,6 +47,7 @@ import sys
 app = create_app()
 
 if __name__ == "__main__":
+    init_db()
     try:
         os.makedirs("uploads", exist_ok=True)
         os.makedirs("models", exist_ok=True)

@@ -1,200 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>Doctors</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-      <!-- Style CSS -->
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-      <!-- Responsive CSS -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-      <!-- Favicon -->
-      <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.mCustomScrollbar.min.css') }}">
-      <!-- FontAwesome -->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <!-- Owl Carousel Stylesheets -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
-      <!-- Fancybox -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-   </head>
-   <body>
-      <!--header section start -->
-      <div class="header_section header_bg">
-         <div class="container-fluid">
-               <div class="main">
-                  <div class="logo"><a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a></div>
-                  <div class="menu_text">
-                     <ul>
-                        <div class="togle_">
-                           <div class="menu_main">
-                              <ul>
-                                 <li><a href="#">Login</a></li>
-                                 <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                              </ul>
-                           </div>
-                        </div>
-                        <div id="myNav" class="overlay">
-                           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                           <div class="overlay-content">
-                              <a href="{{ url_for('main.index') }}">Home</a>
-                              <a href="{{ url_for('main.summerize') }}">Protect</a>
-                              <a href="{{ url_for('main.about') }}">About</a>
-                              <a href="{{ url_for('main.doctors') }}">Doctors</a>
-                              <a href="{{ url_for('main.news') }}">News</a>
-                           </div>   
-                        </div>
-                        <span class="navbar-toggler-icon"></span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon.png') }}" class="toggle_menu">
-                        </span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon1.png') }}" class="toggle_menu_1">
-                        </span>
-                     </ul>
-                  </div>
-               </div>
+<head>
+    <!-- Basic Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Virtual Doctor Consultation</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- WebRTC -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.0/simplepeer.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .header_section {
+            background-color: #343a40;
+            padding: 10px 0;
+        }
+        .header_section .navbar-brand {
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header_section .navbar-nav .nav-link {
+            color: #fff;
+            margin-right: 15px;
+        }
+        .banner_section {
+            background-color: #007bff;
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+        .doctors_section {
+            padding: 50px 0;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .video-container video {
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .video-container input, .video-container button {
+            margin: 5px;
+        }
+        .appointment-form {
+            margin-top: 20px;
+        }
+        .appointment-form input, .appointment-form button {
+            margin: 5px;
+        }
+        .appointments-list {
+            margin-top: 20px;
+        }
+        .appointments-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .appointments-list li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section Start -->
+    <header class="header_section">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">Health Summarize AI</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Banner Section Start -->
+    <section class="banner_section">
+        <div class="container">
+            <div class="banner_content">
+                <h1>Virtual Doctor Consultation</h1>
             </div>
-            <!-- banner section start -->
-            <div class="container">
-               <div class="about_taital_main">
-                  <h2 class="about_tag">Doctors Corona Virus</h2>
-                  <div class="about_menu">
-                     <ul>
-                        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                        <li>Doctors</li>
-                     </ul>
-                  </div>
-               </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+
+    <!-- Doctor Section Start -->
+    <div class="doctors_section">
+        <div class="container">
+            <!-- Video Call Section Start -->
+            <div class="video-container">
+                <h2>Virtual Consultation</h2>
+                <video id="localVideo" autoplay muted></video>
+                <video id="remoteVideo" autoplay></video>
+                <input id="appointmentId" placeholder="Appointment ID" />
+                <button id="validateAppointment">Validate Appointment</button>
+                <input id="yourId" placeholder="Your ID" style="display:none;" />
+                <input id="otherId" placeholder="Other ID" style="display:none;" />
+                <button id="connect" style="display:none;">Connect</button>
+                <button id="startCall" style="display:none;">Start Call</button>
             </div>
-         <!-- banner section end -->
-      </div>
-      <!-- header section end -->
-      <!-- doctor section start -->
-      <div class="doctors_section layout_padding">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="taital_main">
-                     <div class="taital_left">
-                        <div class="play_icon"><img src="{{url_for('static', filename='images/play-icon.png')}}"></div>
-                     </div>
-                     <div class="taital_right">
-                        <h1 class="doctor_taital">What doctors say..</h1>
-                        <p class="doctor_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look</p>
-                        <div class="readmore_bt"><a href="#">Read More</a></div>
-                     </div>
-                  </div>
-               </div>
+            <!-- Video Call Section End -->
+
+            <!-- Appointment Booking Section Start -->
+            <div class="appointment-form">
+                <h2>Book an Appointment</h2>
+                <form action="{{ url_for('main.book') }}" method="POST">
+                    <label for="doctor">Doctor:</label>
+                    <input type="text" id="doctor" name="doctor" required>
+                    <label for="patient">Patient:</label>
+                    <input type="text" id="patient" name="patient" required>
+                    <label for="time">Time:</label>
+                    <input type="datetime-local" id="time" name="time" required>
+                    <button type="submit">Book</button>
+                </form>
             </div>
-         </div>
-      </div>
-      <!-- doctor section end -->
-      <!-- footer section start -->
-      <div class="footer_section layout_padding">
-         <div class="container">
+            <!-- Appointment Booking Section End -->
+
+            <!-- Appointments List Section Start -->
+            <div class="appointments-list">
+                <h2>Appointments</h2>
+                <ul>
+                    {% for appointment in appointments %}
+                        <li>{{ appointment[1] }} with {{ appointment[2] }} at {{ appointment[3] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Appointments List Section End -->
+        </div>
+    </div>
+    <!-- Doctor Section End -->
+
+    <!-- Footer Section Start -->
+    <footer class="footer_section">
+        <div class="container">
             <div class="footer_section_2">
-               <div class="row">
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Resources</h2>
-                     <div class="footer_menu">
-                        <ul>
-                           <li><a href="#">What we do</a></li>
-                           <li><a href="#">Media</a></li>
-                           <li><a href="#">Travel Advice</a></li>
-                           <li><a href="#">Protection</a></li>
-                           <li><a href="#">Care</a></li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">About</h2>
-                     <p class="footer_text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various</p>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Contact Us</h2>
-                     <div class="location_text">
-                        <ul>
-                           <li>
-                              <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>
-                              <span class="padding_15">Location</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>
-                              <span class="padding_15">Call +01 1234567890</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i>
-                              <span class="padding_15">demo@gmail.com</span></a>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">countrys</h2>
-                     <div class="map_image"><img src="{{url_for('static', filename='images/map-bg.png')}}"></div>
-                  </div>
-               </div>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <h2 class="useful_text">Resources</h2>
+                        <div class="footer_menu">
+                            <ul>
+                                <li><a href="#">What we do</a></li>
+                                <li><a href="#">Media</a></li>
+                                <li><a href="#">Travel Advice</a></li>
+                                <li><a href="#">Protection</a></li>
+                                <li><a href="#">Care</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <h2 class="useful_text">About</h2>
+                        <p class="footer_text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various</p>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <h2 class="useful_text">Contact Us</h2>
+                        <div class="location_text">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    <span class="padding_15">Location</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>
+                                    <span class="padding_15">Call +01 1234567890</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <span class="padding_15">demo@gmail.com</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <h2 class="useful_text">Countries</h2>
+                        <div class="map_image"><img src="{{url_for('static', filename='images/map-bg.png')}}"></div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-      <!-- footer section end -->
-      <!-- copyright section start -->
-      <div class="copyright_section">
-         <div class="container">
-            <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text">© 2020 All Rights Reserved.<a href="https://html.design"> Free  html Templates</a></p>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- copyright section end -->
-      <!-- Javascript files-->
-      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-      <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
-      <script>
-         $(document).ready(function(){
-         $(".fancybox").fancybox({
-         openEffect: "none",
-         closeEffect: "none"
-         });
-              
-         $(".zoom").hover(function(){
-              
-         $(this).addClass('transition');
-         }, function(){
-              
-         $(this).removeClass('transition');
-         });
-         });
-      </script> 
-      <script>
-         function openNav() {
-         document.getElementById("myNav").style.width = "100%";
-         }
-         function closeNav() {
-         document.getElementById("myNav").style.width = "0%";
-         }
-      </script>  
-   </body>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Javascript files-->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            $(".fancybox").fancybox({
+                openEffect: "none",
+                closeEffect: "none"
+            });
+            
+            $(".zoom").hover(function(){
+                $(this).addClass('transition');
+            }, function(){
+                $(this).removeClass('transition');
+            });
+        });
+
+        function openNav() {
+            document.getElementById("myNav").style.width = "100%";
+        }
+        function closeNav() {
+            document.getElementById("myNav").style.width = "0%";
+        }
+
+        // WebRTC Implementation
+        const peer = new SimplePeer({ initiator: location.hash === '#init', trickle: false });
+
+        peer.on('signal', data => {
+            document.getElementById('yourId').value = JSON.stringify(data);
+        });
+
+        document.getElementById('connect').addEventListener('click', () => {
+            const otherId = JSON.parse(document.getElementById('otherId').value);
+            peer.signal(otherId);
+        });
+
+        peer.on('stream', stream => {
+            const remoteVideo = document.getElementById('remoteVideo');
+            remoteVideo.srcObject = stream;
+            remoteVideo.play();
+        });
+
+        document.getElementById('startCall').addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+                const localVideo = document.getElementById('localVideo');
+                localVideo.srcObject = stream;
+                localVideo.play();
+                peer.addStream(stream);
+            });
+        });
+
+        document.getElementById('validateAppointment').addEventListener('click', () => {
+            const appointmentId = document.getElementById('appointmentId').value;
+            $.post('{{ url_for("main.validate_appointment") }}', { appointment_id: appointmentId }, function(data) {
+                if (data.status === 'success') {
+                    document.getElementById('yourId').style.display = 'block';
+                    document.getElementById('otherId').style.display = 'block';
+                    document.getElementById('connect').style.display = 'block';
+                    document.getElementById('startCall').style.display = 'block';
+                } else {
+                    alert('Invalid appointment ID');
+                }
+            });
+        });
+    </script>
+</body>
 </html>
