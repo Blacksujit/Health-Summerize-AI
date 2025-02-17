@@ -30,7 +30,6 @@ body {
 
 /* Banner Section */
 .banner_section {
-    background: url('{{ url_for("static", filename="images/hospital_bg.png") }}') no-repeat center center/cover;
     color: #fff;
     padding: 100px 0;
     text-align: center;

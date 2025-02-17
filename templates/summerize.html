@@ -13,15 +13,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <!-- Style CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/summerize_style.css') }}">
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <!-- Dynamic CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dynamic.css') }}">
     <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="{{ url_for('static', filename='images/HealthSummerizeAI.jpg') }}" type="image/gif">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 </head>
@@ -31,7 +35,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light">
                 <a class="navbar-brand" href="{{ url_for('main.index') }}">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                    <img src="{{ url_for('static', filename='images/HealthSummerizeAI.jpg') }}" alt="Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -53,11 +57,10 @@
     <!-- Header Section End -->
 
     <!-- Banner Section Start -->
-    <section class="banner_section">
+    <section class="banner_section" style="background: url('{{ url_for('static', filename='images/HealthSummarizeAI.jpg') }}') no-repeat center center/cover;">
         <div class="container">
             <div class="banner_content text-center">
                 <h1>Summarize EHR Records</h1>
- 
             </div>
         </div>
     </section>
@@ -90,7 +93,7 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <img src="{{ url_for('static', filename='images/img-2.png') }}" alt="AI Summarizer Illustration" class="img-fluid">
+                    <img src="{{ url_for('static', filename='images/img-2.png') }}" alt="AI Summarizer Illustration" class="img-fluid img-container">
                 </div>
             </div>
         </div>
@@ -137,6 +140,7 @@
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -150,23 +154,27 @@
             });
 
             function showPopup(message) {
-                const popup = document.createElement('div');
-                popup.className = 'custom-popup show';
-                popup.innerHTML = `
-                    <div class="popup-content">${message}</div>
-                    <div class="popup-close" onclick="closePopup(this)">×</div>
-                `;
-                document.body.appendChild(popup);
-                setTimeout(() => {
-                    closePopup(popup);
-                }, 5000); // Popup will disappear after 5 seconds
-            }
-
-            function closePopup(element) {
-                element.classList.remove('show');
-                setTimeout(() => {
-                    element.remove();
-                }, 300);
+                let timerInterval;
+                Swal.fire({
+                    title: '⚠️⚠️Auto close alert!⚠️⚠️',
+                    html: message + ' I will close in <b></b> milliseconds.',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getHtmlContainer().querySelector('b');
+                        timerInterval = setInterval(() => {
+                            timer.textContent = Swal.getTimerLeft();
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer');
+                    }
+                });
             }
 
             // GSAP Animations
@@ -181,4 +189,3 @@
     </script>
 </body>
 </html>
-
