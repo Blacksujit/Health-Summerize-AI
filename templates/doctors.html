@@ -60,12 +60,19 @@
         }
         .appointment-form {
             margin-top: 20px;
+            text-align: center;
         }
         .appointment-form input, .appointment-form button {
             margin: 5px;
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
         .appointments-list {
             margin-top: 20px;
+            text-align: center;
         }
         .appointments-list ul {
             list-style-type: none;
@@ -77,6 +84,7 @@
             padding: 10px;
             margin-bottom: 5px;
             border-radius: 5px;
+            text-align: left;
         }
     </style>
 </head>
@@ -117,6 +125,17 @@
     <!-- Doctor Section Start -->
     <div class="doctors_section">
         <div class="container">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alert alert-info" role="alert">
+                        {% for category, message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
             <!-- Video Call Section Start -->
             <div class="video-container">
                 <h2>Virtual Consultation</h2>
