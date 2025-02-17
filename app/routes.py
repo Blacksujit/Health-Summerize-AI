@@ -57,7 +57,7 @@ def index():
 
 
     
-    
+# Route for the Doctors Page
 # Route for the Doctors Page
 @main.route('/doctors', methods=['GET'])
 def doctors():
@@ -76,7 +76,7 @@ def book():
     patient = request.form['patient']
     time = request.form['time']
     appointment_id = str(uuid.uuid4())
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'appointments.db')
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute('INSERT INTO appointments (doctor, patient, time, appointment_id) VALUES (?, ?, ?, ?)', (doctor, patient, time, appointment_id))
@@ -89,7 +89,7 @@ def book():
 @main.route('/validate_appointment', methods=['POST'])
 def validate_appointment():
     appointment_id = request.form['appointment_id']
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'appointments.db')
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute('SELECT * FROM appointments WHERE appointment_id = ?', (appointment_id,))
