@@ -35,41 +35,80 @@ import re
 import logging
 from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForSequenceClassification, GPT2LMHeadModel, GPT2Tokenizer, LongformerTokenizer, LongformerForSequenceClassification
 import shutil
+import warnings
+import torchvision
+import tensorflow as tf
+import warnings
+import tensorflow as tf
+import torchvision
+
+# ===== TensorFlow Fixes =====
+# Option 1: Use compat.v1 for backward compatibility
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+# Option 2: Disable TensorFlow warnings entirely
+# warnings.filterwarnings("ignore", category=DeprecationWarning)
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logs
+
+# ===== PyTorch Fixes =====
+torchvision.disable_beta_transforms_warning()  # Disable torchvision beta warnings
+
+# Optional: Suppress all warnings (not recommended)
+# warnings.filterwarnings("ignore")
+# shutil.rmtree('~/.cache/huggingface', ignore_errors=True)
+# logging.basicConfig(level=logging.INFO)
+# print("imported all packages")
+
+from transformers import (
+    AutoTokenizer, AutoModelForTokenClassification, AutoModelForSeq2SeqLM,
+    pipeline, LongformerTokenizer, LongformerForSequenceClassification, 
+    GPT2LMHeadModel, GPT2Tokenizer
+)
+import os
+
+# ✅ Define cache directory in a permanent location
+CACHE_DIR = "D:/cahc_models_folder"  # Change this to a suitable directory
+
+# ✅ 1. Load Bi-BERT Model For NER Pipeline
+model_name_biobert = "blackshadow1/biobert-ner-model"
+ner_tokenizer = AutoTokenizer.from_pretrained(model_name_biobert, cache_dir=CACHE_DIR)
+ner_model = AutoModelForTokenClassification.from_pretrained(model_name_biobert, cache_dir=CACHE_DIR,torch_dtype=torch.float16)
+nlp_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, grouped_entities=True)
+
+# ✅ 2. Load Sentiment Analysis Pipeline Model 
+model_name_sentiment = "blackshadow1/sentiment-model"
+sentiment_pipeline = pipeline("sentiment-analysis", model=model_name_sentiment)
+
+# ✅ 3. Load the Summarization Model Pipeline 
+model_name_summarization = "blackshadow1/t5-summarization-model"
+summarization_tokenizer = AutoTokenizer.from_pretrained(model_name_summarization, cache_dir=CACHE_DIR)
+summarization_model = AutoModelForSeq2SeqLM.from_pretrained(model_name_summarization, cache_dir=CACHE_DIR)
+
+# ✅ 4. Load the Longformer Model Pipeline 
+model_name_longformer = "blackshadow1/longformer-model"
+longformer_tokenizer = LongformerTokenizer.from_pretrained(model_name_longformer, cache_dir=CACHE_DIR)
+longformer_model = LongformerForSequenceClassification.from_pretrained(model_name_longformer, cache_dir=CACHE_DIR)
+
+# ✅ 5. Initialize the GPT-2 Model & Tokenizer
+gpt2_model_name = "blackshadow1/gpt2-model"
+gpt2_tokenizer = GPT2Tokenizer.from_pretrained(gpt2_model_name, cache_dir=CACHE_DIR)
+gpt2_model = GPT2LMHeadModel.from_pretrained(gpt2_model_name, cache_dir=CACHE_DIR)
+
+# # Load BioBERT Model for NER
+# ner_model = AutoModelForTokenClassification.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
+# ner_tokenizer = AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
+
+# # Create an NER Pipeline
+# ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, grouped_entities=True)
 
 
-shutil.rmtree('~/.cache/huggingface', ignore_errors=True)
-logging.basicConfig(level=logging.INFO)
-print("imported all packages")
+# # Load models for Context-Aware Sentiment Analysis
+# context_sentiment_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
+# context_sentiment_model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
 
 
 
 
-# Load Sentiment Analysis Pipeline
-sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
-
-# Load BioBERT Model for NER
-ner_model = AutoModelForTokenClassification.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
-ner_tokenizer = AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
-
-# Create an NER Pipeline
-ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, grouped_entities=True)
-
-# Load T5 Model for Summarization
-summarization_model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")  # Use 't5-large' for better performance
-summarization_tokenizer = AutoTokenizer.from_pretrained("t5-base")
-
-# Load models for Context-Aware Sentiment Analysis
-context_sentiment_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-context_sentiment_model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-
-# Load Longformer model for handling long text
-longformer_tokenizer = LongformerTokenizer.from_pretrained("allenai/longformer-base-4096")
-longformer_model = LongformerForSequenceClassification.from_pretrained("allenai/longformer-base-4096")
-
-# Initialize the GPT-2 model and tokenizer from Hugging Face
-gpt2_model_name = "gpt2"  # You can also use "gpt2-medium", "gpt2-large", or "gpt2-xl" for larger models
-gpt2_model = GPT2LMHeadModel.from_pretrained(gpt2_model_name)
-gpt2_tokenizer = GPT2Tokenizer.from_pretrained(gpt2_model_name)
 
 
 # Move the model to the GPU if available (optional but recommended for large models)

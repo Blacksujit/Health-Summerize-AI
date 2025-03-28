@@ -7,10 +7,14 @@ import sqlite3
 import os 
 
 def init_db():
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'appointments.db')
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
+        # Free up space by setting journal mode to MEMORY
+    c.execute("PRAGMA journal_mode = MEMORY;")
+    c.execute("PRAGMA temp_store = MEMORY;")
+    
     c.execute('DROP TABLE IF EXISTS appointments')  # Drop the existing table if it exists
     c.execute('''CREATE TABLE appointments
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, doctor TEXT, patient TEXT, time TEXT, appointment_id TEXT UNIQUE)''')
@@ -21,7 +25,8 @@ def create_app():
     app = Flask(__name__, template_folder='../templates', static_folder='../static')  # Specify the path to the templates and static folders
     # Set cache directory and other caching parameters
     # app.register_blueprint(main)  # Register Blueprint
-    
+    # ✅ Fix Hugging Face model cache storage
+    os.environ["HUGGINGFACE_HUB_CACHE"] = "D:/cahc_models_folder"
     # models_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
     CORS(app)
     app.secret_key = 'blackshadow'  # Replace 'your_secret_key' with a strong, unique key
