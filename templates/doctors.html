@@ -1,293 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Basic Meta Tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Doctor Consultation</title>
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <!-- WebRTC -->
-    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.0/simplepeer.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dynamic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/feather.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fullcalendar.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fullcalendar.print.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}">
+
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
         }
-        .header_section {
-            background-color: #343a40;
-            padding: 10px 0;
+        .navbar {
+            background-color: #007bff;
         }
-        .header_section .navbar-brand {
-            color: #fff;
-            font-size: 24px;
+        .navbar-brand {
             font-weight: bold;
+            color: #fff !important;
         }
-        .header_section .navbar-nav .nav-link {
-            color: #fff;
-            margin-right: 15px;
+        .navbar-nav .nav-link {
+            color: #fff !important;
         }
         .banner_section {
-            background-color: #007bff;
+            background: url('{{ url_for('static', filename='images/banner-bg.png') }}') no-repeat center center/cover;
             color: #fff;
-            padding: 50px 0;
+            padding: 60px 0;
             text-align: center;
         }
-        .doctors_section {
-            padding: 50px 0;
+        .banner_taital {
+            font-size: 2.5rem;
+            font-weight: bold;
         }
-        .video-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 20px;
-        }
-        .video-container video {
-            width: 80%;
-            max-width: 600px;
-            border: 2px solid #ddd;
+        .appointment-form, .appointments-list, .video-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
             border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        .video-container input, .video-container button {
-            margin: 5px;
-        }
-        .appointment-form {
-            margin-top: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .appointment-form input, .appointment-form button {
-            margin: 5px;
-        }
-        .appointments-list {
-            margin-top: 20px;
+            margin-bottom: 10px;
         }
         .appointments-list ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
         .appointments-list li {
-            background-color: #fff;
+            background-color: #f8f9fa;
             border: 1px solid #ddd;
             padding: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .appointments-list li:hover {
+            background-color: #e9ecef;
+        }
+        .copy-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+        .video-container video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .footer_section {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <!-- Header Section Start -->
-    <header class="header_section">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-dark">
-                <a class="navbar-brand" href="{{ url_for('main.index') }}">Health Summarize AI</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <!-- Header Section End -->
-
-    <!-- Banner Section Start -->
-    <section class="banner_section">
-        <div class="container">
-            <div class="banner_content">
-                <h1>Virtual Doctor Consultation</h1>
-            </div>
-        </div>
-    </section>
-    <!-- Banner Section End -->
-
-    <!-- Doctor Section Start -->
-    <div class="doctors_section">
-        <div class="container">
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="alert alert-info" role="alert">
-                        {% for category, message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
-            <!-- Video Call Section Start -->
-            <div class="video-container">
-                <h2>Virtual Consultation</h2>
-                <video id="localVideo" autoplay muted></video>
-                <video id="remoteVideo" autoplay></video>
-                <input id="appointmentId" placeholder="Appointment ID" />
-                <button id="validateAppointment">Validate Appointment</button>
-                <input id="yourId" placeholder="Your ID" style="display:none;" />
-                <input id="otherId" placeholder="Other ID" style="display:none;" />
-                <button id="connect" style="display:none;">Connect</button>
-                <button id="startCall" style="display:none;">Start Call</button>
-            </div>
-            <!-- Video Call Section End -->
-
-            <!-- Appointment Booking Section Start -->
-            <div class="appointment-form">
-                <h2>Book an Appointment</h2>
-                <form action="{{ url_for('main.book') }}" method="POST">
-                    <label for="doctor">Doctor:</label>
-                    <input type="text" id="doctor" name="doctor" required>
-                    <label for="patient">Patient:</label>
-                    <input type="text" id="patient" name="patient" required>
-                    <label for="time">Time:</label>
-                    <input type="datetime-local" id="time" name="time" required>
-                    <button type="submit">Book</button>
-                </form>
-            </div>
-            <!-- Appointment Booking Section End -->
-
-            <!-- Appointments List Section Start -->
-            <div class="appointments-list">
-                <h2>Appointments</h2>
-                <ul>
-                    {% for appointment in appointments %}
-                        <li>{{ appointment[1] }} with {{ appointment[2] }} at {{ appointment[3] }}</li>
-                    {% endfor %}
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="40">
+                Health Summarize AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.doctors') }}">Doctors</a></li>
                 </ul>
             </div>
-            <!-- Appointments List Section End -->
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <div class="banner_section">
+        <div class="container text-center">
+            <h1 class="banner_taital">Virtual Doctor Consultation</h1>
+            <p class="banner_text">Book an appointment and start your virtual consultation with ease.</p>
         </div>
     </div>
-    <!-- Doctor Section End -->
 
-    <!-- Footer Section Start -->
-    <footer class="footer_section">
-        <div class="container">
-            <div class="footer_section_2">
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <h2 class="useful_text">Resources</h2>
-                        <div class="footer_menu">
-                            <ul>
-                                <li><a href="#">What we do</a></li>
-                                <li><a href="#">Media</a></li>
-                                <li><a href="#">Travel Advice</a></li>
-                                <li><a href="#">Protection</a></li>
-                                <li><a href="#">Care</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <h2 class="useful_text">About</h2>
-                        <p class="footer_text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various</p>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <h2 class="useful_text">Contact Us</h2>
-                        <div class="location_text">
-                            <ul>
-                                <li>
-                                    <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>
-                                    <span class="padding_15">Location</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>
-                                    <span class="padding_15">Call +01 1234567890</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i>
-                                    <span class="padding_15">demo@gmail.com</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <h2 class="useful_text">Countries</h2>
-                        <div class="map_image"><img src="{{url_for('static', filename='images/map-bg.png')}}"></div>
-                    </div>
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <!-- Appointment Booking Section -->
+        <div class="appointment-form shadow-lg p-4 rounded">
+            <h2 class="section-title">Book an Appointment</h2>
+            <form action="{{ url_for('main.book') }}" method="POST">
+                <div class="mb-3">
+                    <label for="doctor" class="form-label">Doctor</label>
+                    <input type="text" id="doctor" name="doctor" class="form-control" placeholder="Enter doctor's name" required>
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="patient" class="form-label">Patient</label>
+                    <input type="text" id="patient" name="patient" class="form-control" placeholder="Enter your name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="time" class="form-label">Appointment Time</label>
+                    <input type="datetime-local" id="time" name="time" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Book Appointment</button>
+            </form>
+        </div>
+
+        <!-- Appointments List Section -->
+        <div class="appointments-list shadow-lg p-4 rounded">
+            <h2 class="section-title">Your Appointments</h2>
+            <ul class="list-group">
+                {% for appointment in appointments %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Doctor:</strong> {{ appointment['doctor'] }}<br>
+                            <strong>Patient:</strong> {{ appointment['patient'] }}<br>
+                            <strong>Time:</strong> {{ appointment['time'] }}<br>
+                            <strong>Appointment ID:</strong> <span id="appointmentId-{{ loop.index }}">{{ appointment['appointment_id'] }}</span>
+                        </div>
+                        <button class="btn btn-outline-primary copy-btn" onclick="copyToClipboard('appointmentId-{{ loop.index }}')">
+                            <i class="fas fa-copy"></i> Copy ID
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Video Consultation Section -->
+        <div class="video-container shadow-lg p-4 rounded">
+            <h2 class="section-title">Start Virtual Consultation</h2>
+            <input id="appointmentIdInput" class="form-control mb-3" placeholder="Enter Appointment ID" />
+            <button id="validateAppointment" class="btn btn-primary w-100">Validate Appointment</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer_section">
+        <div class="container text-center">
+            <p>&copy; 2025 Health Summarize AI. All rights reserved.</p>
         </div>
     </footer>
-    <!-- Footer Section End -->
 
-    <!-- Javascript files-->
+    <!-- JavaScript Files -->
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.validate.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-    <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/nice-select.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+    
+
+    <!-- Custom JS -->
     <script>
-        $(document).ready(function(){
-            $(".fancybox").fancybox({
-                openEffect: "none",
-                closeEffect: "none"
+        // Copy Appointment ID to Clipboard
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Appointment ID copied to clipboard!');
             });
-            
-            $(".zoom").hover(function(){
-                $(this).addClass('transition');
-            }, function(){
-                $(this).removeClass('transition');
-            });
-        });
-
-        function openNav() {
-            document.getElementById("myNav").style.width = "100%";
-        }
-        function closeNav() {
-            document.getElementById("myNav").style.width = "0%";
         }
 
-        // WebRTC Implementation
-        const peer = new SimplePeer({ initiator: location.hash === '#init', trickle: false });
-
-        peer.on('signal', data => {
-            document.getElementById('yourId').value = JSON.stringify(data);
-        });
-
-        document.getElementById('connect').addEventListener('click', () => {
-            const otherId = JSON.parse(document.getElementById('otherId').value);
-            peer.signal(otherId);
-        });
-
-        peer.on('stream', stream => {
-            const remoteVideo = document.getElementById('remoteVideo');
-            remoteVideo.srcObject = stream;
-            remoteVideo.play();
-        });
-
-        document.getElementById('startCall').addEventListener('click', () => {
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-                const localVideo = document.getElementById('localVideo');
-                localVideo.srcObject = stream;
-                localVideo.play();
-                peer.addStream(stream);
-            });
-        });
-
+        // Validate Appointment
         document.getElementById('validateAppointment').addEventListener('click', () => {
-            const appointmentId = document.getElementById('appointmentId').value;
-            $.post('{{ url_for("main.validate_appointment") }}', { appointment_id: appointmentId }, function(data) {
+            const appointmentId = document.getElementById('appointmentIdInput').value;
+            fetch('{{ url_for("main.validate_appointment") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ appointment_id: appointmentId })
+            })
+            .then(response => response.json())
+            .then(data => {
                 if (data.status === 'success') {
-                    document.getElementById('yourId').style.display = 'block';
-                    document.getElementById('otherId').style.display = 'block';
-                    document.getElementById('connect').style.display = 'block';
-                    document.getElementById('startCall').style.display = 'block';
+                    alert('Appointment validated! You can now start the consultation.');
+                    window.location.href = "{{ url_for('main.virtual_consultation_voice', appointment_id='') }}" + appointmentId;
                 } else {
-                    alert('Invalid appointment ID');
+                    alert('Invalid appointment ID. Please try again.');
                 }
             });
         });

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Voice Consultation</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Virtual Voice Consultation</h1>
+    <div id="chat-box">
+        <!-- Chat messages will appear here -->
+    </div>
+    <button onclick="startRecording()">Start Talking</button>
+    <button onclick="stopRecording()">Stop Talking</button>
+
+    <script>
+        const socket = io();
+        let mediaRecorder;
+        let audioChunks = [];
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob);
+
+                        // Send audio file to the server
+                        fetch('/upload_audio', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            socket.emit('user_voice', { audio_file_path: data.file_path });
+                        });
+
+                        audioChunks = [];
+                    };
+                });
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+        }
+
+        // Receive AI response from the server
+        socket.on('ai_voice_response', (data) => {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<p><strong>AI Doctor:</strong> ${data.response_text}</p>`;
+
+            // Play the AI doctor's voice response
+            const audio = new Audio(data.response_audio);
+            audio.play();
+        });
+    </script>
+</body>
+</html>

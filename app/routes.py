@@ -27,6 +27,8 @@ from werkzeug.utils import secure_filename
 from .utility_script import MedicalNLPipeline
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from .__init__ import db  # Import Firestore database instance
+
 
 main = Blueprint('main', __name__)
 
@@ -61,12 +63,10 @@ def index():
 # Route for the Doctors Page
 @main.route('/doctors', methods=['GET'])
 def doctors():
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'database.db')
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('SELECT * FROM appointments')
-    appointments = c.fetchall()
-    conn.close()
+    # Fetch all appointments from Firebase Firestore
+    appointments_ref = db.collection('appointments')
+    appointments = [doc.to_dict() for doc in appointments_ref.stream()]
+
     return render_template('doctors.html', appointments=appointments)
 
 # Route for Booking an Appointment
@@ -75,31 +75,42 @@ def book():
     doctor = request.form['doctor']
     patient = request.form['patient']
     time = request.form['time']
-    appointment_id = str(uuid.uuid4())
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'appointments.db')
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('INSERT INTO appointments (doctor, patient, time, appointment_id) VALUES (?, ?, ?, ?)', (doctor, patient, time, appointment_id))
-    conn.commit()
-    conn.close()
+    appointment_id = str(uuid.uuid4())  # Generate a unique appointment ID
+
+    # Save appointment to Firebase Firestore
+    appointment_data = {
+        'doctor': doctor,
+        'patient': patient,
+        'time': time,
+        'appointment_id': appointment_id
+    }
+    db.collection('appointments').document(appointment_id).set(appointment_data)
+
     flash(f'Appointment booked successfully! Your appointment ID is {appointment_id}', 'success')
     return redirect(url_for('main.doctors'))
 
 # Route for Validating Appointment ID
 @main.route('/validate_appointment', methods=['POST'])
 def validate_appointment():
-    appointment_id = request.form['appointment_id']
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database', 'appointments.db')
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('SELECT * FROM appointments WHERE appointment_id = ?', (appointment_id,))
-    appointment = c.fetchone()
-    conn.close()
-    if appointment:
-        return jsonify({'status': 'success', 'appointment': appointment})
+    data = request.get_json()  # Parse JSON data from the request
+    appointment_id = data.get('appointment_id')
+
+    if not appointment_id:
+        return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
+
+    # Check if the appointment exists in Firebase Firestore
+    appointment_ref = db.collection('appointments').document(appointment_id)
+    appointment = appointment_ref.get()
+
+    if appointment.exists:
+        return jsonify({'status': 'success', 'appointment': appointment.to_dict()})
     else:
         return jsonify({'status': 'error', 'message': 'Invalid appointment ID'})
 # Route for the Protect Page
+
+@main.route('/virtual_consultation_voice/<appointment_id>')
+def virtual_consultation_voice(appointment_id):
+    return render_template('virtual_consultation_voice.html', appointment_id=appointment_id)
 
 @main.route('/summerize', methods=['GET', 'POST'])
 def summerize():

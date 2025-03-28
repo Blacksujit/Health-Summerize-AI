@@ -9,3 +9,6 @@ venv/
 # Ignore logs and temporary files
 *.log
 *.tmp
+config/water-management-91e4a-firebase-adminsdk-drmsv-dd559d16f2.json
+
+.env
