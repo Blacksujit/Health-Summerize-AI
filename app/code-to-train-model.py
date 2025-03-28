@@ -1,7 +1,10 @@
 # -------------------------------------------------------------------------------This is the commented code to train the model and save it only uncomment it if u need to train the model---------------------------------------------------------------------------------------
 
 
-
+#⚠️⚠️⚠️⚠️ These  Models r not in use currently dont uncomment the script or train the models as it is alerady deployed on the hugging face model hub⚠️⚠️⚠️⚠️
+#⚠️⚠️⚠️⚠️ These  Models r not in use currently dont uncomment the script or train the models as it is alerady deployed on the hugging face model hub⚠️⚠️⚠️⚠️
+#⚠️⚠️⚠️⚠️ These  Models r not in use currently dont uncomment the script or train the models as it is alerady deployed on the hugging face model hub⚠️⚠️⚠️⚠️
+#⚠️⚠️⚠️⚠️ These  Models r not in use currently dont uncomment the script or train the models as it is alerady deployed on the hugging face model hub⚠️⚠️⚠️⚠️
 
 
 
