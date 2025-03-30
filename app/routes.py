@@ -63,55 +63,181 @@ def index():
 # Route for the Doctors Page
 @main.route('/doctors', methods=['GET'])
 def doctors():
-    # Fetch all appointments from Firebase Firestore
-    appointments_ref = db.collection('appointments')
-    appointments = [doc.to_dict() for doc in appointments_ref.stream()]
-
-    return render_template('doctors.html', appointments=appointments)
-
+    try:
+        # Fetch active appointments
+        appointments_ref = db.collection('appointments')
+        appointments = [doc.to_dict() for doc in appointments_ref.stream()]
+        
+        # Fetch completed appointments
+        completed_ref = db.collection('completed_appointments')
+        completed_appointments = [doc.to_dict() for doc in completed_ref.stream()]
+        
+        return render_template(
+            'doctors.html',
+            appointments=appointments,
+            completed_appointments=completed_appointments
+        )
+    except Exception as e:
+        logging.error(f"Error fetching appointments: {str(e)}")
+        flash("Error loading appointments", "error")
+        return render_template('doctors.html', appointments=[], completed_appointments=[])
+    
 # Route for Booking an Appointment
 @main.route('/book', methods=['POST'])
 def book():
-    doctor = request.form['doctor']
-    patient = request.form['patient']
-    time = request.form['time']
-    appointment_id = str(uuid.uuid4())  # Generate a unique appointment ID
-
-    # Save appointment to Firebase Firestore
-    appointment_data = {
-        'doctor': doctor,
-        'patient': patient,
-        'time': time,
-        'appointment_id': appointment_id
-    }
-    db.collection('appointments').document(appointment_id).set(appointment_data)
-
-    flash(f'Appointment booked successfully! Your appointment ID is {appointment_id}', 'success')
-    return redirect(url_for('main.doctors'))
-
+    try:
+        # Validate and format input
+        doctor = request.form.get('doctor', '').strip()
+        patient = request.form.get('patient', '').strip()
+        time_str = request.form.get('time', '').strip()
+        
+        if not all([doctor, patient, time_str]):
+            flash("All fields are required", "error")
+            return redirect(url_for('main.doctors'))
+        
+        # Format datetime
+        try:
+            time_obj = datetime.datetime.strptime(time_str, '%Y-%m-%dT%H:%M')
+            formatted_time = time_obj.strftime('%B %d, %Y at %I:%M %p')
+        except ValueError:
+            flash("Invalid date and time format", "error")
+            return redirect(url_for('main.doctors'))
+        
+        # Create appointment
+        appointment_id = str(uuid.uuid4())
+        appointment_data = {
+            'doctor': doctor,
+            'patient': patient,
+            'time': formatted_time,
+            'appointment_id': appointment_id,
+            'status': 'scheduled',
+            'created_at': datetime.datetime.now().isoformat()
+        }
+        
+        # Save to Firestore
+        db.collection('appointments').document(appointment_id).set(appointment_data)
+        
+        flash(f"Appointment booked successfully! Your ID: {appointment_id}", "success")
+        return redirect(url_for('main.doctors'))
+    
+    except Exception as e:
+        logging.error(f"Booking error: {str(e)}")
+        flash("Error booking appointment. Please try again.", "error")
+        return redirect(url_for('main.doctors'))
+    
+@main.route('/get_appointments', methods=['GET'])
+def get_appointments():
+    try:
+        # Fetch active appointments
+        appointments_ref = db.collection('appointments')
+        appointments = [doc.to_dict() for doc in appointments_ref.stream()]
+        
+        return jsonify({
+            'status': 'success',
+            'appointments': appointments
+        })
+    except Exception as e:
+        logging.error(f"Error fetching appointments: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Error fetching appointments'}), 500
+    
 # Route for Validating Appointment ID
 @main.route('/validate_appointment', methods=['POST'])
 def validate_appointment():
-    data = request.get_json()  # Parse JSON data from the request
-    appointment_id = data.get('appointment_id')
-
-    if not appointment_id:
-        return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
-
-    # Check if the appointment exists in Firebase Firestore
-    appointment_ref = db.collection('appointments').document(appointment_id)
-    appointment = appointment_ref.get()
-
-    if appointment.exists:
-        return jsonify({'status': 'success', 'appointment': appointment.to_dict()})
-    else:
-        return jsonify({'status': 'error', 'message': 'Invalid appointment ID'})
-# Route for the Protect Page
-
+    try:
+        data = request.get_json()
+        appointment_id = data.get('appointment_id', '').strip()
+        
+        if not appointment_id:
+            return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
+        
+        # Check active appointments
+        doc_ref = db.collection('appointments').document(appointment_id)
+        doc = doc_ref.get()
+        
+        if not doc.exists:
+            return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
+        
+        # Check appointment status and time
+        appointment_data = doc.to_dict()
+        appointment_time = datetime.datetime.strptime(appointment_data['time'], '%B %d, %Y at %I:%M %p')
+        current_time = datetime.datetime.now()
+        
+        if appointment_time.date() != current_time.date():
+            return jsonify({'status': 'error', 'message': 'This appointment is not scheduled for today'}), 400
+        
+        if appointment_data.get('status') != 'scheduled':
+            return jsonify({'status': 'error', 'message': 'This appointment is not active'}), 400
+        
+        # Return success and redirect URL
+        return jsonify({
+            'status': 'success',
+            'redirect_url': url_for('main.virtual_consultation_voice', appointment_id=appointment_id)
+        })
+    except Exception as e:
+        logging.error(f"Validation error: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
+    
+                            
+@main.route('/complete_appointment', methods=['POST'])
+def complete_appointment():
+    try:
+        data = request.get_json()
+        appointment_id = data.get('appointment_id', '').strip()
+        
+        if not appointment_id:
+            return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
+        
+        # Get and move appointment
+        doc_ref = db.collection('appointments').document(appointment_id)
+        doc = doc_ref.get()
+        
+        if not doc.exists:
+            return jsonify({'status': 'error', 'message': 'Appointment not found'}), 404
+        
+        # Update and move to completed
+        appointment_data = doc.to_dict()
+        appointment_data['status'] = 'completed'
+        appointment_data['completed_at'] = datetime.datetime.now().isoformat()
+        
+        db.collection('completed_appointments').document(appointment_id).set(appointment_data)
+        doc_ref.delete()
+        
+        return jsonify({'status': 'success', 'message': 'Appointment marked as completed.'})
+        
+    except Exception as e:
+        logging.error(f"Completion error: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
+  
+                
 @main.route('/virtual_consultation_voice/<appointment_id>')
 def virtual_consultation_voice(appointment_id):
-    return render_template('virtual_consultation_voice.html', appointment_id=appointment_id)
-
+    try:
+        # Fetch the appointment from the database
+        doc_ref = db.collection('appointments').document(appointment_id)
+        doc = doc_ref.get()
+        
+        if not doc.exists:
+            flash("Invalid or expired appointment.", "error")
+            return redirect(url_for('main.doctors'))
+        
+        # Validate appointment time
+        appointment_data = doc.to_dict()
+        appointment_time = datetime.datetime.strptime(appointment_data['time'], '%Y-%m-%dT%H:%M')
+        current_time = datetime.datetime.now()
+        
+        if appointment_time.date() != current_time.date():
+            flash("This appointment is not scheduled for today.", "error")
+            return redirect(url_for('main.doctors'))
+        
+        # Render the consultation page
+        return render_template('virtual_consultation_voice.html',
+                               appointment_id=appointment_id,
+                               appointment_data=appointment_data)
+    except Exception as e:
+        logging.error(f"Error rendering consultation page: {str(e)}")
+        flash("Error starting consultation.", "error")
+        return redirect(url_for('main.doctors'))      
+                        
 @main.route('/summerize', methods=['GET', 'POST'])
 def summerize():
     if request.method == 'POST':
@@ -158,8 +284,7 @@ def summerize():
                     'reports.html',
                     report=report,
                     sentiment_label=sentiment_label,
-                    sentiment_score=sentiment_score,
-                    report_filename=report_filename  # Pass the filename to the template
+                    sentiment_score=sentiment_score,                    report_filename=report_filename  # Pass the filename to the template
                 )
 
         except Exception as e:
@@ -188,8 +313,7 @@ def about():
 
 # # Route for the Doctors Page
 # @main.route('/doctors')
-# def doctors():
-#     return render_template('doctors.html')  # Make sure to create 'doctors.html'
+# def doctors():#     return render_template('doctors.html')  # Make sure to create 'doctors.html'
 
 # Route for the News Page
 @main.route('/news')
