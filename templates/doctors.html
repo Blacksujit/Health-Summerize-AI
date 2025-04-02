@@ -530,7 +530,13 @@ if (appointments.length > 0) {
         const appointmentId = document.getElementById("appointmentIdInput").value.trim();
         
         if (!appointmentId) {
-            alert("Please enter an appointment ID");
+            Swal.fire({
+                icon: "warning",
+                title: "Missing Appointment ID",
+                text: "Please enter an appointment ID to proceed.",
+                timer: 2000, // Notification will disappear after 2 seconds
+                showConfirmButton: false,
+            });
             return;
         }
     
@@ -543,27 +549,39 @@ if (appointments.length > 0) {
     
             const data = await response.json();
             if (data.status === "success") {
-                window.location.href = data.redirect_url;
+                // Show success notification
+                Swal.fire({
+                    icon: "success",
+                    title: "Appointment Validated",
+                    text: "Redirecting to the consultation page...",
+                    timer: 2000, // Notification will disappear after 2 seconds
+                    showConfirmButton: false,
+                }).then(() => {
+                    // Redirect to the consultation page
+                    window.location.href = data.redirect_url;
+                });
             } else {
-                alert(data.message || "Invalid appointment ID");
+                // Show error notification
+                Swal.fire({
+                    icon: "error",
+                    title: "Validation Failed",
+                    text: data.message || "Invalid appointment ID. Please try again.",
+                    timer: 2000, // Notification will disappear after 2 seconds
+                    showConfirmButton: false,
+                });
             }
         } catch (error) {
             console.error("Error validating appointment:", error);
-            alert("Error validating appointment. Please try again.");
+            Swal.fire({
+                icon: "error",
+                title: "Server Error",
+                text: "An error occurred while validating the appointment. Please try again later.",
+                timer: 2000, // Notification will disappear after 2 seconds
+                showConfirmButton: false,
+            });
         }
     });
 
-// Show alert function
-function showAlert(message, type) {
-    const alertDiv = document.createElement("div");
-    alertDiv.className = `alert alert-${type} mt-3`;
-    alertDiv.textContent = message;
-    
-    const container = document.querySelector(".col-lg-4 .card-body");
-    container.insertBefore(alertDiv, container.lastElementChild);
-    
-    setTimeout(() => alertDiv.remove(), 5000);
-}
 // Add this to doctors.html to refresh appointments list
 window.addEventListener('load', () => {
     if (performance.navigation.type === 1) { // Check if page was reloaded

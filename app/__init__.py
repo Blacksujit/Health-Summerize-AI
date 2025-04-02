@@ -62,6 +62,9 @@ def create_app():
     app.config['SESSION_COOKIE_SECURE'] = False  # Use True in production
     app.config['SESSION_COOKIE_HTTPONLY'] = True
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    
+    # setting up the secreat key for session management 
+    app.config['SECRET_KEY'] = os.urandom(24)  # Generate a random secret key
 
     # Initialize the cache
     cache = Cache(app)

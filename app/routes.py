@@ -101,6 +101,7 @@ def book():
             formatted_time = time_obj.strftime('%B %d, %Y at %I:%M %p')
         except ValueError:
             flash("Invalid date and time format", "error")
+            logging.error(f"Invalid date and time format: {time_str}")
             return redirect(url_for('main.doctors'))
         
         # Create appointment
@@ -124,7 +125,7 @@ def book():
         logging.error(f"Booking error: {str(e)}")
         flash("Error booking appointment. Please try again.", "error")
         return redirect(url_for('main.doctors'))
-    
+        
 @main.route('/get_appointments', methods=['GET'])
 def get_appointments():
     try:
@@ -218,26 +219,36 @@ def virtual_consultation_voice(appointment_id):
         
         if not doc.exists:
             flash("Invalid or expired appointment.", "error")
+            logging.error(f"Appointment ID {appointment_id} does not exist.")
             return redirect(url_for('main.doctors'))
         
         # Validate appointment time
         appointment_data = doc.to_dict()
-        appointment_time = datetime.datetime.strptime(appointment_data['time'], '%Y-%m-%dT%H:%M')
-        current_time = datetime.datetime.now()
+        try:
+            appointment_time = datetime.datetime.strptime(appointment_data['time'], '%B %d, %Y at %I:%M %p')
+        except ValueError as e:
+            flash("Invalid appointment time format.", "error")
+            logging.error(f"Error parsing appointment time for ID {appointment_id}: {str(e)}")
+            return redirect(url_for('main.doctors'))
         
+        current_time = datetime.datetime.now()
         if appointment_time.date() != current_time.date():
             flash("This appointment is not scheduled for today.", "error")
+            logging.warning(f"Appointment ID {appointment_id} is not scheduled for today.")
             return redirect(url_for('main.doctors'))
         
         # Render the consultation page
-        return render_template('virtual_consultation_voice.html',
-                               appointment_id=appointment_id,
-                               appointment_data=appointment_data)
+        return render_template(
+            'virtual_consultation_voice.html',
+            appointment_id=appointment_id,
+            appointment_data=appointment_data,
+            now=current_time
+        )
     except Exception as e:
-        logging.error(f"Error rendering consultation page: {str(e)}")
+        logging.error(f"Error rendering consultation page for ID {appointment_id}: {str(e)}")
         flash("Error starting consultation.", "error")
-        return redirect(url_for('main.doctors'))      
-                        
+        return redirect(url_for('main.doctors'))
+                            
 @main.route('/summerize', methods=['GET', 'POST'])
 def summerize():
     if request.method == 'POST':
