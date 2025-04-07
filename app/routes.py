@@ -28,6 +28,7 @@ from .utility_script import MedicalNLPipeline
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from .__init__ import db , socketio # Import Firestore database instance
+from app import socketio  # Import SocketIO instance
 from flask_socketio import SocketIO, emit
 import openai
 from google.cloud import speech
@@ -35,7 +36,7 @@ from google.cloud import speech
 main = Blueprint('main', __name__)
 
 # Set OpenAI API Key
-openai.api_key = "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"  # Replace with your OpenAI API key
+openai.api_key = "your_open_ai_key"  # Replace with your OpenAI API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
