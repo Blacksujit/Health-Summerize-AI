@@ -8,7 +8,7 @@ import os
 from flask_socketio import SocketIO
 import firebase_admin
 from firebase_admin import credentials, firestore
-
+import gevent
 # Initialize Firebase
 # cred = credentials.Certificate("C:\\Users\\HP\\OneDrive\\Desktop\\openSource\\AI-Health-Summerize\\config\\water-management-91e4a-firebase-adminsdk-drmsv-dd559d16f2.json")  # Replace with your Firebase Admin SDK JSON file
 # firebase_admin.initialize_app(cred)
@@ -27,7 +27,7 @@ if not firebase_admin._apps:
 
 db = firestore.client()  # Firestore database instance
 
-socketio = SocketIO()  # Initialize SocketIO
+socketio = SocketIO(async_mode='gevent')  # Initialize SocketIO
 
 
 def init_db():

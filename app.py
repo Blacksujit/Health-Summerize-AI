@@ -27,7 +27,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import sys
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-from app import create_app, init_db
+from app import create_app, init_db , socketio
 import os
 import logging
 from PyQt5.QtWidgets import QApplication
@@ -53,8 +53,10 @@ if __name__ == "__main__":
         os.makedirs("models", exist_ok=True)
         new_app = QApplication(sys.argv)
         # main_window = MainWindow()
-        # main_window.show()
-        app.run(debug=True, port=200)
+        # # main_window.show()
+        # app.run(debug=True, port=200)
+        # Use socketio.run() instead of app.run()
+        socketio.run(app, debug=True, port=500)
         sys.exit(new_app.exec_())
     except Exception as e:
         logging.error(f"An error occurred: {e}")

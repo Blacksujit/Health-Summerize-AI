@@ -27,10 +27,15 @@ from werkzeug.utils import secure_filename
 from .utility_script import MedicalNLPipeline
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-from .__init__ import db  # Import Firestore database instance
-
+from .__init__ import db , socketio # Import Firestore database instance
+from flask_socketio import SocketIO, emit
+import openai
+from google.cloud import speech
 
 main = Blueprint('main', __name__)
+
+# Set OpenAI API Key
+openai.api_key = "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"  # Replace with your OpenAI API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -58,6 +63,41 @@ def index():
     return render_template('index.html')  # Your index page template
 
 
+# Handle voice queries from the patient
+@socketio.on('process_voice')
+def handle_voice_query(data):
+    try:
+        appointment_id = data.get('appointment_id')
+        audio_file_path = data.get('audio_file_path')
+
+        # Use Google Cloud Speech-to-Text to transcribe the audio
+        client = speech.SpeechClient()
+        with open(audio_file_path, 'rb') as audio_file:
+            audio_content = audio_file.read()
+
+        audio = speech.RecognitionAudio(content=audio_content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=16000,
+            language_code="en-US"
+        )
+
+        response = client.recognize(config=config, audio=audio)
+        patient_message = response.results[0].alternatives[0].transcript
+
+        # Generate AI doctor response using OpenAI GPT
+        ai_response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"You are a helpful AI doctor. Patient says: {patient_message}",
+            max_tokens=150,
+            temperature=0.7
+        ).choices[0].text.strip()
+
+        # Send the response back to the frontend
+        emit('ai_voice_response', {'response_text': ai_response})
+    except Exception as e:
+        print(f"Error processing voice query: {str(e)}")
+        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})
     
 # Route for the Doctors Page
 # Route for the Doctors Page
