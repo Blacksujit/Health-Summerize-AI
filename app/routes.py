@@ -31,7 +31,8 @@ from .__init__ import db , socketio # Import Firestore database instance
 from app import socketio  # Import SocketIO instance
 from flask_socketio import SocketIO, emit
 import openai
-from google.cloud import speech
+from google.cloud import speech , texttospeech
+import os
 
 main = Blueprint('main', __name__)
 
@@ -64,6 +65,67 @@ def index():
     return render_template('index.html')  # Your index page template
 
 
+@socketio.on('real_time_voice')
+def handle_real_time_voice(data):
+    try:
+        # Extract audio file path from the frontend
+        audio_file_path = data.get('audio_file_path')
+
+        # Step 1: Convert voice to text (Speech-to-Text)
+        client = speech.SpeechClient()
+        with open(audio_file_path, 'rb') as audio_file:
+            audio_content = audio_file.read()
+
+        audio = speech.RecognitionAudio(content=audio_content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=16000,
+            language_code="en-US"
+        )
+
+        response = client.recognize(config=config, audio=audio)
+        patient_message = response.results[0].alternatives[0].transcript
+
+        # Step 2: Generate AI doctor's response (OpenAI GPT)
+        ai_response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"You are a helpful AI doctor. Patient says: {patient_message}",
+            max_tokens=150,
+            temperature=0.7
+        ).choices[0].text.strip()
+
+        # Step 3: Convert AI response to voice (Text-to-Speech)
+        tts_client = texttospeech.TextToSpeechClient()
+        synthesis_input = texttospeech.SynthesisInput(text=ai_response)
+        voice = texttospeech.VoiceSelectionParams(
+            language_code="en-US",
+            ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+        )
+        audio_config = texttospeech.AudioConfig(
+            audio_encoding=texttospeech.AudioEncoding.MP3
+        )
+
+        tts_response = tts_client.synthesize_speech(
+            input=synthesis_input, voice=voice, audio_config=audio_config
+        )
+
+        # Save the audio response to a file
+        audio_response_path = os.path.join('static', 'audio', 'response.mp3')
+        with open(audio_response_path, 'wb') as out:
+            out.write(tts_response.audio_content)
+
+        # Send the response back to the frontend
+        emit('ai_voice_response', {
+            'response_text': ai_response,
+            'audio_url': f"/static/audio/response.mp3"
+        })
+    except Exception as e:
+        logging.error(f"Error in real-time voice interaction: {str(e)}")
+        emit('ai_voice_response', {
+            'response_text': 'Sorry, I encountered an error. Please try again.',
+            'audio_url': None
+        })
+
 @socketio.on('process_text')
 def handle_text_query(data):
     try:
@@ -87,7 +149,6 @@ def handle_text_query(data):
     except Exception as e:
         logging.error(f"Error processing text query: {str(e)}")
         emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})
-
 # Handle voice queries from the patient
 @socketio.on('process_voice')
 def handle_voice_query(data):
@@ -122,8 +183,7 @@ def handle_voice_query(data):
         emit('ai_voice_response', {'response_text': ai_response})
     except Exception as e:
         logging.error(f"Error processing voice query: {str(e)}")
-        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})    
-        
+        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})        
 # Route for the Doctors Page
 # Route for the Doctors Page
 
@@ -383,6 +443,10 @@ def download_report(filename):
     return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
 
 
+@main.route('/avatar-images/<filename>')
+def avatar_images(filename):
+    avatar_folder = os.path.join(BASE_DIR, 'static', 'avatar-images')  # Adjust the path as needed
+    return send_from_directory(avatar_folder, filename)
 # Route for the About Page
 @main.route('/about')
 def about():
