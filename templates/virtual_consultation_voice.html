@@ -220,68 +220,68 @@
     
     <!-- Custom JS -->
     <script>
-        // Initialize Socket.IO
-        const socket = io();
-        let mediaRecorder;
-        let audioChunks = [];
-        const appointmentId = "{{ appointment_id }}";
-        const chatContainer = document.getElementById('chatContainer');
-        
-        // Scroll chat to bottom
-        function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-        
-        // Add message to chat
-        function addMessage(sender, text, isUser) {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'doctor-message'}`;
-            
-            if (!isUser) {
-                messageDiv.innerHTML = `
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
-                             style="width: 30px; height: 30px;">
-                            <i class="fas fa-user-md"></i>
-                        </div>
-                        <strong class="ms-2">Dr. {{ appointment_data.doctor.split(' ')[0] }}</strong>
+       // Initialize Socket.IO
+    const socket = io();
+    let mediaRecorder;
+    let audioChunks = [];
+    const appointmentId = "{{ appointment_id }}";
+    const chatContainer = document.getElementById('chatContainer');
+
+    // Scroll chat to bottom
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Add message to chat
+    function addMessage(sender, text, isUser) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'doctor-message'}`;
+
+        if (!isUser) {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                         style="width: 30px; height: 30px;">
+                        <i class="fas fa-user-md"></i>
                     </div>
-                    <p>${text}</p>
-                    <div class="message-time">${timeString}</div>
-                `;
-            } else {
-                messageDiv.innerHTML = `
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" 
-                             style="width: 30px; height: 30px;">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <strong class="ms-2">You</strong>
+                    <strong class="ms-2">Dr. {{ appointment_data.doctor.split(' ')[0] }}</strong>
+                </div>
+                <p>${text}</p>
+                <div class="message-time">${timeString}</div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                         style="width: 30px; height: 30px;">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <p>${text}</p>
-                    <div class="message-time">${timeString}</div>
-                `;
-            }
-            
-            chatContainer.appendChild(messageDiv);
-            scrollToBottom();
+                    <strong class="ms-2">You</strong>
+                </div>
+                <p>${text}</p>
+                <div class="message-time">${timeString}</div>
+            `;
         }
-        
-        // Show typing indicator
-        function showTypingIndicator() {
-            const typingIndicator = document.getElementById('typingIndicator');
-            typingIndicator.style.display = 'inline-block';
-            scrollToBottom();
-        }
-        
-        // Hide typing indicator
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'none';
-        }
-        
+
+        chatContainer.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    // Show typing indicator
+    function showTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        typingIndicator.style.display = 'inline-block';
+        scrollToBottom();
+    }
+
+    // Hide typing indicator
+    function hideTypingIndicator() {
+        document.getElementById('typingIndicator').style.display = 'none';
+    }
+ 
         // Start recording
         document.getElementById('startRecording').addEventListener('click', function() {
             const button = this;
@@ -358,26 +358,26 @@
             }
         }
         
-        // Send text message
-        document.getElementById('sendMessage').addEventListener('click', function() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                addMessage('You', message, true);
-                input.value = '';
-                
-                // Show typing indicator
-                showTypingIndicator();
-                
-                // Send to server
-                socket.emit('process_text', {
-                    appointment_id: appointmentId,
-                    text: message
-                });
-            }
-        });
-        
+       // Send text message
+    document.getElementById('sendMessage').addEventListener('click', function() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+
+        if (message) {
+            addMessage('You', message, true);
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Send to server
+            socket.emit('process_text', {
+                appointment_id: appointmentId,
+                text: message
+            });
+        }
+    });
+ 
         // Also send on Enter key
         document.getElementById('messageInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -409,31 +409,27 @@
             }
         });
        // Receive AI response
-socket.on('ai_voice_response', (data) => {
-    hideTypingIndicator();
+    socket.on('ai_voice_response', (data) => {
+        hideTypingIndicator();
 
-    if (data.response_text) {
-        addMessage('AI Doctor', data.response_text, false);
+        if (data.response_text) {
+            addMessage('AI Doctor', data.response_text, false);
 
-        // Convert AI response to speech
-        const utterance = new SpeechSynthesisUtterance(data.response_text);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-    }
+            // Convert AI response to speech
+            const utterance = new SpeechSynthesisUtterance(data.response_text);
+            utterance.lang = 'en-US';
+            speechSynthesis.speak(utterance);
+        }
+    });
 
-    if (data.response_audio) {
-        const audio = new Audio(data.response_audio);
-        audio.play().catch(e => console.error('Error playing audio:', e));
-    }
-}); 
-        // Handle connection errors
-        socket.on('connect_error', (error) => {
-            addMessage('System', 'Connection error. Please refresh the page.', false);
-            console.error('Socket error:', error);
-        });
-        
-        // Initial scroll to bottom
-        scrollToBottom();
+    // Handle connection errors
+    socket.on('connect_error', (error) => {
+        addMessage('System', 'Connection error. Please refresh the page.', false);
+        console.error('Socket error:', error);
+    });
+
+    // Initial scroll to bottom
+    scrollToBottom();
     </script>
 </body>
 </html>

@@ -64,6 +64,30 @@ def index():
     return render_template('index.html')  # Your index page template
 
 
+@socketio.on('process_text')
+def handle_text_query(data):
+    try:
+        appointment_id = data.get('appointment_id')
+        patient_message = data.get('text', '')
+
+        if not patient_message:
+            emit('ai_voice_response', {'response_text': 'Please ask a valid question.'})
+            return
+
+        # Generate AI doctor response using OpenAI GPT
+        ai_response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"You are a helpful AI doctor. Patient says: {patient_message}",
+            max_tokens=150,
+            temperature=0.7
+        ).choices[0].text.strip()
+
+        # Send the response back to the frontend
+        emit('ai_voice_response', {'response_text': ai_response})
+    except Exception as e:
+        logging.error(f"Error processing text query: {str(e)}")
+        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})
+
 # Handle voice queries from the patient
 @socketio.on('process_voice')
 def handle_voice_query(data):
@@ -97,11 +121,12 @@ def handle_voice_query(data):
         # Send the response back to the frontend
         emit('ai_voice_response', {'response_text': ai_response})
     except Exception as e:
-        print(f"Error processing voice query: {str(e)}")
-        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})
-    
+        logging.error(f"Error processing voice query: {str(e)}")
+        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})    
+        
 # Route for the Doctors Page
 # Route for the Doctors Page
+
 @main.route('/doctors', methods=['GET'])
 def doctors():
     try:
