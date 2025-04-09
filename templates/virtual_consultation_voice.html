@@ -225,24 +225,6 @@
     </style>
 </head>
 <body class="d-flex align-items-center py-4">
-    <!-- Header -->
-    <div class="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="mb-0">
-                    <i class="fas fa-user-md me-2"></i>Virtual Consultation
-                </h4>
-                <small class="opacity-75">
-                    Appointment ID: {{ appointment_id }}
-                </small>
-            </div>
-            <div>
-                <span class="badge bg-light text-primary">
-                    <i class="fas fa-circle text-success me-1"></i>Connected
-                </span>
-            </div>
-        </div>
-    </div>
     <div class="container">
         <div class="consultation-container mx-auto">
              <!-- AI Doctor Section -->
@@ -257,6 +239,24 @@
             </model-viewer>
             <div id="avatarError" style="display: none; color: red; text-align: center;">
                 Failed to load the AI doctor avatar. Please try again later.
+            </div>
+            <!-- Header -->
+            <div class="header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-md me-2"></i>Virtual Consultation
+                        </h4>
+                        <small class="opacity-75">
+                            Appointment ID: {{ appointment_id }}
+                        </small>
+                    </div>
+                    <div>
+                        <span class="badge bg-light text-primary">
+                            <i class="fas fa-circle text-success me-1"></i>Connected
+                        </span>
+                    </div>
+                </div>
             </div>
 
              
