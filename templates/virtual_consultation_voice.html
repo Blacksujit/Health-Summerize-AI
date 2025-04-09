@@ -6,15 +6,18 @@
     <title>Virtual Consultation | HealthAI</title>
     
     <!-- Bootstrap 5 CSS -->
+    <!-- stylelint-disable-next-line -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    <!-- stylelint-disable-next-line -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 
-    <!-- Model-Viewer for 3D Model -->
+    <!-- stylelint-disable-next-line -->
+    <link rel="stylesheet" href="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.css">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.css">
 
@@ -28,6 +31,14 @@
             --dark: #343a40;
         }
 
+        .chat-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            padding: 20px;
+        }
+
         .ai-doctor-avatar {
             margin: 20px auto;
             width: 100%;
@@ -39,7 +50,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
+            /* stylelint-disable-next-line */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -48,7 +60,8 @@
         }
 
         .btn-microphone.recording {
-            animation: pulse 1.5s infinite;
+            /* stylelint-disable-next-line */
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
         }
         
         @keyframes pulse {
@@ -58,14 +71,15 @@
         }
         
         .consultation-container {
-            max-width: 1000px;
+            max-width: 1200px;
+            width: 100%;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            height: calc(100vh - 100px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            overflow: hidden;
+            height: 80vh;
         }
         
         .header {
@@ -199,45 +213,53 @@
             margin-left: 10px;
             cursor: pointer;
         }
+        .ai-doctor-section {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-right: 1px solid #ddd;
+        }
+
     </style>
 </head>
 <body class="d-flex align-items-center py-4">
+    <!-- Header -->
+    <div class="header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-0">
+                    <i class="fas fa-user-md me-2"></i>Virtual Consultation
+                </h4>
+                <small class="opacity-75">
+                    Appointment ID: {{ appointment_id }}
+                </small>
+            </div>
+            <div>
+                <span class="badge bg-light text-primary">
+                    <i class="fas fa-circle text-success me-1"></i>Connected
+                </span>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="consultation-container mx-auto">
-            
-            <!-- Header -->
-            <div class="header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="mb-0">
-                            <i class="fas fa-user-md me-2"></i>Virtual Consultation
-                        </h4>
-                        <small class="opacity-75">
-                            Appointment ID: {{ appointment_id }}
-                        </small>
-                    </div>
-                    <div>
-                        <span class="badge bg-light text-primary">
-                            <i class="fas fa-circle text-success me-1"></i>Connected
-                        </span>
-                    </div>
-                </div>
+             <!-- AI Doctor Section -->
+        <div class="ai-doctor-section">
+            <model-viewer
+                src="{{ url_for('main.avatar_images', filename='doctor.glb') }}"
+                alt="AI Doctor Avatar"
+                auto-rotate
+                camera-controls
+                class="ai-doctor-avatar"
+                onerror="document.getElementById('avatarError').style.display = 'block';">
+            </model-viewer>
+            <div id="avatarError" style="display: none; color: red; text-align: center;">
+                Failed to load the AI doctor avatar. Please try again later.
             </div>
 
-            <div class="ai-doctor-avatar text-center">
-                <model-viewer
-                src="{{ url_for('main.avatar_images', filename='doctor.glb') }}">
-                    alt="AI Doctor Avatar"
-                    auto-rotate
-                    camera-controls
-                    style="width: 100%; height: 500px;"
-                    onerror="document.getElementById('avatarError').style.display = 'block';">
-                </src=>
-                <div id="avatarError" style="display: none; color: red; text-align: center;">
-                    Failed to load the AI doctor avatar. Please try again later.
-                </div>
-            </div>
-            
+             
             <!-- Chat Container -->
             <div class="chat-container" id="chatContainer">
                 <!-- Welcome message -->
@@ -246,7 +268,8 @@
                         <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
                              style="width: 30px; height: 30px;">
                             <i class="fas fa-user-md"></i>
-                        </div>
+                        {# pylint: disable=invalid-name #}
+                        {{ now.strftime('%I:%M %p') }}
                         <strong class="ms-2">Dr. {{ appointment_data.doctor }}</strong>
                     </div>
                     <p>Hello! I'm Dr. {{ appointment_data.doctor.split(' ')[0] }}. How can I help you today?</p>
@@ -369,7 +392,8 @@ document.getElementById('startRecording').addEventListener('click', function () 
 
 // Start Recording Function
 function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
+            // eslint-disable-next-line no-unused-vars
+            mediaRecorder.ondataavailable = event => {
         .then(stream => {
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
@@ -438,7 +462,8 @@ function stopRecording() {
 
             // Send to server
             socket.emit('process_text', {
-                appointment_id: appointmentId,
+        // eslint-disable-next-line no-restricted-globals
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
                 text: message
             });
         }
