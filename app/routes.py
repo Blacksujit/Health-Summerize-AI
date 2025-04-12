@@ -35,7 +35,7 @@ from google.cloud import speech
 main = Blueprint('main', __name__)
 
 # Set OpenAI API Key
-openai.api_key = "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"  # Replace with your OpenAI API key
+openai.api_key = "your_api_key"  # Replace with your OpenAI API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
