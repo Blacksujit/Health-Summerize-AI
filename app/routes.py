@@ -31,11 +31,12 @@ from .__init__ import db , socketio # Import Firestore database instance
 from flask_socketio import SocketIO, emit
 import openai
 from google.cloud import speech
+import requests
 
 main = Blueprint('main', __name__)
 
 # Set OpenAI API Key
-openai.api_key = "your_api_key"  # Replace with your OpenAI API key
+openai.api_key = "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"  # Replace with your OpenAI API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -63,14 +64,17 @@ def index():
     return render_template('index.html')  # Your index page template
 
 
+
 # Handle voice queries from the patient
 @socketio.on('process_voice')
 def handle_voice_query(data):
     try:
         appointment_id = data.get('appointment_id')
         audio_file_path = data.get('audio_file_path')
+        D_ID_API_KEY = os.getenv('D_ID_API_KEY')  # Get from environment variables
+        AVATAR_IMAGE_URL = "https://your-domain.com/path/to/doctor-avatar-image.png"  # Host your avatar image
 
-        # Use Google Cloud Speech-to-Text to transcribe the audio
+        # Transcribe audio
         client = speech.SpeechClient()
         with open(audio_file_path, 'rb') as audio_file:
             audio_content = audio_file.read()
@@ -85,20 +89,73 @@ def handle_voice_query(data):
         response = client.recognize(config=config, audio=audio)
         patient_message = response.results[0].alternatives[0].transcript
 
-        # Generate AI doctor response using OpenAI GPT
+        # Generate AI response
+        prompt = f"""As an AI doctor, respond to: "{patient_message}". Follow:
+        1. Empathetic acknowledgement
+        2. Professional medical advice
+        3. Simple language
+        4. Max 3 sentences
+        Response:"""
+        
         ai_response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"You are a helpful AI doctor. Patient says: {patient_message}",
-            max_tokens=150,
-            temperature=0.7
+            prompt=prompt,
+            max_tokens=200,
+            temperature=0.6
         ).choices[0].text.strip()
 
-        # Send the response back to the frontend
-        emit('ai_voice_response', {'response_text': ai_response})
+        # Generate talking avatar video
+        d_id_response = requests.post(
+            'https://api.d-id.com/talks',
+            headers={'Authorization': f'Bearer {D_ID_API_KEY}'},
+            json={
+                'script': ai_response,
+                'source_url': AVATAR_IMAGE_URL,
+                'config': {
+                    'fluent': 'en-US',
+                    'driver_url': 'bank://lively/',
+                    'pad_audio': '0.2'
+                }
+            }
+        )
+
+        if d_id_response.status_code != 201:
+            raise Exception(f"D-ID API Error: {d_id_response.text}")
+
+        # Poll for video result
+        talk_id = d_id_response.json()['id']
+        video_url = None
+        for _ in range(10):  # Retry for 10 seconds
+            status_response = requests.get(
+                f'https://api.d-id.com/talks/{talk_id}',
+                headers={'Authorization': f'Bearer {D_ID_API_KEY}'}
+            )
+            if status_response.json()['status'] == 'done':
+                video_url = status_response.json()['result_url']
+                break
+            time.sleep(1)
+
+        if not video_url:
+            raise Exception("Avatar video generation timeout")
+
+        # Save video locally
+        video_response = requests.get(video_url)
+        video_path = f"static/avatar_videos/{uuid.uuid4()}.mp4"
+        with open(video_path, 'wb') as f:
+            f.write(video_response.content)
+
+        emit('ai_voice_response', {
+            'response_text': ai_response,
+            'response_audio': None,  # Remove if not using audio
+            'avatar_video': url_for('static', filename=video_path.split('static/')[1])
+        })
+
     except Exception as e:
         print(f"Error processing voice query: {str(e)}")
-        emit('ai_voice_response', {'response_text': 'Sorry, I encountered an error. Please try again.'})
-    
+        emit('ai_voice_response', {
+            'response_text': 'Sorry, I encountered an error. Please try again.',
+            'avatar_video': None
+        })    
 # Route for the Doctors Page
 # Route for the Doctors Page
 @main.route('/doctors', methods=['GET'])

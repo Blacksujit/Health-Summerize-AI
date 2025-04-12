@@ -13,6 +13,11 @@
     
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <!-- Add these in head section -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     
     <style>
         :root {
@@ -22,6 +27,33 @@
             --light: #f8f9fa;
             --dark: #343a40;
         }
+
+        /* Add to existing styles */
+#avatarContainer {
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+#sceneContainer canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.avatar-mic-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.lip-sync {
+    animation: lipMovement 0.2s infinite alternate;
+}
+
+@keyframes lipMovement {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(0.8); }
+}
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -162,6 +194,19 @@
                             Appointment ID: {{ appointment_id }}
                         </small>
                     </div>
+                    <div class="d-flex flex-grow-1" style="overflow: hidden;">
+                        <!-- Add avatar container -->
+                        <div id="avatarContainer" class="w-50 position-relative" 
+                             style="background: linear-gradient(135deg, #007bff 0%, #00b4db 100%);">
+                             <video id="avatarVideo" autoplay muted playsinline></video>
+                            <div id="sceneContainer" class="h-100 w-100"></div>
+                            <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white" 
+                                 style="background: rgba(0,0,0,0.5); display: none;">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
                     <div>
                         <span class="badge bg-light text-primary">
                             <i class="fas fa-circle text-success me-1"></i>Connected
@@ -409,24 +454,14 @@
             }
         });
        // Receive AI response
+// Modify the ai_voice_response handler
 socket.on('ai_voice_response', (data) => {
-    hideTypingIndicator();
-
-    if (data.response_text) {
-        addMessage('AI Doctor', data.response_text, false);
-
-        // Convert AI response to speech
-        const utterance = new SpeechSynthesisUtterance(data.response_text);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
+    if (data.avatar_video) {
+        const videoElement = document.getElementById('avatarVideo');
+        videoElement.src = data.avatar_video;
+        videoElement.play();
     }
-
-    if (data.response_audio) {
-        const audio = new Audio(data.response_audio);
-        audio.play().catch(e => console.error('Error playing audio:', e));
-    }
-}); 
-        // Handle connection errors
+});        // Handle connection errors
         socket.on('connect_error', (error) => {
             addMessage('System', 'Connection error. Please refresh the page.', false);
             console.error('Socket error:', error);
@@ -434,6 +469,76 @@ socket.on('ai_voice_response', (data) => {
         
         // Initial scroll to bottom
         scrollToBottom();
+
+        // Add after socket initialization
+let mixer, avatarMesh;
+const clock = new THREE.Clock();
+
+// Initialize 3D scene
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xffffff);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(800, 600);
+document.getElementById('sceneContainer').appendChild(renderer.domElement);
+
+// Add lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(5, 5, 5);
+scene.add(directionalLight);
+
+// Load avatar model
+const loader = new THREE.GLTFLoader();
+document.getElementById('loadingOverlay').style.display = 'flex';
+loader.load(
+    '/static/avatar-images/model.glb',
+    function(gltf) {
+        avatarMesh = gltf.scene;
+        scene.add(avatarMesh);
+        avatarMesh.position.set(0, -1, 0);
+        camera.position.z = 3;
+        mixer = new THREE.AnimationMixer(avatarMesh);
+        document.getElementById('loadingOverlay').style.display = 'none';
+        animate();
+    },
+    undefined,
+    function(error) {
+        console.error('Error loading avatar:', error);
+    }
+);
+
+function animate() {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    if (mixer) mixer.update(delta);
+    renderer.render(scene, camera);
+}
+
+// Add lip sync animation
+function startLipSync() {
+    if (avatarMesh) {
+        avatarMesh.traverse(child => {
+            if (child.isMesh && child.name === 'Mouth') {
+                child.material.emissive = new THREE.Color(0xff0000);
+                child.material.needsUpdate = true;
+                child.visible = true;
+            }
+        });
+    }
+}
+
+function stopLipSync() {
+    if (avatarMesh) {
+        avatarMesh.traverse(child => {
+            if (child.isMesh && child.name === 'Mouth') {
+                child.material.emissive = new THREE.Color(0x000000);
+                child.visible = false;
+            }
+        });
+    }
+}
     </script>
 </body>
 </html>
