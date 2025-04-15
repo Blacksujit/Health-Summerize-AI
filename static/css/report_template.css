@@ -1,0 +1,16 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.report-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+.report-content {
+    margin-top: 20px;
+}
+.sentiment-analysis {
+    margin-top: 20px;
+}

@@ -56,7 +56,7 @@ if __name__ == "__main__":
         # # main_window.show()
         # app.run(debug=True, port=200)
         # Use socketio.run() instead of app.run()
-        socketio.run(app, debug=True, port=500)
+        socketio.run(app, debug=True, port=600)
         sys.exit(new_app.exec_())
     except Exception as e:
         logging.error(f"An error occurred: {e}")

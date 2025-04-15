@@ -206,29 +206,6 @@
       <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
       <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
-      <script>
-         $(document).ready(function(){
-         $(".fancybox").fancybox({
-         openEffect: "none",
-         closeEffect: "none"
-         });
-              
-         $(".zoom").hover(function(){
-              
-         $(this).addClass('transition');
-         }, function(){
-              
-         $(this).removeClass('transition');
-         });
-         });
-      </script> 
-      <script>
-         function openNav() {
-         document.getElementById("myNav").style.width = "100%";
-         }
-         function closeNav() {
-         document.getElementById("myNav").style.width = "0%";
-         }
-      </script>  
+      <script src="{{url_for('static', filename='js/news.js')}}"></script>  
    </body>
 </html>
