@@ -143,7 +143,7 @@ document.getElementById("validateAppointment").addEventListener("click", async (
     }
 
     try {
-        const response = await fetch('{{ url_for("main.validate_appointment") }}', {
+        const response = await fetch(validateAppointmentUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ appointment_id: appointmentId })
@@ -165,7 +165,6 @@ document.getElementById("validateAppointment").addEventListener("click", async (
         showAlert("Error validating appointment. Please try again.", "danger");
     }
 });
-
 // Show alert function
 function showAlert(message, type) {
     const alertDiv = document.createElement("div");
