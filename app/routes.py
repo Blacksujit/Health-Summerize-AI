@@ -281,32 +281,39 @@ def complete_appointment():
     try:
         data = request.get_json()
         appointment_id = data.get('appointment_id', '').strip()
-        
+
+        logging.info(f"Received appointment ID: {appointment_id}")  # Debugging: Log the appointment ID
+
         if not appointment_id:
+            logging.error("No appointment ID provided.")
             return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
-        
-        # Get and move appointment
+
+        # Fetch the appointment from the database
+        logging.info(f"Fetching appointment from Firestore: appointments/{appointment_id}")
         doc_ref = db.collection('appointments').document(appointment_id)
         doc = doc_ref.get()
-        
+
         if not doc.exists:
+            logging.error(f"Appointment ID {appointment_id} not found in the database.")
             return jsonify({'status': 'error', 'message': 'Appointment not found'}), 404
-        
-        # Update and move to completed
+
+        # Move the appointment to the completed_appointments collection
         appointment_data = doc.to_dict()
         appointment_data['status'] = 'completed'
         appointment_data['completed_at'] = datetime.datetime.now().isoformat()
-        
+
         db.collection('completed_appointments').document(appointment_id).set(appointment_data)
+
+        # Delete the appointment from the active appointments collection
         doc_ref.delete()
-        
+
+        logging.info(f"Appointment ID {appointment_id} marked as completed.")
         return jsonify({'status': 'success', 'message': 'Appointment marked as completed.'})
-        
     except Exception as e:
-        logging.error(f"Completion error: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
-  
-                
+        logging.error(f"Error completing appointment: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500    
+        
+                    
 @main.route('/virtual_consultation_voice/<appointment_id>')
 def virtual_consultation_voice(appointment_id):
     try:

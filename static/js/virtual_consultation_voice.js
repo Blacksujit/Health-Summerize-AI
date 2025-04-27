@@ -1,9 +1,9 @@
- 
 // Initialize Socket.IO
 const socket = io();
 let mediaRecorder;
 let audioChunks = [];
-const appointmentId = "{{ appointment_id }}";
+// Get the appointmentId from the global variable set in the HTML template
+// Remove this line because it's redefining the variable: const appointmentId = "{{ appointment_id }}";
 const chatContainer = document.getElementById('chatContainer');
 
 // Scroll chat to bottom
@@ -164,61 +164,88 @@ document.getElementById('messageInput').addEventListener('keypress', function(e)
     }
 });
 
-document.getElementById('endConsultation').addEventListener('click', async function() {
-    if (confirm('Are you sure you want to end this consultation?')) {
-        try {
-            const response = await fetch("{{ url_for('main.complete_appointment') }}", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ appointment_id: "{{ appointment_id }}" })
-            });
+document.getElementById("endConsultation").addEventListener("click", async function () {
+    console.log("Appointment ID being sent:", appointmentId);  // Debugging: Check if appointmentId is correct
 
-            const data = await response.json();
+    Swal.fire({
+        title: "End Consultation?",
+        text: "Are you sure you want to end this consultation?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, End It",
+        cancelButtonText: "Cancel",
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch("/complete_appointment", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ appointment_id: appointmentId }),
+                });
 
-            if (data.status === 'success') {
-                alert('Consultation completed successfully.');
-                window.location.href = "{{ url_for('main.doctors') }}";
-            } else {
-                alert('Error: ' + (data.message || 'Failed to complete consultation'));
+                const data = await response.json();
+                console.log("Server response:", data); // Log the full server response for debugging
+
+                if (data.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Consultation Completed",
+                        text: "The appointment has been marked as completed.",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        window.location.href = "/doctors";
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: data.message || "Failed to complete consultation.",
+                        confirmButtonText: "OK",
+                    });
+                }
+            } catch (error) {
+                console.error("Error completing consultation:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Network Error",
+                    text: "There was an issue completing the consultation. Please try again.",
+                    confirmButtonText: "OK",
+                });
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Network error completing consultation.');
         }
+    });
+});
+
+// Receive AI response
+socket.on('ai_voice_response', (data) => {
+    hideTypingIndicator();
+
+    if (data.response_text) {
+        addMessage('AI Doctor', data.response_text, false);
+
+        // Speech synthesis with lip sync
+        const utterance = new SpeechSynthesisUtterance(data.response_text);
+        utterance.lang = 'en-US';
+
+        utterance.onstart = () => {
+            startLipSync();
+        };
+
+        utterance.onend = () => {
+            stopLipSync();
+        };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    if (data.response_audio) {
+        const audio = new Audio(data.response_audio);
+        audio.play().catch(e => console.error('Error playing audio:', e));
+        audio.addEventListener('play', startLipSync);
+        audio.addEventListener('ended', stopLipSync);
     }
 });
-// Receive AI response
-// Modify the ai_voice_response handler
-socket.on('ai_voice_response', (data) => {
-hideTypingIndicator();
-
-if (data.response_text) {
-addMessage('AI Doctor', data.response_text, false);
-
-// Speech synthesis with lip sync
-const utterance = new SpeechSynthesisUtterance(data.response_text);
-utterance.lang = 'en-US';
-
-utterance.onstart = () => {
-    startLipSync();
-};
-
-utterance.onend = () => {
-    stopLipSync();
-};
-
-speechSynthesis.speak(utterance);
-}
-
-if (data.response_audio) {
-const audio = new Audio(data.response_audio);
-audio.play().catch(e => console.error('Error playing audio:', e));
-audio.addEventListener('play', startLipSync);
-audio.addEventListener('ended', stopLipSync);
-}
-});
-
-
 
 // Handle connection errors
 socket.on('connect_error', (error) => {
@@ -252,49 +279,49 @@ scene.add(directionalLight);
 const loader = new THREE.GLTFLoader();
 document.getElementById('loadingOverlay').style.display = 'flex';
 loader.load(
-'/static/avatar-images/model.glb',
-function(gltf) {
-avatarMesh = gltf.scene;
-scene.add(avatarMesh);
-avatarMesh.position.set(0, -1, 0);
-camera.position.z = 3;
-mixer = new THREE.AnimationMixer(avatarMesh);
-document.getElementById('loadingOverlay').style.display = 'none';
-animate();
-},
-undefined,
-function(error) {
-console.error('Error loading avatar:', error);
-}
+    '/static/avatar-images/model.glb',
+    function(gltf) {
+        avatarMesh = gltf.scene;
+        scene.add(avatarMesh);
+        avatarMesh.position.set(0, -1, 0);
+        camera.position.z = 3;
+        mixer = new THREE.AnimationMixer(avatarMesh);
+        document.getElementById('loadingOverlay').style.display = 'none';
+        animate();
+    },
+    undefined,
+    function(error) {
+        console.error('Error loading avatar:', error);
+    }
 );
 
 function animate() {
-requestAnimationFrame(animate);
-const delta = clock.getDelta();
-if (mixer) mixer.update(delta);
-renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    if (mixer) mixer.update(delta);
+    renderer.render(scene, camera);
 }
 
 // Add lip sync animation
 function startLipSync() {
-if (avatarMesh) {
-avatarMesh.traverse(child => {
-    if (child.isMesh && child.name === 'Mouth') {
-        child.material.emissive = new THREE.Color(0xff0000);
-        child.material.needsUpdate = true;
-        child.visible = true;
+    if (avatarMesh) {
+        avatarMesh.traverse(child => {
+            if (child.isMesh && child.name === 'Mouth') {
+                child.material.emissive = new THREE.Color(0xff0000);
+                child.material.needsUpdate = true;
+                child.visible = true;
+            }
+        });
     }
-});
-}
 }
 
 function stopLipSync() {
-if (avatarMesh) {
-avatarMesh.traverse(child => {
-    if (child.isMesh && child.name === 'Mouth') {
-        child.material.emissive = new THREE.Color(0x000000);
-        child.visible = false;
+    if (avatarMesh) {
+        avatarMesh.traverse(child => {
+            if (child.isMesh && child.name === 'Mouth') {
+                child.material.emissive = new THREE.Color(0x000000);
+                child.visible = false;
+            }
+        });
     }
-});
-}
 }

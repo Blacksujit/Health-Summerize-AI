@@ -229,7 +229,12 @@ document.getElementById("validateAppointment")?.addEventListener("click", async 
     const appointmentId = document.getElementById("appointmentIdInput").value.trim();
 
     if (!appointmentId) {
-        showAlert("Please enter an appointment ID", "danger");
+        Swal.fire({
+            icon: "warning",
+            title: "Missing Appointment ID",
+            text: "Please enter an appointment ID to validate.",
+            confirmButtonText: "OK",
+        });
         return;
     }
 
@@ -237,22 +242,39 @@ document.getElementById("validateAppointment")?.addEventListener("click", async 
         const response = await fetch('/validate_appointment', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ appointment_id: appointmentId })
+            body: JSON.stringify({ appointment_id: appointmentId }),
         });
 
         const data = await response.json();
 
         if (data.status === "success") {
-            window.location.href = data.redirect_url;
+            Swal.fire({
+                icon: "success",
+                title: "Appointment Validated",
+                text: "Redirecting to the consultation page...",
+                timer: 2000,
+                showConfirmButton: false,
+            }).then(() => {
+                window.location.href = data.redirect_url;
+            });
         } else {
-            showAlert(data.message || "Invalid appointment ID", "danger");
+            Swal.fire({
+                icon: "error",
+                title: "Validation Failed",
+                text: data.message || "Invalid appointment ID. Please try again.",
+                confirmButtonText: "OK",
+            });
         }
     } catch (error) {
         console.error("Validation error:", error);
-        showAlert("Error validating appointment. Please try again.", "danger");
+        Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "An error occurred while validating the appointment. Please try again later.",
+            confirmButtonText: "OK",
+        });
     }
 });
-
 // Show alert function
 function showAlert(message, type) {
     const alertDiv = document.createElement("div");
