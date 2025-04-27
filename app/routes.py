@@ -36,7 +36,7 @@ import requests
 main = Blueprint('main', __name__)
 
 # Set OpenAI API Key
-openai.api_key = "your_api_key"  # Replace with your OpenAI API key
+openai.api_key = "yur_api_key"  # Replace with your OpenAI API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -392,8 +392,7 @@ def summerize():
                     'reports.html',
                     report=report,
                     sentiment_label=sentiment_label,
-                    sentiment_score=sentiment_score,                    
-                    report_filename=report_filename  # Pass the filename to the template
+                    sentiment_score=sentiment_score,                    report_filename=report_filename  # Pass the filename to the template
                 )
 
         except Exception as e:
