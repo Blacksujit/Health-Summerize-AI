@@ -85,96 +85,96 @@ def index():
 
 
 # Handle voice queries from the patient
-@socketio.on('process_voice')
-def handle_voice_query(data):
-    try:
-        appointment_id = data.get('appointment_id')
-        audio_file_path = data.get('audio_file_path')
-        D_ID_API_KEY = os.getenv('D_ID_API_KEY')  # Get from environment variables
-        AVATAR_IMAGE_URL = "https://your-domain.com/path/to/doctor-avatar-image.png"  # Host your avatar image
+# @socketio.on('process_voice')
+# def handle_voice_query(data):
+#     try:
+#         appointment_id = data.get('appointment_id')
+#         audio_file_path = data.get('audio_file_path')
+#         D_ID_API_KEY = os.getenv('D_ID_API_KEY')  # Get from environment variables
+#         AVATAR_IMAGE_URL = "https://your-domain.com/path/to/doctor-avatar-image.png"  # Host your avatar image
 
-        # Transcribe audio
-        client = speech.SpeechClient()
-        with open(audio_file_path, 'rb') as audio_file:
-            audio_content = audio_file.read()
+#         # Transcribe audio
+#         client = speech.SpeechClient()
+#         with open(audio_file_path, 'rb') as audio_file:
+#             audio_content = audio_file.read()
 
-        audio = speech.RecognitionAudio(content=audio_content)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code="en-US"
-        )
+#         audio = speech.RecognitionAudio(content=audio_content)
+#         config = speech.RecognitionConfig(
+#             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+#             sample_rate_hertz=16000,
+#             language_code="en-US"
+#         )
 
-        response = client.recognize(config=config, audio=audio)
-        patient_message = response.results[0].alternatives[0].transcript
+#         response = client.recognize(config=config, audio=audio)
+#         patient_message = response.results[0].alternatives[0].transcript
 
-        # Generate AI response
-        prompt = f"""As an AI doctor, respond to: "{patient_message}". Follow:
-        1. Empathetic acknowledgement
-        2. Professional medical advice
-        3. Simple language
-        4. Max 3 sentences
-        Response:"""
+#         # Generate AI response
+#         prompt = f"""As an AI doctor, respond to: "{patient_message}". Follow:
+#         1. Empathetic acknowledgement
+#         2. Professional medical advice
+#         3. Simple language
+#         4. Max 3 sentences
+#         Response:"""
         
-        ai_response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=200,
-            temperature=0.6
-        ).choices[0].text.strip()
+#         ai_response = openai.Completion.create(
+#             engine="text-davinci-003",
+#             prompt=prompt,
+#             max_tokens=200,
+#             temperature=0.6
+#         ).choices[0].text.strip()
 
-        # Generate talking avatar video
-        d_id_response = requests.post(
-            'https://api.d-id.com/talks',
-            headers={'Authorization': f'Bearer {D_ID_API_KEY}'},
-            json={
-                'script': ai_response,
-                'source_url': AVATAR_IMAGE_URL,
-                'config': {
-                    'fluent': 'en-US',
-                    'driver_url': 'bank://lively/',
-                    'pad_audio': '0.2'
-                }
-            }
-        )
+#         # Generate talking avatar video
+#         d_id_response = requests.post(
+#             'https://api.d-id.com/talks',
+#             headers={'Authorization': f'Bearer {D_ID_API_KEY}'},
+#             json={
+#                 'script': ai_response,
+#                 'source_url': AVATAR_IMAGE_URL,
+#                 'config': {
+#                     'fluent': 'en-US',
+#                     'driver_url': 'bank://lively/',
+#                     'pad_audio': '0.2'
+#                 }
+#             }
+#         )
 
-        if d_id_response.status_code != 201:
-            raise Exception(f"D-ID API Error: {d_id_response.text}")
+#         if d_id_response.status_code != 201:
+#             raise Exception(f"D-ID API Error: {d_id_response.text}")
 
-        # Poll for video result
-        talk_id = d_id_response.json()['id']
-        video_url = None
-        for _ in range(10):  # Retry for 10 seconds
-            status_response = requests.get(
-                f'https://api.d-id.com/talks/{talk_id}',
-                headers={'Authorization': f'Bearer {D_ID_API_KEY}'}
-            )
-            if status_response.json()['status'] == 'done':
-                video_url = status_response.json()['result_url']
-                break
-            time.sleep(1)
+#         # Poll for video result
+#         talk_id = d_id_response.json()['id']
+#         video_url = None
+#         for _ in range(10):  # Retry for 10 seconds
+#             status_response = requests.get(
+#                 f'https://api.d-id.com/talks/{talk_id}',
+#                 headers={'Authorization': f'Bearer {D_ID_API_KEY}'}
+#             )
+#             if status_response.json()['status'] == 'done':
+#                 video_url = status_response.json()['result_url']
+#                 break
+#             time.sleep(1)
 
-        if not video_url:
-            raise Exception("Avatar video generation timeout")
+#         if not video_url:
+#             raise Exception("Avatar video generation timeout")
 
-        # Save video locally
-        video_response = requests.get(video_url)
-        video_path = f"static/avatar_videos/{uuid.uuid4()}.mp4"
-        with open(video_path, 'wb') as f:
-            f.write(video_response.content)
+#         # Save video locally
+#         video_response = requests.get(video_url)
+#         video_path = f"static/avatar_videos/{uuid.uuid4()}.mp4"
+#         with open(video_path, 'wb') as f:
+#             f.write(video_response.content)
 
-        emit('ai_voice_response', {
-            'response_text': ai_response,
-            'response_audio': None,  # Remove if not using audio
-            'avatar_video': url_for('static', filename=video_path.split('static/')[1])
-        })
+#         emit('ai_voice_response', {
+#             'response_text': ai_response,
+#             'response_audio': None,  # Remove if not using audio
+#             'avatar_video': url_for('static', filename=video_path.split('static/')[1])
+#         })
 
-    except Exception as e:
-        print(f"Error processing voice query: {str(e)}")
-        emit('ai_voice_response', {
-            'response_text': 'Sorry, I encountered an error. Please try again.',
-            'avatar_video': None
-        })    
+#     except Exception as e:
+#         print(f"Error processing voice query: {str(e)}")
+#         emit('ai_voice_response', {
+#             'response_text': 'Sorry, I encountered an error. Please try again.',
+#             'avatar_video': None
+#         })    
 # Route for the Doctors Page
 # Route for the Doctors Page
 @main.route('/doctors', methods=['GET'])
