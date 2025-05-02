@@ -32,11 +32,30 @@ from flask_socketio import SocketIO, emit
 import openai
 from google.cloud import speech
 import requests
+import os
+import openai
+import whisper
+# from elevenlabs import generate, save
+from flask import Flask, request, jsonify
+from flask_socketio import SocketIO
+import subprocess
+import logging
+# from elevenlabs import text_to_speech, save
+
+
+ 
+# # Set your API keys
+# openai.api_key = "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"
+# elevenlabs_api_key = "sk_3bee0cad8a026a8c63111850d5a9851b7589ba2172b66711"
+
+
 
 main = Blueprint('main', __name__)
 
 # Set OpenAI API Key
-openai.api_key = "yur_api_key"  # Replace with your OpenAI API key
+# openai.api_key = "yur_api_key"  # Replace with your OpenAI API key
+# # Whisper model
+# whisper_model = whisper.load_model("base")
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -434,3 +453,46 @@ def about():
 @main.route('/news')
 def news():
     return render_template('news.html')  # Make sure to create 'news.html'
+
+
+# @main.route('/upload_audio', methods=['POST'])
+# def upload_audio():
+#     try:
+#         # Save uploaded audio
+#         audio_file = request.files['audio']
+#         audio_path = os.path.join("uploads", audio_file.filename)
+#         audio_file.save(audio_path)
+
+#         # Transcribe audio using Whisper
+#         result = whisper_model.transcribe(audio_path)
+#         transcription = result['text']
+
+#         # Generate AI response using GPT
+#         response = openai.ChatCompletion.create(
+#             model="gpt-4",
+#             messages=[{"role": "user", "content": transcription}]
+#         )
+#         ai_response = response['choices'][0]['message']['content']
+
+#         # Generate voice using Eleven Labs
+#         voice_audio = text_to_speech(
+#             text=ai_response,
+#             voice="Rachel",  # Replace with your Eleven Labs voice
+#             api_key=elevenlabs_api_key
+#         )
+#         voice_path = os.path.join("uploads", "response.mp3")
+#         save(voice_audio, voice_path)
+
+#         # Generate lip sync using Rhubarb
+#         lipsync_path = os.path.join("uploads", "response.json")
+#         subprocess.run(["rhubarb", voice_path, "-o", lipsync_path])
+
+#         return jsonify({
+#             "transcription": transcription,
+#             "response_text": ai_response,
+#             "voice_path": voice_path,
+#             "lipsync_path": lipsync_path
+#         })
+#     except Exception as e:
+#         logging.error(f"Error in /upload_audio: {e}")
+#         return jsonify({"error": str(e)}), 500

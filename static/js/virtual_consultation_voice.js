@@ -224,28 +224,28 @@ socket.on('ai_voice_response', (data) => {
     if (data.response_text) {
         addMessage('AI Doctor', data.response_text, false);
 
-        // Speech synthesis with lip sync
-        const utterance = new SpeechSynthesisUtterance(data.response_text);
-        utterance.lang = 'en-US';
+        // Play AI-generated voice
+        const audio = new Audio(data.voice_path);
+        audio.play();
 
-        utterance.onstart = () => {
-            startLipSync();
-        };
-
-        utterance.onend = () => {
-            stopLipSync();
-        };
-
-        speechSynthesis.speak(utterance);
-    }
-
-    if (data.response_audio) {
-        const audio = new Audio(data.response_audio);
-        audio.play().catch(e => console.error('Error playing audio:', e));
-        audio.addEventListener('play', startLipSync);
-        audio.addEventListener('ended', stopLipSync);
+        // Load lip sync data
+        fetch(data.lipsync_path)
+            .then(response => response.json())
+            .then(lipsyncData => {
+                startLipSync(lipsyncData);
+            })
+            .catch(error => console.error('Error loading lip sync data:', error));
     }
 });
+
+// Lip sync animation
+function startLipSync(lipsyncData) {
+    // Use Three.js or your 3D library to animate the avatar's mouth
+    lipsyncData.forEach(frame => {
+        // Example: Adjust mouth mesh based on frame data
+        console.log(frame);
+    });
+}
 
 // Handle connection errors
 socket.on('connect_error', (error) => {
