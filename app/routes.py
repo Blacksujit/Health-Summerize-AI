@@ -45,8 +45,8 @@ import logging
 
  
 # # Set your API keys
-# openai.api_key = "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"
-# elevenlabs_api_key = "sk_3bee0cad8a026a8c63111850d5a9851b7589ba2172b66711"
+# openai.api_key = "yur_apiKey"
+# elevenlabs_api_key = "yur_api_key"
 
 
 
@@ -496,3 +496,5 @@ def news():
 #     except Exception as e:
 #         logging.error(f"Error in /upload_audio: {e}")
 #         return jsonify({"error": str(e)}), 500
+
+
