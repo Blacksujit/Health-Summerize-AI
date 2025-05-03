@@ -248,7 +248,7 @@ def get_appointments():
         # Fetch active appointments
         appointments_ref = db.collection('appointments')
         appointments = [doc.to_dict() for doc in appointments_ref.stream()]
-        
+
         return jsonify({
             'status': 'success',
             'appointments': appointments
@@ -256,64 +256,57 @@ def get_appointments():
     except Exception as e:
         logging.error(f"Error fetching appointments: {str(e)}")
         return jsonify({'status': 'error', 'message': 'Error fetching appointments'}), 500
-    
+        
 # Route for Validating Appointment ID
 @main.route('/validate_appointment', methods=['POST'])
 def validate_appointment():
     try:
         data = request.get_json()
         appointment_id = data.get('appointment_id', '').strip()
-        
+
         if not appointment_id:
             return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
-        
+
         # Check active appointments
         doc_ref = db.collection('appointments').document(appointment_id)
         doc = doc_ref.get()
-        
+
         if not doc.exists:
             return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
-        
+
         # Check appointment status and time
         appointment_data = doc.to_dict()
         appointment_time = datetime.datetime.strptime(appointment_data['time'], '%B %d, %Y at %I:%M %p')
         current_time = datetime.datetime.now()
-        
+
         if appointment_time.date() != current_time.date():
             return jsonify({'status': 'error', 'message': 'This appointment is not scheduled for today'}), 400
-        
+
         if appointment_data.get('status') != 'scheduled':
             return jsonify({'status': 'error', 'message': 'This appointment is not active'}), 400
-        
-        # Return success and redirect URL
-        return jsonify({
-            'status': 'success',
-            'redirect_url': url_for('main.virtual_consultation_voice', appointment_id=appointment_id)
-        })
+
+        # Redirect to Hugging Face Spaces
+        hugging_face_url = f"https://huggingface.co/spaces/blackshadow1/AI-doctor?appointment_id={appointment_id}"
+        return jsonify({'status': 'success', 'redirect_url': hugging_face_url})
     except Exception as e:
         logging.error(f"Validation error: {str(e)}")
         return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
     
-                            
+                                
 @main.route('/complete_appointment', methods=['POST'])
 def complete_appointment():
     try:
         data = request.get_json()
         appointment_id = data.get('appointment_id', '').strip()
 
-        logging.info(f"Received appointment ID: {appointment_id}")  # Debugging: Log the appointment ID
-
         if not appointment_id:
-            logging.error("No appointment ID provided.")
             return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
 
         # Fetch the appointment from the database
-        logging.info(f"Fetching appointment from Firestore: appointments/{appointment_id}")
         doc_ref = db.collection('appointments').document(appointment_id)
         doc = doc_ref.get()
 
-        if not doc.exists:
-            logging.error(f"Appointment ID {appointment_id} not found in the database.")
+        if not doc.exists():
             return jsonify({'status': 'error', 'message': 'Appointment not found'}), 404
 
         # Move the appointment to the completed_appointments collection
@@ -326,13 +319,12 @@ def complete_appointment():
         # Delete the appointment from the active appointments collection
         doc_ref.delete()
 
-        logging.info(f"Appointment ID {appointment_id} marked as completed.")
         return jsonify({'status': 'success', 'message': 'Appointment marked as completed.'})
     except Exception as e:
         logging.error(f"Error completing appointment: {str(e)}")
         return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500    
-        
-                    
+    
+                        
 @main.route('/virtual_consultation_voice/<appointment_id>')
 def virtual_consultation_voice(appointment_id):
     try:
@@ -455,6 +447,15 @@ def news():
     return render_template('news.html')  # Make sure to create 'news.html'
 
 
+
+@main.route('/serve_video/<filename>')
+def serve_video(filename):
+    try:
+        video_path = os.path.join('static', 'avatar_videos', filename)
+        return send_file(video_path, mimetype='video/mp4')
+    except Exception as e:
+        logging.error(f"Error serving video: {str(e)}")
+        return Response("Error serving video", status=500)
 # @main.route('/upload_audio', methods=['POST'])
 # def upload_audio():
 #     try:
