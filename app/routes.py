@@ -41,6 +41,7 @@ from flask_socketio import SocketIO
 import subprocess
 import logging
 # from elevenlabs import text_to_speech, save
+from flask_cors import CORS
 
 
  
@@ -52,6 +53,7 @@ import logging
 
 main = Blueprint('main', __name__)
 
+CORS(main, resources={r"/*": {"origins": "*"}})
 # Set OpenAI API Key
 # openai.api_key = "yur_api_key"  # Replace with your OpenAI API key
 # # Whisper model
