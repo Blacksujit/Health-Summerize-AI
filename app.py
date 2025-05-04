@@ -32,6 +32,8 @@ import os
 import logging
 from PyQt5.QtWidgets import QApplication
 import sys
+from flask_cors import CORS
+import threading
 
 # class MainWindow(QMainWindow):
 #     def __init__(self):
@@ -43,8 +45,20 @@ import sys
 #         webview = QWebEngineView()
 #         webview.setUrl("https://www.python.org")
 #         self.setCentralWidget(webview)
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Flask-PyQt5 Integration")
+        self.resize(800, 600)
+
+        # Add a QWebEngineView
+        webview = QWebEngineView()
+        webview.setUrl("http://127.0.0.1:600")  # Flask app URL
+        self.setCentralWidget(webview)
 
 app = create_app()
+
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 if __name__ == "__main__":
     init_db()
@@ -56,7 +70,13 @@ if __name__ == "__main__":
         # # main_window.show()
         # app.run(debug=True, port=200)
         # Use socketio.run() instead of app.run()
-        socketio.run(app, debug=True, port=600)
+# Start Flask server in a separate thread
+        def run_flask():
+            socketio.run(app, debug=True, port=600)
+
+        flask_thread = threading.Thread(target=run_flask, daemon=True)
+        flask_thread.start()
+        # flask_thread.start()
         sys.exit(new_app.exec_())
     except Exception as e:
         logging.error(f"An error occurred: {e}")

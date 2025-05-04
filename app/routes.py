@@ -36,8 +36,8 @@ import os
 import openai
 import whisper
 # from elevenlabs import generate, save
-from flask import Flask, request, jsonify
-from flask_socketio import SocketIO
+from flask import Flask, request, jsonify , Response
+from flask_socketio import SocketIO 
 import subprocess
 import logging
 # from elevenlabs import text_to_speech, save
@@ -63,6 +63,10 @@ CORS(main, resources={r"/*": {"origins": "*"}})
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+
+
+
 # Constants and configurations
 BASE_DIR = Path(__file__).resolve().parent
 # Define path for static folder to serve video
@@ -72,6 +76,9 @@ BASE_DIR = Path(__file__).resolve().parent
 # Configure file upload settings
 UPLOAD_FOLDER = 'C:\\Users\\HP\\OneDrive\\Desktop\\Machine Learning Projects\\Health-Summerize-AI\\uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json'}
+# Define the base directory for the video files
+VIDEO_DIRECTORY = os.path.abspath(os.path.join(BASE_DIR, 'static', 'avatar-videos'))
+
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Utility to check allowed file extensions
@@ -179,6 +186,45 @@ def index():
 #         })    
 # Route for the Doctors Page
 # Route for the Doctors Page
+
+@main.route('/medical_chat', methods=['POST'])
+def medical_chat():
+    try:
+        logging.info("Received request at /medical_chat")
+        data = request.get_json()
+        logging.info(f"Request data: {data}")
+        message = data.get('message', '').strip()
+        appointment_id = data.get('appointment_id', '').strip()
+
+        if not message or not appointment_id:
+            logging.error("Missing message or appointment_id")
+            return jsonify({'status': 'error', 'message': 'Message and Appointment ID are required'}), 400
+
+        # Validate the appointment
+        doc_ref = db.collection('appointments').document(appointment_id)
+        doc = doc_ref.get()
+
+        if not doc.exists():
+            logging.error(f"Invalid appointment ID: {appointment_id}")
+            return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
+
+        # Generate AI response using OpenAI
+        prompt = f"As an AI doctor, respond to the following query: {message}"
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=prompt,
+            max_tokens=150,
+            temperature=0.7
+        )
+        ai_response = response.choices[0].text.strip()
+
+        logging.info(f"AI response: {ai_response}")
+        return jsonify({'status': 'success', 'response': ai_response})
+    except Exception as e:
+        logging.error(f"Error in medical_chat: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
+    
+    
 @main.route('/doctors', methods=['GET'])
 def doctors():
     try:
@@ -453,12 +499,28 @@ def news():
 @main.route('/serve_video/<filename>')
 def serve_video(filename):
     try:
-        video_path = os.path.join('static', 'avatar_videos', filename)
+        # Construct the full path to the video file
+        video_path = os.path.join(VIDEO_DIRECTORY, filename)
+        
+        # Log the resolved path for debugging
+        logging.info(f"Resolved video path: {video_path}")
+        
+        # Check if the file exists
+        if not os.path.exists(video_path):
+            logging.error(f"Video file not found: {video_path}")
+            return jsonify({'error': 'Video file not found'}), 404
+        
+        # Serve the video file
         return send_file(video_path, mimetype='video/mp4')
     except Exception as e:
         logging.error(f"Error serving video: {str(e)}")
         return Response("Error serving video", status=500)
-# @main.route('/upload_audio', methods=['POST'])
+
+@main.route('/debug_video_path')
+def debug_video_path():
+    # Debugging route to verify the resolved path
+    video_path = os.path.join(VIDEO_DIRECTORY, 'doctorAIavatar.mp4')
+    return jsonify({'resolved_path': video_path, 'exists': os.path.exists(video_path)})# @main.route('/upload_audio', methods=['POST'])
 # def upload_audio():
 #     try:
 #         # Save uploaded audio
