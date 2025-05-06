@@ -1,0 +1,155 @@
+{
+    "common_conditions": [
+        {
+            "name": "Common Cold",
+            "symptoms": ["runny nose", "sore throat", "cough", "sneezing"],
+            "advice": "Rest, drink fluids, use OTC cold remedies. See a doctor if symptoms persist beyond 10 days."
+        },
+        {
+            "name": "Allergies",
+            "symptoms": ["sneezing", "itchy eyes", "runny nose", "congestion"],
+            "advice": "Try antihistamines. Reduce exposure to allergens. Consult doctor if symptoms are severe."
+        },
+        {
+            "name": "Flu",
+            "symptoms": ["fever", "chills", "muscle aches", "fatigue", "cough"],
+            "advice": "Rest, stay hydrated, and take fever reducers. Seek medical attention if symptoms worsen."
+        },
+        {
+            "name": "Migraine",
+            "symptoms": ["severe headache", "nausea", "sensitivity to light", "sensitivity to sound"],
+            "advice": "Rest in a dark, quiet room. Use prescribed medications. Consult a doctor for frequent migraines."
+        },
+        {
+            "name": "Stomach Ache",
+            "symptoms": ["abdominal pain", "bloating", "nausea", "indigestion"],
+            "advice": "Avoid heavy meals, drink clear fluids, and rest. See a doctor if pain is severe or persistent."
+        },
+        {
+            "name": "COVID-19",
+            "symptoms": ["fever", "cough", "shortness of breath", "loss of taste or smell"],
+            "advice": "Isolate, monitor symptoms, and consult a healthcare provider. Seek emergency care for severe symptoms."
+        },
+        {
+            "name": "Hypertension",
+            "symptoms": ["headache", "dizziness", "blurred vision", "shortness of breath"],
+            "advice": "Maintain a healthy diet, exercise regularly, and take prescribed medications. Monitor blood pressure regularly."
+        },
+        {
+            "name": "Diabetes",
+            "symptoms": ["increased thirst", "frequent urination", "fatigue", "blurred vision"],
+            "advice": "Monitor blood sugar levels, follow a healthy diet, exercise, and take prescribed medications."
+        },
+        {
+            "name": "Cholesterol",
+            "symptoms": ["none (often asymptomatic)", "chest pain", "fatigue"],
+            "advice": "Maintain a healthy diet, exercise regularly, and take prescribed medications. Monitor cholesterol levels."
+        },
+        {
+            "name": "Gastritis",
+            "symptoms": ["stomach pain", "nausea", "vomiting", "bloating"],
+            "advice": "Avoid spicy foods, alcohol, and NSAIDs. Consult a doctor for severe symptoms."
+        },
+        {
+            "name": "Sinusitis",
+            "symptoms": ["nasal congestion", "facial pain", "headache", "fever"],
+            "advice": "Use saline nasal sprays, stay hydrated, and consider decongestants. Consult a doctor if symptoms persist."
+        },
+        {
+            "name": "Bronchitis",
+            "symptoms": ["cough", "mucus production", "fatigue", "shortness of breath"],
+            "advice": "Rest, drink fluids, and consider over-the-counter cough medications. Consult a doctor if symptoms worsen."
+        },
+        {
+            "name": "Asthma",
+            "symptoms": ["wheezing", "shortness of breath", "chest tightness", "coughing"],
+            "advice": "Use prescribed inhalers, avoid triggers, and seek medical attention for severe symptoms."
+        },
+        {
+            "name": "Anxiety",
+            "symptoms": ["nervousness", "restlessness", "rapid heartbeat", "sweating"],
+            "advice": "Practice relaxation techniques, exercise, and consider therapy or medication. Consult a healthcare provider."
+        },
+        {
+            "name": "Depression",
+            "symptoms": ["persistent sadness", "loss of interest", "fatigue", "changes in sleep or appetite"],
+            "advice": "Seek therapy, consider medication, and maintain a support network. Consult a healthcare provider."
+        },
+        {
+            "name": "Back Pain",
+            "symptoms": ["localized pain", "stiffness", "muscle spasms"],
+            "advice": "Rest, apply heat or ice, and consider over-the-counter pain relievers. Consult a doctor if pain persists."
+        },
+        {
+            "name": "Skin Rash",
+            "symptoms": ["redness", "itching", "swelling", "blisters"],
+            "advice": "Avoid scratching, apply soothing creams, and consult a dermatologist if rash worsens or persists."
+        },
+        {
+            "name": "Heartburn",
+            "symptoms": ["burning sensation in chest", "sour taste in mouth", "difficulty swallowing"],
+            "advice": "Avoid spicy foods, eat smaller meals, and consider antacids. Consult a doctor if symptoms are frequent."
+        },
+        {
+            "name": "Joint Pain",
+            "symptoms": ["swelling", "stiffness", "reduced range of motion"],
+            "advice": "Rest, apply ice, and consider over-the-counter pain relievers. Consult a doctor if pain persists."
+        },
+        {
+            "name": "Insomnia",
+            "symptoms": ["difficulty falling asleep", "waking up frequently", "feeling tired during the day"],
+            "advice": "Establish a sleep routine, limit screen time before bed, and consult a doctor if insomnia persists."
+        },
+        {
+            "name": "Constipation",
+            "symptoms": ["infrequent bowel movements", "hard stools", "abdominal discomfort"],
+            "advice": "Increase fiber intake, drink plenty of water, and consider over-the-counter laxatives. Consult a doctor if symptoms persist."
+        },
+        {
+            "name": "Urinary Tract Infection (UTI)",
+            "symptoms": ["burning sensation during urination", "frequent urge to urinate", "cloudy urine"],
+            "advice": "Drink plenty of fluids, avoid irritants, and consult a doctor for antibiotics if symptoms persist."
+        },
+        {
+            "name": "Gastroesophageal Reflux Disease (GERD)",
+            "symptoms": ["heartburn", "regurgitation", "difficulty swallowing"],
+            "advice": "Avoid trigger foods, eat smaller meals, and consider over-the-counter medications. Consult a doctor if symptoms persist."
+        },
+        {
+            "name": "Pneumonia",
+            "symptoms": ["cough", "fever", "chest pain", "shortness of breath"],
+            "advice": "Seek medical attention immediately. Treatment may include antibiotics and rest."
+        },
+        {
+            "name": "Osteoarthritis",
+            "symptoms": ["joint pain", "stiffness", "swelling"],
+            "advice": "Maintain a healthy weight, exercise regularly, and consider physical therapy. Consult a doctor for severe symptoms."
+        },
+        {
+            "name": "Psoriasis",
+            "symptoms": ["red patches of skin", "itching", "thickened skin"],
+            "advice": "Use topical treatments, moisturize regularly, and consult a dermatologist for severe cases."
+        },
+        {
+            "name": "Eczema",
+            "symptoms": ["dry skin", "itching", "redness"],
+            "advice": "Moisturize regularly, avoid irritants, and consult a dermatologist for severe cases."
+        },
+        {
+            "name": "Tension Headache",
+            "symptoms": ["dull pain", "tightness in forehead or back of head", "sensitivity to light or sound"],
+            "advice": "Rest, apply heat, and consider over-the-counter pain relievers. Consult a doctor if headaches are frequent."
+        },
+        {
+            "name": "Tendonitis",
+            "symptoms": ["pain around a joint", "stiffness", "swelling"],
+            "advice": "Rest the affected area, apply ice, and consider physical therapy. Consult a doctor if symptoms persist."
+        },
+        {
+            "name": "Carpal Tunnel Syndrome",
+            "symptoms": ["numbness", "tingling", "pain in hand or wrist"],
+            "advice": "Rest the affected hand, use wrist splints, and consider physical therapy. Consult a doctor if symptoms persist."
+        }
+        
+    ]
+}

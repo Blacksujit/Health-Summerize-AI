@@ -1,0 +1,16 @@
+[User Interface] -> [API Gateway] -> [Microservices Architecture]
+    |
+    V
+[NLP Processing Engine] -> [Medical Knowledge Graph] -> [Prescription Generator]
+    |                          |
+    V                          V
+[Symptom Checker]      [Drug Interaction Checker]
+    |                          |
+    V                          V
+[Diagnosis Model]       [Treatment Recommender]
+    |                          |
+    V                          V
+[Report Generator] <- [Nutrition Advisor]
+    |
+    V
+[Storage & Download Module]

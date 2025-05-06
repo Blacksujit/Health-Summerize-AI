@@ -1,0 +1,60 @@
+┌───────────────────────────────────────────────────────────────────────────┐
+│                                                                           │
+│                         AI Doctor Model Pipeline                          │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                       Input Processing & NLU Module                       │
+│                                                                           │
+│  - Symptom extraction                                                     │
+│  - Medical entity recognition                                             │
+│  - Patient intent classification                                          │
+│  - Medical context understanding                                          │
+│                                                                           │
+└────────────────────────────────────┬──────────────────────────────────────┘
+                                     │
+                                     ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                        Diagnostic Reasoning Module                        │
+│                                                                           │
+│  - Symptom-disease matching                                               │
+│  - Medical knowledge retrieval                                            │
+│  - Differential diagnosis generation                                      │
+│  - Confidence scoring                                                     │
+│                                                                           │
+└────────────────────────────────────┬──────────────────────────────────────┘
+                                     │
+                                     ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                      Treatment Recommendation Module                      │
+│                                                                           │
+│  - Treatment protocol retrieval                                           │
+│  - Medication suggestion                                                  │
+│  - Lifestyle recommendation                                               │
+│  - Dietary advice generation                                              │
+│                                                                           │
+└────────────────────────────────────┬──────────────────────────────────────┘
+                                     │
+                                     ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                       Response Generation Module                          │
+│                                                                           │
+│  - Medical report formatting                                              │
+│  - Patient-friendly explanation                                           │
+│  - Appropriate disclaimer addition                                        │
+│  - Referral generation when needed                                        │
+│                                                                           │
+└────────────────────────────────────┬──────────────────────────────────────┘
+                                     │
+                                     ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                        Safety & Compliance Module                         │
+│                                                                           │
+│  - Critical condition detection                                           │
+│  - Emergency warning generation                                           │
+│  - Medical ethics compliance                                              │
+│  - Regulatory adherence                                                   │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘

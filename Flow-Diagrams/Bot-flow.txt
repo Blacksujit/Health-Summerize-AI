@@ -1,0 +1,31 @@
+┌───────────────────────────────────────────────────────────────────┐
+│                                                                   │
+│                      AI Doctor Chatbot System                     │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+                                   │
+           ┌─────────────────────────────────────────────┐
+           │                                             │
+┌──────────▼─────────────┐  ┌────────────────┐  ┌────────▼────────┐
+│    Frontend (React)    │  │    Backend     │  │ Medical Report  │
+│ - User Interface       │◄─┤    (Flask)     │─►│   Generator     │
+│ - Chat Interface       │  │ - API Endpoints│  │ - PDF Creation  │
+│ - Report Download      │  │ - Auth System  │  │ - Templates     │
+└──────────┬─────────────┘  └───────┬────────┘  └─────────────────┘
+           │                        │
+           │             ┌──────────▼───────────┐
+           │             │                      │
+           │             │  AI Model Pipeline   │
+           └────────────►│                      │
+                         └──────────┬───────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │                               │
+         ┌──────────▼─────────┐         ┌──────────▼─────────┐
+         │                    │         │                    │
+         │  Medical Knowledge │         │ Specialized Models │
+         │      Database      │         │ - Symptom Analysis │
+         │  - Disease Info    │         │ - Disease ID       │
+         │  - Treatment Data  │         │ - Treatment Rec.   │
+         │  - Medicine Data   │         │ - Diet Analysis    │
+         └────────────────────┘         └────────────────────┘

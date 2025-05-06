@@ -190,14 +190,11 @@ def index():
 @main.route('/medical_chat', methods=['POST'])
 def medical_chat():
     try:
-        logging.info("Received request at /medical_chat")
         data = request.get_json()
-        logging.info(f"Request data: {data}")
         message = data.get('message', '').strip()
         appointment_id = data.get('appointment_id', '').strip()
 
         if not message or not appointment_id:
-            logging.error("Missing message or appointment_id")
             return jsonify({'status': 'error', 'message': 'Message and Appointment ID are required'}), 400
 
         # Validate the appointment
@@ -205,7 +202,6 @@ def medical_chat():
         doc = doc_ref.get()
 
         if not doc.exists():
-            logging.error(f"Invalid appointment ID: {appointment_id}")
             return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
 
         # Generate AI response using OpenAI
@@ -218,12 +214,11 @@ def medical_chat():
         )
         ai_response = response.choices[0].text.strip()
 
-        logging.info(f"AI response: {ai_response}")
         return jsonify({'status': 'success', 'response': ai_response})
     except Exception as e:
         logging.error(f"Error in medical_chat: {str(e)}")
         return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
-    
+        
     
 @main.route('/doctors', methods=['GET'])
 def doctors():
