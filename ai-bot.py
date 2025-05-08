@@ -1,134 +1,106 @@
-# # Removed unused imports: SequentialChain, PromptTemplate, HuggingFacePipeline
-# from langchain.agents import Tool, initialize_agent, AgentType
-# from transformers import pipeline, AutoModelForSequenceClassification, AutoTokenizer
-# import spacy
-# import random
-# import json
+# # Step 1: Install packages with exact versions (skip pip check)
+# !pip install --upgrade --force-reinstall numpy==1.26.2 --quiet
+# !pip install gradio==4.24.0 --quiet
+# !pip install langchain-community==0.0.34 transformers==4.41.2 sentence-transformers==2.7.0 --quiet
+# !pip install bitsandbytes==0.43.1 accelerate==0.29.3 faiss-cpu==1.8.0 --quiet
+
+# # Step 2: Import libraries
+# import sys
+# from langchain_community.llms import HuggingFacePipeline
+# from langchain.prompts import ChatPromptTemplate
+# from langchain_community.embeddings import HuggingFaceEmbeddings
+# from langchain_community.vectorstores import FAISS
+# from langchain.chains import RetrievalQA
+# from google.colab import files
 # import gradio as gr
+# import torch
+# from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline, BitsAndBytesConfig
+# import numpy as np
 
-# # Load SpaCy model for NER
-# nlp = spacy.load("en_core_web_sm")
+# # Step 1: Install required packages
+# !pip install -U transformers accelerate gradio sentence-transformers huggingface-hub
 
-# # Load Hugging Face pipelines
-# intent_classifier = pipeline("text-classification", model="bhadresh-savani/distilbert-base-uncased-emotion")
-# bio_bert_model = AutoModelForSequenceClassification.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
-# bio_bert_tokenizer = AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
-# treatment_advice_model = pipeline("text-generation", model="gpt2")
+# # Step 2: Authenticate with Hugging Face
+# from huggingface_hub import notebook_login
+# notebook_login()  # Follow the prompt to enter your Hugging Face token
 
-# # Load the knowledge base
-# with open("c:/Users/HP/OneDrive/Desktop/openSource/AI-Health-Summerize/medical-kb/conditions.json", "r") as f:
-#     knowledge_base = json.load(f)["common_conditions"]
+# # Step 3: Load Mistral with authentication
+# from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
-# # Generate empathetic response
-# def generate_empathetic_response():
-#     responses = [
-#         "I'm here to help. Please tell me more about your symptoms.",
-#         "I understand this can be concerning. Let me assist you.",
-#         "Your health is important. Let's work together to address your concerns."
-#     ]
-#     return random.choice(responses)
+# model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+# tokenizer = AutoTokenizer.from_pretrained(model_name)
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     device_map="auto",
+#     load_in_4bit=True  # Reduces memory usage
+# )
 
-# # Define individual agents
-# def intent_detection_agent(user_input):
-#     """Detect the intent of the user input."""
-#     intent_result = intent_classifier(user_input)
-#     intent = intent_result[0]["label"]
-#     return intent
-#     return intent_result[0]["label"]
+# mistral_pipe = pipeline(
+#     "text-generation",
+#     model=model,
+#     tokenizer=tokenizer,
+#     max_new_tokens=200
+# )
 
-# def process_user_input(user_input):
-#     """Process user input through the agentic pipeline."""
-#     entities = {"symptoms": ["headache", "chest pain"]}  # Placeholder for entity recognition
-#     diagnostic_response = "Based on the symptoms, further analysis is required."  # Placeholder
-#     treatment_recommendations = {"advice": "Consult a doctor for a detailed checkup."}  # Placeholder
-#     safety_check = "No immediate critical conditions detected."  # Placeholder
+# # Step 4: Knowledge Base Setup
+# print("Please upload your medical knowledge text file:")
+# uploaded = files.upload()
+# kb_filename = next(iter(uploaded))
 
-#     return {
-#         "Intent": intent_detection_agent(user_input),
-#         "Entities": entities,
-#         "Diagnostic Response": diagnostic_response,
-#         "Treatment Recommendations": treatment_recommendations,
-#         "Safety Check": safety_check
-#     }
+# from langchain_community.document_loaders import TextLoader
+# from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-# def create_gradio_interface():
-#     """Create a Gradio interface for user interaction."""
-#     interface = gr.Interface(
-#         fn=process_user_input,
-#         inputs=gr.Textbox(lines=2, placeholder="Enter your symptoms or health concerns here..."),
-#     return gr.Interface(
-#         fn=process_user_input,
-#         inputs=gr.Textbox(lines=2, placeholder="Enter your symptoms or health concerns here..."),
-#         outputs=[
-#             gr.Textbox(label="Detected Intent"),
-#             gr.JSON(label="Extracted Entities"),
-#             gr.Textbox(label="Diagnostic Response"),
-#             gr.JSON(label="Treatment Recommendations"),
-#             gr.Textbox(label="Safety Check")
-#         ],
-#         title="AI Health Assistant",
-#         description="Interact with the AI Health Assistant to get diagnostic reasoning, treatment recommendations, and safety compliance checks."
-#     )
+# loader = TextLoader(kb_filename)
+# docs = loader.load()
 
-# def create_fusion_agentic_pipeline():
-#     """Create a robust fusion agentic pipeline."""
-#     # Define tools for each agent
-#     tools = [
-#         Tool(
-#             name="Intent Detection",
-#             func=intent_detection_agent,
-#             description="Detects the user's intent from their input."
-#         ),
-#         Tool(
-#             name="Entity Recognition",
-#             func=lambda x: {"symptoms": ["headache", "chest pain"]},  # Placeholder function
-#             description="Extracts entities such as symptoms or conditions from the user's input."
-#         ),
-#         Tool(
-#             name="Diagnostic Reasoning",
-#             func=lambda x: "Based on the symptoms, further analysis is required.",  # Placeholder function
-#             description="Performs diagnostic reasoning based on extracted entities."
-#         ),
-#         Tool(
-#             name="Treatment Recommendation",
-#             func=lambda x: {"advice": "Consult a doctor for a detailed checkup."},  # Placeholder function
-#             description="Provides treatment recommendations based on extracted entities."
-#         ),
-#         Tool(
-#             name="Safety Compliance Check",
-#             func=lambda x: "No immediate critical conditions detected.",  # Placeholder function
-#             description="Checks for critical conditions and provides safety advice."
-#         )
-#     ]
+# text_splitter = RecursiveCharacterTextSplitter(
+#     chunk_size=500,
+#     chunk_overlap=100
+# )
+# split_docs = text_splitter.split_documents(docs)
 
-#     # Define the LLM (e.g., Hugging Face pipeline)
-#     llm = HuggingFacePipeline(pipeline=treatment_advice_model)
+# embeddings = HuggingFaceEmbeddings(
+#     model_name="sentence-transformers/all-MiniLM-L6-v2",
+#     model_kwargs={"device": "cpu"}
+# )
+# vectorstore = FAISS.from_documents(split_docs, embeddings)
 
-#     # Initialize the agent
-#     agent = initialize_agent(
-#         tools=tools,
-#         llm=llm,
-#         agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-#     return initialize_agent(
-#         tools=tools,
-#         llm=llm,
-#         agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-#         verbose=True
-#     )
-# if __name__ == "__main__":
-#     # Create and launch the Gradio interface
-#     gradio_interface = create_gradio_interface()
-#     gradio_interface.launch()
-#     return agent
+# # Step 5: Create LangChain QA System
+# prompt_template = """[INST] You are a medical assistant. Use this context:
+# {context}
 
-# # Example usage of the pipeline
-# if __name__ == "__main__":
-#     # Create the agentic pipeline
-#     agent_pipeline = create_fusion_agentic_pipeline()
+# Question: {question}
+# Provide a concise answer and recommend consulting a doctor. [/INST]"""
 
-#     # Example user input
-# if __name__ == "__main__":
-#     # Removed redundant conditional
-#     # Run the pipeline
-#     response = agent_pipeline.run(user_input)
-#     print(response)
+# prompt = ChatPromptTemplate.from_template(prompt_template)
+
+# qa_chain = RetrievalQA.from_chain_type(
+#     llm=HuggingFacePipeline(pipeline=mistral_pipe),
+#     chain_type="stuff",
+#     retriever=vectorstore.as_retriever(),
+#     chain_type_kwargs={"prompt": prompt}
+# )
+
+# # Step 6: Gradio Interface
+# def respond(message, history):
+#     # Emergency detection
+#     emergencies = ["chest pain", "can't breathe", "unconscious", "severe bleeding"]
+#     if any(term in message.lower() for term in emergencies):
+#         return "🆘 EMERGENCY: Call local emergency services immediately!"
+
+#     try:
+#         response = qa_chain.invoke({"query": message})["result"]
+#         return f"{response}\n\n⚠️ Always consult a qualified doctor"
+#     except Exception as e:
+#         return f"🚨 Please try again later. Error: {str(e)}"
+
+# with gr.Blocks(theme=gr.themes.Soft()) as app:
+#     gr.Markdown("# 🏥 Medical Assistant (Mistral 7B)")
+#     chatbot = gr.Chatbot(height=300)
+#     msg = gr.Textbox(label="Your health question", placeholder="Describe your symptoms...")
+#     clear = gr.ClearButton([msg, chatbot])
+
+#     msg.submit(respond, [msg, chatbot], [chatbot])
+
+# print("Launching interface...")
+# app.launch(share=True, debug=False)
