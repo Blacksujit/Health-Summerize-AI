@@ -91,7 +91,10 @@
 #     try:
 #         response = qa_chain.invoke({"query": message})["result"]
 #         return f"{response}\n\n⚠️ Always consult a qualified doctor"
-#     except Exception as e:
+#     except Exception as e:# The code snippet you provided is a part of a Python script that sets up a
+#     # medical assistant chatbot using Mistral 7B model for text generation and a
+#     # LangChain QA system for answering health-related questions.
+    
 #         return f"🚨 Please try again later. Error: {str(e)}"
 
 # with gr.Blocks(theme=gr.themes.Soft()) as app:
