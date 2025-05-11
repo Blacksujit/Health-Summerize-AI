@@ -1,4 +1,6 @@
 
+import http
+import json
 from flask import Blueprint, render_template, request, jsonify , send_file , send_from_directory , url_for
 import logging
 import os
@@ -42,6 +44,7 @@ import subprocess
 import logging
 # from elevenlabs import text_to_speech, save
 from flask_cors import CORS
+import http.client
 
 
  
@@ -187,38 +190,45 @@ def index():
 # Route for the Doctors Page
 # Route for the Doctors Page
 
-@main.route('/medical_chat', methods=['POST'])
-def medical_chat():
+@main.route('/ai_doctor_chat', methods=['POST'])
+def ai_doctor_chat():
+    """
+    Handles communication with the AI Doctor API.
+    """
     try:
+        # Get the user message and appointment details from the request
         data = request.get_json()
-        message = data.get('message', '').strip()
-        appointment_id = data.get('appointment_id', '').strip()
+        user_message = data.get('message', '').strip()
+        specialization = data.get('specialization', 'general')
+        language = data.get('language', 'en')
 
-        if not message or not appointment_id:
-            return jsonify({'status': 'error', 'message': 'Message and Appointment ID are required'}), 400
+        if not user_message:
+            return jsonify({'status': 'error', 'message': 'Message is required'}), 400
 
-        # Validate the appointment
-        doc_ref = db.collection('appointments').document(appointment_id)
-        doc = doc_ref.get()
+        # Prepare the API request
+        conn = http.client.HTTPSConnection("ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com")
+        payload = json.dumps({
+            "message": user_message,
+            "specialization": specialization,
+            "language": language
+        })
+        headers = {
+            'x-rapidapi-key': "2408f98dfemshf58df2f19cfc556p1a26c5jsnac7fa5db12ad",
+            'x-rapidapi-host': "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
+            'Content-Type': "application/json"
+        }
 
-        if not doc.exists():
-            return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
+        # Send the request to the AI Doctor API
+        conn.request("POST", "/chat?noqueue=1", payload, headers)
+        res = conn.getresponse()
+        data = res.read()
 
-        # Generate AI response using OpenAI
-        prompt = f"As an AI doctor, respond to the following query: {message}"
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=150,
-            temperature=0.7
-        )
-        ai_response = response.choices[0].text.strip()
-
-        return jsonify({'status': 'success', 'response': ai_response})
+        # Parse the API response
+        response_data = json.loads(data.decode("utf-8"))
+        return jsonify({'status': 'success', 'response': response_data})
     except Exception as e:
-        logging.error(f"Error in medical_chat: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500
-        
+        logging.error(f"Error in AI Doctor Chat: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500    
     
 @main.route('/doctors', methods=['GET'])
 def doctors():

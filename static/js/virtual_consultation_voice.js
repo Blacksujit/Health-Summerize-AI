@@ -8,6 +8,7 @@ function scrollToBottom() {
 }
 
 // Add message to chat
+// Add message to chat
 function addMessage(sender, text, isUser) {
     const now = new Date();
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -41,25 +42,11 @@ function addMessage(sender, text, isUser) {
         `;
     }
 
-    chatContainer.appendChild(messageDiv);
-    scrollToBottom();
+    document.getElementById('chatContainer').appendChild(messageDiv);
 }
 
-// Show typing indicator
-function showTypingIndicator() {
-    const typingIndicator = document.getElementById('typingIndicator');
-    typingIndicator.style.display = 'inline-block';
-    scrollToBottom();
-}
-
-// Hide typing indicator
-function hideTypingIndicator() {
-    const typingIndicator = document.getElementById('typingIndicator');
-    typingIndicator.style.display = 'none';
-}
-
-// Send text message
-document.getElementById('sendMessage').addEventListener('click', function () {
+// Send message to AI Doctor API
+document.getElementById('sendMessage').addEventListener('click', async function () {
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
 
@@ -68,74 +55,63 @@ document.getElementById('sendMessage').addEventListener('click', function () {
         input.value = '';
 
         // Show typing indicator
-        showTypingIndicator();
+        document.getElementById('typingIndicator').style.display = 'inline-block';
 
-        // Send to server
-        socket.emit('process_text', {
-            appointment_id: appointmentId,
-            text: message
-        });
-    }
-});
+        try {
+            const response = await fetch('/ai_doctor_chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, specialization: 'general', language: 'en' })
+            });
 
-// Also send on Enter key
-document.getElementById('messageInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        document.getElementById('sendMessage').click();
+            const data = await response.json();
+            document.getElementById('typingIndicator').style.display = 'none';
+
+            if (data.status === 'success') {
+                addMessage('AI Doctor', data.response.message, false);
+            } else {
+                addMessage('System', 'Error: ' + data.message, false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            addMessage('System', 'Network error. Please try again.', false);
+        }
     }
 });
 
 // End consultation
-document.getElementById("endConsultation").addEventListener("click", async function () {
+document.getElementById('endConsultation').addEventListener('click', async function () {
     Swal.fire({
-        title: "End Consultation?",
-        text: "Are you sure you want to end this consultation?",
-        icon: "warning",
+        title: 'End Consultation?',
+        text: 'Are you sure you want to end this consultation?',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Yes, End It",
-        cancelButtonText: "Cancel",
+        confirmButtonText: 'Yes, End It',
+        cancelButtonText: 'Cancel'
     }).then(async (result) => {
         if (result.isConfirmed) {
             try {
-                const response = await fetch("/complete_appointment", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ appointment_id: appointmentId }),
+                const response = await fetch('/complete_appointment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ appointment_id: appointmentId })
                 });
 
                 const data = await response.json();
 
-                if (data.status === "success") {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Consultation Completed",
-                        text: "The appointment has been marked as completed.",
-                        timer: 2000,
-                        showConfirmButton: false,
-                    }).then(() => {
-                        window.location.href = "/doctors";
-                    });
+                if (data.status === 'success') {
+                    Swal.fire('Consultation Completed', 'The appointment has been marked as completed.', 'success')
+                        .then(() => window.location.href = '/doctors');
                 } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: data.message || "Failed to complete consultation.",
-                        confirmButtonText: "OK",
-                    });
+                    Swal.fire('Error', data.message || 'Failed to complete consultation.', 'error');
                 }
             } catch (error) {
-                console.error("Error completing consultation:", error);
-                Swal.fire({
-                    icon: "error",
-                    title: "Network Error",
-                    text: "There was an issue completing the consultation. Please try again.",
-                    confirmButtonText: "OK",
-                });
+                console.error('Error completing consultation:', error);
+                Swal.fire('Error', 'Network error. Please try again.', 'error');
             }
         }
     });
 });
-
 // Receive AI response
 socket.on('ai_response', (data) => {
     hideTypingIndicator();
