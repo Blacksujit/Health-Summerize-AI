@@ -96,139 +96,46 @@ def index():
 
 
 
-# Handle voice queries from the patient
-# @socketio.on('process_voice')
-# def handle_voice_query(data):
+
+# @main.route('/ai_doctor_chat', methods=['POST'])
+# def ai_doctor_chat():
+#     """
+#     Handles communication with the AI Doctor API.
+#     """
 #     try:
-#         appointment_id = data.get('appointment_id')
-#         audio_file_path = data.get('audio_file_path')
-#         D_ID_API_KEY = os.getenv('D_ID_API_KEY')  # Get from environment variables
-#         AVATAR_IMAGE_URL = "https://your-domain.com/path/to/doctor-avatar-image.png"  # Host your avatar image
+#         # Get the user message and appointment details from the request
+#         data = request.get_json()
+#         user_message = data.get('message', '').strip()
+#         specialization = data.get('specialization', 'general')
+#         language = data.get('language', 'en')
 
-#         # Transcribe audio
-#         client = speech.SpeechClient()
-#         with open(audio_file_path, 'rb') as audio_file:
-#             audio_content = audio_file.read()
+#         if not user_message:
+#             return jsonify({'status': 'error', 'message': 'Message is required'}), 400
 
-#         audio = speech.RecognitionAudio(content=audio_content)
-#         config = speech.RecognitionConfig(
-#             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-#             sample_rate_hertz=16000,
-#             language_code="en-US"
-#         )
-
-#         response = client.recognize(config=config, audio=audio)
-#         patient_message = response.results[0].alternatives[0].transcript
-
-#         # Generate AI response
-#         prompt = f"""As an AI doctor, respond to: "{patient_message}". Follow:
-#         1. Empathetic acknowledgement
-#         2. Professional medical advice
-#         3. Simple language
-#         4. Max 3 sentences
-#         Response:"""
-        
-#         ai_response = openai.Completion.create(
-#             engine="text-davinci-003",
-#             prompt=prompt,
-#             max_tokens=200,
-#             temperature=0.6
-#         ).choices[0].text.strip()
-
-#         # Generate talking avatar video
-#         d_id_response = requests.post(
-#             'https://api.d-id.com/talks',
-#             headers={'Authorization': f'Bearer {D_ID_API_KEY}'},
-#             json={
-#                 'script': ai_response,
-#                 'source_url': AVATAR_IMAGE_URL,
-#                 'config': {
-#                     'fluent': 'en-US',
-#                     'driver_url': 'bank://lively/',
-#                     'pad_audio': '0.2'
-#                 }
-#             }
-#         )
-
-#         if d_id_response.status_code != 201:
-#             raise Exception(f"D-ID API Error: {d_id_response.text}")
-
-#         # Poll for video result
-#         talk_id = d_id_response.json()['id']
-#         video_url = None
-#         for _ in range(10):  # Retry for 10 seconds
-#             status_response = requests.get(
-#                 f'https://api.d-id.com/talks/{talk_id}',
-#                 headers={'Authorization': f'Bearer {D_ID_API_KEY}'}
-#             )
-#             if status_response.json()['status'] == 'done':
-#                 video_url = status_response.json()['result_url']
-#                 break
-#             time.sleep(1)
-
-#         if not video_url:
-#             raise Exception("Avatar video generation timeout")
-
-#         # Save video locally
-#         video_response = requests.get(video_url)
-#         video_path = f"static/avatar_videos/{uuid.uuid4()}.mp4"
-#         with open(video_path, 'wb') as f:
-#             f.write(video_response.content)
-
-#         emit('ai_voice_response', {
-#             'response_text': ai_response,
-#             'response_audio': None,  # Remove if not using audio
-#             'avatar_video': url_for('static', filename=video_path.split('static/')[1])
+#         # Prepare the API request
+#         conn = http.client.HTTPSConnection("ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com")
+#         payload = json.dumps({
+#             "message": user_message,
+#             "specialization": specialization,
+#             "language": language
 #         })
+#         headers = {
+#             'x-rapidapi-key': "2408f98dfemshf58df2f19cfc556p1a26c5jsnac7fa5db12ad",
+#             'x-rapidapi-host': "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
+#             'Content-Type': "application/json"
+#         }
 
+#         # Send the request to the AI Doctor API
+#         conn.request("POST", "/chat?noqueue=1", payload, headers)
+#         res = conn.getresponse()
+#         data = res.read()
+
+#         # Parse the API response
+#         response_data = json.loads(data.decode("utf-8"))
+#         return jsonify({'status': 'success', 'response': response_data})
 #     except Exception as e:
-#         print(f"Error processing voice query: {str(e)}")
-#         emit('ai_voice_response', {
-#             'response_text': 'Sorry, I encountered an error. Please try again.',
-#             'avatar_video': None
-#         })    
-# Route for the Doctors Page
-# Route for the Doctors Page
-
-@main.route('/ai_doctor_chat', methods=['POST'])
-def ai_doctor_chat():
-    """
-    Handles communication with the AI Doctor API.
-    """
-    try:
-        # Get the user message and appointment details from the request
-        data = request.get_json()
-        user_message = data.get('message', '').strip()
-        specialization = data.get('specialization', 'general')
-        language = data.get('language', 'en')
-
-        if not user_message:
-            return jsonify({'status': 'error', 'message': 'Message is required'}), 400
-
-        # Prepare the API request
-        conn = http.client.HTTPSConnection("ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com")
-        payload = json.dumps({
-            "message": user_message,
-            "specialization": specialization,
-            "language": language
-        })
-        headers = {
-            'x-rapidapi-key': "2408f98dfemshf58df2f19cfc556p1a26c5jsnac7fa5db12ad",
-            'x-rapidapi-host': "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
-            'Content-Type': "application/json"
-        }
-
-        # Send the request to the AI Doctor API
-        conn.request("POST", "/chat?noqueue=1", payload, headers)
-        res = conn.getresponse()
-        data = res.read()
-
-        # Parse the API response
-        response_data = json.loads(data.decode("utf-8"))
-        return jsonify({'status': 'success', 'response': response_data})
-    except Exception as e:
-        logging.error(f"Error in AI Doctor Chat: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500    
+#         logging.error(f"Error in AI Doctor Chat: {str(e)}")
+#         return jsonify({'status': 'error', 'message': 'Server error occurred'}), 500    
     
 @main.route('/doctors', methods=['GET'])
 def doctors():
@@ -339,7 +246,7 @@ def validate_appointment():
             return jsonify({'status': 'error', 'message': 'This appointment is not active'}), 400
 
         # Redirect to Hugging Face Spaces
-        hugging_face_url = f"https://huggingface.co/spaces/blackshadow1/AI-doctor?appointment_id={appointment_id}"
+        hugging_face_url = f"https://huggingface.co/spaces/blackshadow1/Multi-Modal-Medical-Analysis-System?appointment_id={appointment_id}"
         return jsonify({'status': 'success', 'redirect_url': hugging_face_url})
     except Exception as e:
         logging.error(f"Validation error: {str(e)}")
