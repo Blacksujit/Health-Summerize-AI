@@ -18,28 +18,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <!-- Dynamic CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dynamic.css') }}">
-    <!-- Favicon -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="icon" href="{{ url_for('static', filename='images/HealthSummerizeAI.jpg') }}" type="image/gif">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/HealthSummerizeAI.jpg') }}" type="image/jpeg">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 </head>
 <body>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-        {% if category == 'info' %}
-            <script>
-                alert("{{ message }}");
-            </script>
-        {% endif %}
-    {% endfor %}
-{% endwith %}
+        {% for category, message in messages %}
+            {% if category == 'info' %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endwith %}
 
     <!-- Header Section Start -->
     <header class="header_section">
@@ -68,7 +65,7 @@
     <!-- Header Section End -->
 
     <!-- Banner Section Start -->
-    <section class="banner_section" style="background: url('{{ url_for('static', filename='images/HealthSummarizeAI.jpg') }}') no-repeat center center/cover;">
+    <section class="banner_section">
         <div class="container">
             <div class="banner_content text-center">
                 <h1>Summarize EHR Records</h1>
@@ -86,11 +83,11 @@
                     <p>Use the input options below to provide files, prompts, or documents, and click the "Summarize" button to get a detailed summary report.</p>
                     <form action="{{ url_for('main.summerize') }}" method="POST" enctype="multipart/form-data">
                         {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        <div class="alert alert-warning">
-                            {{ messages[0] }}
-                        </div>
-                        {% endif %}
+                            {% if messages %}
+                                <div class="alert alert-warning">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
                         {% endwith %}
                         <div class="form-group">
                             <label for="fileInput">Upload File:</label>
@@ -151,7 +148,6 @@
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='js/summerize.js') }}"></script>
 </body>

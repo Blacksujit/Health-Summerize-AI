@@ -224,30 +224,67 @@ def virtual_consultation_voice(appointment_id):
     )
 
 @main.route('/summerize', methods=['GET', 'POST'])
-@handle_error
 def summerize():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file selected', 'error')
-            return redirect(request.url)
-            
-        file = request.files['file']
-        if file.filename == '':
-            flash('No file selected', 'error')
-            return redirect(request.url)
-            
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = UPLOAD_FOLDER / filename
-            file.save(filepath)
-            
-            # Process the file
-            pipeline = MedicalNLPipeline()
-            summary = pipeline.process_document(str(filepath))
-            
-            return render_template('summerize.html', summary=summary)
-            
+        file = request.files.get('file')
+        text_input = request.form.get('text')
+        medical_nlp = MedicalNLPipeline()
+
+        try:
+            result = None
+
+            # Validate input
+            if file and allowed_file(file.filename):
+                # Save the uploaded file
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
+
+                # Process the uploaded file
+                result = medical_nlp.process_document(file_path=filepath)
+
+            elif text_input:
+                # Process the entered text
+                result = medical_nlp.process_document(prompt=text_input)
+
+            else:
+                flash('Please provide a valid file or text input for summarization.')
+                return redirect(url_for('main.summerize'))
+
+            if result:
+                # Extract sentiment results
+                sentiment_data = result.get('sentiment', {})
+                sentiment_label = sentiment_data.get('label', 'Unknown')
+                report = result.get('report', 'No structured report available.')
+                sentiment_score = sentiment_data.get('score') or sentiment_data.get('confidence', 'N/A')
+
+                # Save the report as a file
+                report_filename = f"report_{uuid.uuid4().hex}.txt"  # Generate a unique filename
+                report_filepath = os.path.join(UPLOAD_FOLDER, report_filename)
+                with open(report_filepath, 'w') as f:
+                    f.write(report)  # Save the report content to the file
+
+                # Log the saved file path
+                logging.info(f"Report saved at: {report_filepath}")
+
+
+                # Pass relevant data to the reports.html template
+                return render_template(
+                    'reports.html',
+                    report=report,
+                    sentiment_label=sentiment_label,
+                    sentiment_score=sentiment_score,
+                    report_filename=report_filename  # Pass the filename to the template
+                )
+
+        except Exception as e:
+            logging.error(f"Error in processing: {str(e)}")
+            flash(f"An error occurred: {str(e)}")
+            return redirect(url_for('main.summerize'))
+
+    # Render the summarize page
     return render_template('summerize.html')
+
 
 @main.route('/Reports')
 def Reports():
@@ -256,7 +293,28 @@ def Reports():
 @main.route('/download_report/<filename>')
 @handle_error
 def download_report(filename):
-    return send_from_directory('outputs', filename)
+    try:
+        # Log the filename being requested
+        logging.info(f"Attempting to download file: {filename}")
+        
+        # Fix the file path construction
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Check if the file exists
+        if not os.path.exists(file_path):
+            logging.error(f"File not found: {file_path}")
+            return jsonify({'error': 'File not found'}), 404
+        
+        # Return the file with attachment disposition
+        return send_from_directory(
+            directory=UPLOAD_FOLDER,
+            path=filename,
+            as_attachment=True
+        )
+        
+    except Exception as e:
+        logging.error(f"Error in download_report: {str(e)}")
+        return jsonify({'error': 'Error downloading file'}), 500
 
 @main.route('/about')
 def about():
@@ -287,5 +345,3 @@ def debug_video_path():
         'exists': VIDEO_DIRECTORY.exists(),
         'is_dir': VIDEO_DIRECTORY.is_dir() if VIDEO_DIRECTORY.exists() else False
     })
-
-
