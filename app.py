@@ -7,7 +7,7 @@ The script performs the following tasks:
 4. Runs the application in debug mode on port 200.
 If an exception occurs during the execution, it is logged as an error.
 Modules:
-    os: Provides a way of using operating system dependent functionality.
+    # os: Provides a way of using operating system dependent functionality.
     logging: Provides a way to configure and use loggers.
 Functions:
     create_app: A function imported from the app module to create an instance of the application.
@@ -80,3 +80,5 @@ if __name__ == "__main__":
         sys.exit(new_app.exec_())
     except Exception as e:
         logging.error(f"An error occurred: {e}")
+
+        

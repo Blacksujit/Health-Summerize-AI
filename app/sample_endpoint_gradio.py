@@ -1,6 +1,29 @@
+# import os
+# import logging
+# import tempfile
+# import requests
+# from pathlib import Path
+# import gradio as gr
+# from dotenv import load_dotenv
+
+# # Load environment variables
+# load_dotenv()
+
+# # Configure logging
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+# )
+# logger = logging.getLogger(__name__)
+
+# # Constants
+# APP_HOST = os.getenv('APP_HOST', '127.0.0.1')
+# APP_PORT = int(os.getenv('APP_PORT', '600'))
+# HUGGINGFACE_SPACE = os.getenv('HUGGINGFACE_SPACE', 'blackshadow1/Multi-Modal-Medical-Analysis-System')
+
 # def create_interface():
 #     """Create and launch the Gradio interface with all fixes implemented."""
-
+#     from .hugging_face_script import MediSyncApp
 #     app = MediSyncApp()
 
 #     # Example medical report for demo
@@ -26,7 +49,7 @@
 #     sample_image_path = None
 #     try:
 #         sample_images_dir = Path(__file__).parent.parent / "data" / "sample"
-#         os.makedirs(sample_images_dir, exist_ok=True)
+#         sample_images_dir.mkdir(parents=True, exist_ok=True)
         
 #         # Check for existing images first
 #         sample_images = list(sample_images_dir.glob("*.png")) + list(sample_images_dir.glob("*.jpg"))
@@ -39,18 +62,17 @@
 #             try:
 #                 response = requests.get(fallback_url, timeout=10)
 #                 if response.status_code == 200:
-#                     with open(sample_path, 'wb') as f:
-#                         f.write(response.content)
+#                     sample_path.write_bytes(response.content)
 #                     sample_image_path = str(sample_path)
-#                     logging.info("Successfully downloaded fallback sample image")
+#                     logger.info("Successfully downloaded fallback sample image")
 #                 else:
-#                     logging.warning(f"Failed to download sample image. Status code: {response.status_code}")
+#                     logger.warning(f"Failed to download sample image. Status code: {response.status_code}")
 #             except Exception as download_error:
-#                 logging.warning(f"Could not download sample image: {str(download_error)}")
+#                 logger.warning(f"Could not download sample image: {str(download_error)}")
 #         else:
 #             sample_image_path = str(sample_images[0])
 #     except Exception as e:
-#         logging.error(f"Error setting up sample images: {str(e)}")
+#         logger.error(f"Error setting up sample images: {str(e)}")
 
 #     # Define interface with robust parameter handling
 #     with gr.Blocks(
@@ -62,7 +84,7 @@
 #             from gradio.context import Context
 #             appointment_id_value = Context.request.query_params.get("appointment_id", "") if hasattr(Context, 'request') else ""
 #         except Exception as e:
-#             logging.warning(f"Could not get URL parameters: {str(e)}")
+#             logger.warning(f"Could not get URL parameters: {str(e)}")
 #             appointment_id_value = ""
 
 #         appointment_id = gr.Textbox(
@@ -213,8 +235,7 @@
 #                 return "<div class='alert alert-error'>No appointment ID found. Please contact support.</div>"
             
 #             try:
-#                 # Replace with your actual Flask app URL
-#                 flask_app_url = "http://127.0.0.1:600/complete_consultation"
+#                 flask_app_url = f"http://{APP_HOST}:{APP_PORT}/complete_appointment"
                 
 #                 response = requests.post(
 #                     flask_app_url,
@@ -223,13 +244,13 @@
 #                 )
                 
 #                 if response.status_code == 200:
-#                     return """
+#                     return f"""
 #                     <div class='alert alert-success'>
 #                         Consultation completed successfully. Redirecting...
 #                         <script>
-#                             setTimeout(function() {
-#                                 window.location.href = "http://127.0.0.1:600/doctors";
-#                             }, 2000);
+#                             setTimeout(function() {{
+#                                 window.location.href = "http://{APP_HOST}:{APP_PORT}/doctors";
+#                             }}, 2000);
 #                         </script>
 #                     </div>
 #                     """
@@ -242,6 +263,7 @@
 #                     """
                     
 #             except Exception as e:
+#                 logger.error(f"Error completing consultation: {e}")
 #                 return f"""
 #                 <div class='alert alert-error'>
 #                     Error: {str(e)}
@@ -249,16 +271,12 @@
 #                 """
 
 #         end_consultation_btn.click(
-#             fn=complete_consultation,
+#             complete_consultation,
 #             inputs=[appointment_id],
-#             outputs=completion_status
+#             outputs=[completion_status],
 #         )
 
-#     try:
-#         interface.launch()
-#     except Exception as e:
-#         logging.error(f"Failed to launch interface: {str(e)}")
-#         raise RuntimeError("Failed to launch MediSync interface") from e
+#     return interface
 
 
 # if __name__ == "__main__":
@@ -267,5 +285,5 @@
 #         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 #     )
 #     create_interface()
-# 
-# Sample endpoint Code ✅✅
+
+# # Sample endpoint Code ✅✅
