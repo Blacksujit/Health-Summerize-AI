@@ -65,7 +65,7 @@ For inquiries and support:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/HealthSummarizeAI.git
+   git clone https://github.com/Blacksujit/HealthSummarizeAI.git
    ```
 
 2. **Install Dependencies**:
@@ -75,7 +75,7 @@ For inquiries and support:
 
 3. **Run the Application**:
    ```bash
-   flask run
+   flask run --port=600
    ```
 
 4. **Explore the Features**: Visit `http://localhost:600` to explore the platform.
