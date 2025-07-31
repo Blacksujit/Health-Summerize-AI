@@ -50,16 +50,6 @@ Coming Soon.......!!
 
 ---
 
-## 📫 **Contact**
-
-For inquiries and support:
-- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
-
----
-
-*Empowering Healthcare Through Innovation* 🌟
-
----
 
 ### **How to Get Started**
 
@@ -91,5 +81,16 @@ We welcome contributions from the community! Please read our [Contributing Guide
 ### **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📫 **Contact**
+
+For inquiries and support:
+- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
+
+---
+
+*Empowering Healthcare Through Innovation* 🌟
 
 ---
