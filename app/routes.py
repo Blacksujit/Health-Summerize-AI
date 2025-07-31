@@ -191,6 +191,49 @@ def complete_appointment():
     
     return jsonify({'status': 'success', 'message': 'Appointment completed successfully'})
 
+@main.route('/complete_appointment_manual', methods=['GET', 'POST'])
+@handle_error
+def complete_appointment_manual():
+    """Manual appointment completion page for users returning from Hugging Face."""
+    
+    if request.method == 'POST':
+        appointment_id = request.form.get('appointment_id', '').strip()
+        
+        if not appointment_id:
+            flash("Please enter an appointment ID", "error")
+            return redirect(url_for('main.complete_appointment_manual'))
+        
+        # Try to complete the appointment
+        try:
+            # Get appointment
+            doc_ref = db.collection('appointments').document(appointment_id)
+            doc = doc_ref.get()
+            
+            if not doc.exists:
+                flash("Appointment not found. Please check the appointment ID.", "error")
+                return redirect(url_for('main.complete_appointment_manual'))
+                
+            appointment_data = doc.to_dict()
+            appointment_data['status'] = 'completed'
+            appointment_data['completed_at'] = datetime.datetime.now().isoformat()
+            
+            # Move to completed appointments
+            completed_ref = db.collection('completed_appointments').document(appointment_id)
+            completed_ref.set(appointment_data)
+            
+            # Delete from active appointments
+            doc_ref.delete()
+            
+            flash(f"Appointment {appointment_id} completed successfully!", "success")
+            return redirect(url_for('main.doctors'))
+            
+        except Exception as e:
+            flash(f"Error completing appointment: {str(e)}", "error")
+            return redirect(url_for('main.complete_appointment_manual'))
+    
+    # GET request - show the form
+    return render_template('complete_appointment_manual.html')
+
 @main.route('/virtual_consultation_voice/<appointment_id>')
 @handle_error
 def virtual_consultation_voice(appointment_id):
