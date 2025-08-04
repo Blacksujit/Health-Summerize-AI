@@ -1,196 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>About</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-       <!-- Bootstrap CSS -->
-       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-       <!-- Style CSS -->
-       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-       <!-- Responsive CSS -->
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-       <!-- Favicon -->
-       <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
-       <!-- Scrollbar Custom CSS -->
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.mCustomScrollbar.min.css') }}">
-       <!-- FontAwesome -->
-       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-       <!-- Owl Carousel Stylesheets -->
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
-       <!-- Fancybox -->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-   </head>
-   <body>
-      <!--header section start -->
-      <div class="header_section header_bg">
-         <div class="container-fluid">
-               <div class="main">
-                  <div class="logo"><a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a></div>
-                  <div class="menu_text">
-                     <ul>
-                        <div class="togle_">
-                           <div class="menu_main">
-                              <ul>
-                                 <li><a href="#">Login</a></li>
-                                 <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                              </ul>
-                           </div>
-                        </div>
-                        <div id="myNav" class="overlay">
-                           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                           <div class="overlay-content">
-                              <a href="{{ url_for('main.index') }}">Home</a>
-                              <a href="{{ url_for('main.summerize') }}">Protect</a>
-                              <a href="{{ url_for('main.about') }}">About</a>
-                              <a href="{{ url_for('main.doctors') }}">Doctors</a>
-                              <a href="{{ url_for('main.news') }}">News</a>
-                           </div>
-                        </div>
-                        <span class="navbar-toggler-icon"></span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon.png') }}" class="toggle_menu">
-                        </span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon1.png') }}" class="toggle_menu_1">
-                        </span>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-            <!-- banner section start -->
-            <div class="container">
-               <div class="about_taital_main">
-                  <h2 class="about_tag">About Corona Virus</h2>
-                  <div class="about_menu">
-                     <ul>
-                        <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                        <li>About</li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         <!-- banner section end -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About | Medivance</title>
+  <meta name="description" content="Learn about Medivance, our mission, vision, and the team revolutionizing healthcare with AI.">
+  <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/png">
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --secondary: #00bfae;
+      --bg-light: #f8fafc;
+      --bg-gradient: linear-gradient(120deg, #f8fafc 0%, #e3f6f5 100%);
+      --text-dark: #222;
+      --text-muted: #6c757d;
+      --card-radius: 1.5rem;
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+    }
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      scroll-behavior: smooth;
+    }
+    /* Navbar */
+    .modern-navbar {
+      background: #fff;
+      border-bottom: 1.5px solid #e0e7ef;
+      box-shadow: 0 2px 12px 0 rgba(26,115,232,0.04);
+      padding: 0.7rem 0;
+      transition: box-shadow 0.2s;
+    }
+    .navbar .navbar-brand .logo-text {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .navbar .navbar-brand img {
+      height: 38px;
+      width: auto;
+    }
+    .navbar-nav .nav-link {
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 1.08rem;
+      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      transition: background 0.2s, color 0.2s;
+      margin: 0 0.1rem;
+    }
+    .navbar-nav .nav-link.active,
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      color: #fff !important;
+      box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10);
+    }
+    .navbar-toggler {
+      border: none;
+      font-size: 1.3rem;
+      color: var(--primary);
+      background: transparent;
+      outline: none;
+      box-shadow: none !important;
+    }
+    @media (max-width: 991px) {
+      .navbar .navbar-brand .logo-text { font-size: 1.5rem; }
+      .navbar-nav .nav-link { font-size: 1rem; padding: 0.5rem 1rem; }
+    }
+    @media (max-width: 767px) {
+      .navbar .navbar-brand .logo-text { font-size: 1.2rem; }
+      .navbar-nav .nav-link { font-size: 0.98rem; padding: 0.45rem 0.8rem; }
+    }
+
+    /* Hero Section */
+    .about-hero {
+      background: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 100%);
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero .hero-bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.13;
+      z-index: 1;
+      background: #fff;
+      width: 340px; height: 340px;
+      top: -90px; left: -120px;
+      filter: blur(2px);
+    }
+    .about-hero .hero-bg-shape2 {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.18;
+      z-index: 1;
+      background: #e3f6f5;
+      width: 220px; height: 220px;
+      bottom: -60px; right: -60px;
+      filter: blur(1px);
+    }
+    .about-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      padding: 3.5rem 0 2.5rem 0;
+      width: 100%;
+    }
+    .about-hero-content h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      background: linear-gradient(90deg, #fff 60%, #e3f6f5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.1rem;
+      line-height: 1.1;
+    }
+    .about-hero-content p {
+      font-size: 1.22rem;
+      color: #e3f6f5;
+      max-width: 700px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+    @media (max-width: 991px) {
+      .about-hero-content h1 { font-size: 2.1rem; }
+      .about-hero-content p { font-size: 1.05rem; }
+      .about-hero { min-height: 220px; }
+    }
+    @media (max-width: 767px) {
+      .about-hero-content h1 { font-size: 1.3rem; }
+      .about-hero-content p { font-size: 0.98rem; }
+      .about-hero { min-height: 140px; }
+    }
+
+    /* About Section */
+    .about-section {
+      margin-top: -70px;
+      position: relative;
+      z-index: 3;
+      background: #fff;
+      border-radius: 2rem;
+      box-shadow: var(--shadow);
+      padding: 3rem 2.5rem 2.5rem 2.5rem;
+      max-width: 950px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .about-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.7rem;
+      letter-spacing: -1px;
+      text-align: center;
+    }
+    .about-desc {
+      color: #444;
+      font-size: 1.13rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .about-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .feature-card {
+      background: linear-gradient(120deg, #e3f6f5 0%, #f8fafc 100%);
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px 0 rgba(26,115,232,0.07);
+      padding: 1.5rem 1.3rem;
+      min-width: 220px;
+      max-width: 320px;
+      flex: 1 1 220px;
+      text-align: center;
+      transition: transform 0.18s, box-shadow 0.18s;
+      border: 1.5px solid #e0e7ef;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 32px 0 rgba(26,115,232,0.13);
+      border-color: var(--secondary);
+    }
+    .feature-icon {
+      font-size: 2.2rem;
+      color: var(--secondary);
+      margin-bottom: 0.7rem;
+    }
+    .feature-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    .feature-desc {
+      color: #555;
+      font-size: 1.01rem;
+    }
+    @media (max-width: 991px) {
+      .about-section { padding: 2rem 1rem; }
+      .about-features { gap: 1.2rem; }
+    }
+    @media (max-width: 767px) {
+      .about-section { padding: 1.2rem 0.5rem; }
+      .about-features { flex-direction: column; gap: 1rem; }
+    }
+
+    /* CTA */
+    .about-cta {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+    .btn-gradient {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      color: #fff;
+      border-radius: 2rem;
+      padding: 0.75rem 2.2rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 2px 12px 0 rgba(26,115,232,0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+      color: #fff;
+      box-shadow: 0 4px 24px 0 rgba(26,115,232,0.18);
+    }
+
+    /* Footer */
+    .footer_section {
+      background: linear-gradient(90deg, #f8fafc 60%, #e3f6f5 100%);
+      border-top:1.5px solid #e0e7ef;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+      word-break: break-word;
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+      margin-top: 3rem;
+    }
+    .footer_section h5 {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .footer_section a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer_section a:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+    .footer_section p {
+      color: #444;
+    }
+    .footer_section .fa {
+      color: var(--secondary);
+      margin-right: 0.5rem;
+    }
+    .copyright_section {
+      color: #888;
+      font-size: 0.98rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 767px) {
+      .footer_section { padding: 2rem 0.5rem 0.5rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg modern-navbar fixed-top animate__animated animate__fadeInDown">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" />
+        <span class="logo-text">Medivance</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="fa fa-bars"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
+          <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.about') }}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+        </ul>
       </div>
-      <!-- header section end -->
-      <!-- about section start -->
-      <div class="about_section layout_padding">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-6">
-                  <div class="about_img"><img src="{{url_for('static', filename='images/img-1.png')}}"></div>
-               </div>
-               <div class="col-md-6">
-                  <h1 class="about_taital">Coronavirus what it is?</span></h1>
-                  <p class="about_text">when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using</p>
-                  <div class="read_bt"><a href="#">Read More</a></div>
-               </div>
-            </div>
-         </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="about-hero animate__animated animate__fadeInDown">
+    <div class="hero-bg-shape"></div>
+    <div class="hero-bg-shape2"></div>
+    <div class="container about-hero-content">
+      <h1 class="animate__animated animate__fadeInUp">About <span style="color:#00bfae;">Medivance</span></h1>
+      <p class="animate__animated animate__fadeInUp animate__delay-1s">
+        Empowering healthcare with the synergy of <span class="fw-bold" style="color:#fff;">AI</span> and human expertise.<br>
+        <span class="fw-bold" style="color:#fff;">Your health, our mission—delivered with innovation, security, and care.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section shadow animate__animated animate__fadeInUp" data-aos="fade-up">
+    <h2 class="about-title">Who We Are</h2>
+    <p class="about-desc">
+      Medivance is a next-generation healthcare platform, blending advanced AI with compassionate medical professionals to make healthcare more accessible, secure, and actionable for everyone. Our mission is to empower patients and doctors with innovative tools, seamless virtual care, and trustworthy information.
+    </p>
+    <div class="about-features">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fa fa-brain"></i></div>
+        <div class="feature-title">AI-Powered Insights</div>
+        <div class="feature-desc">Harnessing artificial intelligence to deliver fast, accurate, and personalized medical information and summaries.</div>
       </div>
-      <!-- about section end -->
-      <!-- footer section start -->
-      <div class="footer_section layout_padding">
-         <div class="container">
-            <div class="footer_section_2">
-               <div class="row">
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Resources</h2>
-                     <div class="footer_menu">
-                        <ul>
-                           <li><a href="#">What we do</a></li>
-                           <li><a href="#">Media</a></li>
-                           <li><a href="#">Travel Advice</a></li>
-                           <li><a href="#">Protection</a></li>
-                           <li><a href="#">Care</a></li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">About</h2>
-                     <p class="footer_text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various</p>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Contact Us</h2>
-                     <div class="location_text">
-                        <ul>
-                           <li>
-                              <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>
-                              <span class="padding_15">Location</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>
-                              <span class="padding_15">Call +01 1234567890</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i>
-                              <span class="padding_15">demo@gmail.com</span></a>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">countrys</h2>
-                     <div class="map_image"><img src="{{url_for('static', filename='images/map-bg.png')}}"></div>
-                  </div>
-               </div>
-            </div>
-         </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fa fa-user-md"></i></div>
+        <div class="feature-title">Expert Medical Team</div>
+        <div class="feature-desc">A diverse, board-certified team of doctors and specialists, ready to guide you on your health journey.</div>
       </div>
-      <!-- footer section end -->
-      <!-- copyright section start -->
-      <div class="copyright_section">
-         <div class="container">
-            <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text">© 2020 All Rights Reserved.<a href="https://html.design"> Free  html Templates</a></p>
-               </div>
-            </div>
-         </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon"><i class="fa fa-shield-alt"></i></div>
+        <div class="feature-title">Privacy & Security</div>
+        <div class="feature-desc">Your data is protected with industry-leading security, ensuring confidentiality and peace of mind.</div>
       </div>
-      <!-- copyright section end -->
-      <!-- Javascript files-->
-      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-      <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
-      <script>
-         $(document).ready(function(){
-         $(".fancybox").fancybox({
-         openEffect: "none",
-         closeEffect: "none"
-         });
-              
-         $(".zoom").hover(function(){
-              
-         $(this).addClass('transition');
-         }, function(){
-              
-         $(this).removeClass('transition');
-         });
-         });
-      </script> 
-      <script>
-         function openNav() {
-         document.getElementById("myNav").style.width = "100%";
-         }
-         function closeNav() {
-         document.getElementById("myNav").style.width = "0%";
-         }
-      </script>  
-   </body>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon"><i class="fa fa-globe"></i></div>
+        <div class="feature-title">Global Reach</div>
+        <div class="feature-desc">Connecting patients and doctors worldwide, breaking barriers to quality healthcare.</div>
+      </div>
+    </div>
+    <div class="about-cta" data-aos="fade-up" data-aos-delay="500">
+      <a href="{{ url_for('main.summerize') }}" class="btn btn-gradient shadow animate__animated animate__pulse animate__infinite">
+        <i class="fa fa-magic me-2"></i>Try AI Medical Summarizer
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer_section layout_padding pt-5 pb-0">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+          <h5>Resources</h5>
+          <ul class="list-unstyled">
+            <li><a href="#"><i class="fa fa-lightbulb"></i>What we do</a></li>
+            <li><a href="#"><i class="fa fa-newspaper"></i>Media</a></li>
+            <li><a href="#"><i class="fa fa-plane-departure"></i>Travel Advice</a></li>
+            <li><a href="#"><i class="fa fa-shield-alt"></i>Protection</a></li>
+            <li><a href="#"><i class="fa fa-hand-holding-heart"></i>Care</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+          <h5>About</h5>
+          <p>Medivance is redefining healthcare with AI, making medical information accessible, secure, and actionable for everyone.</p>
+        </div>
+        <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+          <h5>Contact Us</h5>
+          <ul class="list-unstyled">
+            <li>
+              <a href="#"><i class="fa fa-map-marker-alt"></i> <span class="ms-2">123 Health Ave, MedCity</span></a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-phone"></i> <span class="ms-2">+01 123 456 7890</span></a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-envelope"></i> <span class="ms-2">info@medivance.com</span></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <h5>Global Reach</h5>
+          <img src="{{url_for('static', filename='images/map-bg.png')}}" alt="Global Map" style="max-width:100%; border-radius:12px;">
+        </div>
+      </div>
+    </div>
+    <div class="copyright_section mt-4 pb-3">
+      <div class="container">
+        <p class="mb-0 text-center">© 2024 Medivance. All Rights Reserved. | Designed with <i class="fa fa-heart"></i> for modern healthcare</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  <script>
+    // Navbar scroll effect
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 50) {
+        $('.navbar').addClass('shadow-lg');
+      } else {
+        $('.navbar').removeClass('shadow-lg');
+      }
+    });
+    // AOS init
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+  </script>
+</body>
 </html>

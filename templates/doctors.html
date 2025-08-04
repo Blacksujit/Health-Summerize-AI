@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Medivance | Virtual Doctor Consultation</title>
-
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome 6 -->
@@ -18,127 +17,247 @@
     <link href="{{ url_for('static', filename='css/doctors.css') }}" rel="stylesheet" />
     <style>
       body {
-        background: linear-gradient(120deg, #f8fcff 0%, #e6f7fa 100%);
         min-height: 100vh;
+        background: linear-gradient(120deg, #e6f0ff 0%, #f8fcff 100%);
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        color: #222;
       }
-      .glass {
+      .glass-modern {
         background: rgba(255,255,255,0.85);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
-        border-radius: 1.2rem;
-        backdrop-filter: blur(6px);
-        border: 1px solid rgba(255,255,255,0.18);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
+        border-radius: 1.5rem;
+        backdrop-filter: blur(10px) saturate(1.2);
+        border: 1.5px solid rgba(0,191,174,0.10);
+        transition: box-shadow 0.2s, border 0.2s;
+      }
+      .glass-modern:hover, .glass-modern:focus-within {
+        box-shadow: 0 12px 40px 0 rgba(26,115,232,0.13);
+        border: 1.5px solid #1a73e8;
       }
       .section-title {
-        font-size: 2.1rem;
-        font-weight: 700;
+        font-size: 2.3rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
         background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.7rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
       }
       .btn-gradient {
         background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
         color: #fff;
         border: none;
-        transition: box-shadow 0.2s, transform 0.2s;
-        box-shadow: 0 2px 16px 0 rgba(26,115,232,0.08);
+        border-radius: 2em;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        box-shadow: 0 2px 16px 0 rgba(26,115,232,0.10);
+        transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-gradient:after {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; right: 0; bottom: 0;
+        background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
+        opacity: 0;
+        transition: opacity 0.2s;
+        z-index: 0;
       }
       .btn-gradient:hover, .btn-gradient:focus {
         color: #fff;
-        box-shadow: 0 4px 24px 0 rgba(0,191,174,0.15);
-        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 6px 28px 0 rgba(0,191,174,0.18);
+        transform: translateY(-2px) scale(1.04);
+        background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
       }
-      .appointment-card, .completed-card {
-        border: none;
-        border-radius: 1.2rem;
-        margin-bottom: 2rem;
-        background: rgba(255,255,255,0.95);
-        box-shadow: 0 4px 24px 0 rgba(26,115,232,0.07);
-        transition: box-shadow 0.2s;
+      .btn-gradient:active {
+        background: #1a73e8;
       }
-      .appointment-card:hover, .completed-card:hover {
-        box-shadow: 0 8px 32px 0 rgba(0,191,174,0.10);
+      .modern-navbar {
+        background: rgba(255,255,255,0.92);
+        box-shadow: 0 2px 16px 0 rgba(26,115,232,0.07);
+        border-bottom: 1.5px solid rgba(0,191,174,0.08);
+        backdrop-filter: blur(8px);
       }
-      .badge-status {
-        font-size: 0.92rem;
-        padding: 0.4em 0.9em;
-        border-radius: 1em;
-        letter-spacing: 0.03em;
-        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.07);
+      .navbar-brand .logo-text {
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -1px;
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
-      .copy-btn {
+      .navbar-nav .nav-link {
+        font-weight: 500;
+        color: #1a73e8;
         border-radius: 2em;
-        font-size: 0.95rem;
-        transition: background 0.2s, color 0.2s;
+        padding: 0.5em 1.2em;
+        transition: background 0.18s, color 0.18s;
       }
-      .copy-btn:active {
-        background: #00bfae;
-        color: #fff;
-      }
-      .banner-section {
-        padding: 4.5rem 0 2.5rem 0;
-        position: relative;
+      .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
         background: linear-gradient(90deg, #e6f7fa 0%, #f8fcff 100%);
+        color: #00bfae;
+      }
+      .hero-section {
+        padding: 5.5rem 0 3.5rem 0;
+        position: relative;
+        background: linear-gradient(120deg, #e6f7fa 0%, #f8fcff 100%);
         overflow: hidden;
       }
-      .banner-section::before {
+      .hero-section::before {
         content: "";
         position: absolute;
-        top: -60px; left: 50%; transform: translateX(-50%);
-        width: 600px; height: 220px;
+        top: -80px; left: 50%; transform: translateX(-50%);
+        width: 700px; height: 260px;
         background: radial-gradient(circle at 60% 40%, #1a73e8 0%, #00bfae 80%, transparent 100%);
-        opacity: 0.13;
+        opacity: 0.11;
         z-index: 0;
-        filter: blur(12px);
+        filter: blur(18px);
       }
-      .banner-section .container {
+      .hero-section .container {
         position: relative;
         z-index: 2;
       }
-      .form-label {
-        font-weight: 600;
-        color: #1a73e8;
+      .hero-cta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.2rem;
+        margin-top: 2.2rem;
       }
-      .form-control:focus {
+      .modern-form-label {
+        font-weight: 700;
+        color: #00bfae;
+        letter-spacing: 0.01em;
+      }
+      .modern-form-control {
+        border-radius: 1.2em;
+        border: 1.5px solid #e3f7fa;
+        background: rgba(245,250,255,0.97);
+        font-size: 1.08rem;
+        padding: 0.9em 1.2em;
+        transition: border 0.2s, box-shadow 0.2s;
+      }
+      .modern-form-control:focus {
         border-color: #00bfae;
-        box-shadow: 0 0 0 0.15rem rgba(0,191,174,0.15);
+        box-shadow: 0 0 0 0.15rem rgba(0,191,174,0.13);
+        background: #fff;
       }
-      .list-group-item {
+      .modern-card {
         border: none;
-        border-radius: 1rem;
-        margin-bottom: 0.7rem;
-        background: rgba(245,250,255,0.95);
-        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.04);
+        border-radius: 1.5rem;
+        margin-bottom: 2.2rem;
+        background: rgba(255,255,255,0.97);
+        box-shadow: 0 4px 24px 0 rgba(26,115,232,0.09);
         transition: box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
       }
-      .list-group-item:hover {
-        box-shadow: 0 4px 16px 0 rgba(0,191,174,0.10);
+      .modern-card:before {
+        content: "";
+        position: absolute;
+        top: -30px; right: -30px;
+        width: 80px; height: 80px;
+        background: linear-gradient(135deg, #1a73e8 0%, #00bfae 100%);
+        opacity: 0.07;
+        border-radius: 50%;
+        z-index: 0;
       }
-      .alert-info {
+      .modern-card .card-content {
+        position: relative;
+        z-index: 2;
+      }
+      .modern-badge {
+        font-size: 0.98rem;
+        padding: 0.45em 1.1em;
+        border-radius: 1.2em;
+        letter-spacing: 0.04em;
+        font-weight: 600;
+        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.07);
         background: linear-gradient(90deg, #e3f7fa 0%, #f8fcff 100%);
         color: #1a73e8;
         border: none;
-        border-radius: 1em;
+      }
+      .modern-badge.success {
+        background: linear-gradient(90deg, #e0fbe6 0%, #b2f7c1 100%);
+        color: #00bfae;
+      }
+      .modern-badge.scheduled {
+        background: linear-gradient(90deg, #e3f7fa 0%, #d0eaff 100%);
+        color: #1a73e8;
+      }
+      .modern-copy-btn {
+        border-radius: 2em;
+        font-size: 1.02rem;
+        font-weight: 500;
+        background: #f8fcff;
+        color: #1a73e8;
+        border: 1.5px solid #e3f7fa;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+      }
+      .modern-copy-btn:hover, .modern-copy-btn:focus {
+        background: #00bfae;
+        color: #fff;
+        border: 1.5px solid #00bfae;
+      }
+      .modern-list-group-item {
+        border: none;
+        border-radius: 1.2rem;
+        margin-bottom: 0.8rem;
+        background: rgba(245,250,255,0.98);
+        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.04);
+        transition: box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.2rem;
+        padding: 1.1rem 1.3rem;
+      }
+      .modern-list-group-item:hover {
+        box-shadow: 0 6px 20px 0 rgba(0,191,174,0.13);
+      }
+      .modern-alert-info {
+        background: linear-gradient(90deg, #e3f7fa 0%, #f8fcff 100%);
+        color: #1a73e8;
+        border: none;
+        border-radius: 1.2em;
+        font-size: 1.01rem;
+        font-weight: 500;
+        padding: 1em 1.2em;
+        margin-top: 1.2em;
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+      }
+      .modern-footer {
+        background: rgba(26,115,232,0.07);
+        border-top: 1.5px solid #e3f7fa;
+        border-radius: 1.2em 1.2em 0 0;
+        box-shadow: 0 -2px 16px 0 rgba(26,115,232,0.04);
       }
       @media (max-width: 991px) {
         .section-title { font-size: 1.5rem; }
-        .banner-section { padding: 2.5rem 0 1.5rem 0; }
+        .hero-section { padding: 2.5rem 0 1.5rem 0; }
       }
       @media (max-width: 767px) {
-        .banner-section { padding: 1.5rem 0 0.5rem 0; }
+        .hero-section { padding: 1.5rem 0 0.5rem 0; }
         .section-title { font-size: 1.2rem; }
+        .modern-card, .glass-modern { border-radius: 1em; }
       }
     </style>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
-  <body class="relative">
+  <body>
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="container pt-3">
           {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show glass" role="alert">
+            <div class="alert alert-{{ category }} alert-dismissible fade show glass-modern" role="alert">
               <i class="fa fa-info-circle me-2"></i>{{ message }}
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -148,11 +267,11 @@
     {% endwith %}
 
     <!-- Modern Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass shadow animate__animated animate__fadeInDown">
+    <nav class="navbar navbar-expand-lg modern-navbar fixed-top shadow animate__animated animate__fadeInDown">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" style="height:40px;" />
-          <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" style="height:42px;" />
+          <span class="logo-text">Medivance</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fa fa-bars"></span>
@@ -171,17 +290,23 @@
       </div>
     </nav>
 
-    <!-- Banner / Hero Section -->
-    <section class="banner-section d-flex align-items-center animate__animated animate__fadeInDown">
+    <!-- Hero Section -->
+    <section class="hero-section d-flex align-items-center animate__animated animate__fadeInDown">
       <div class="container text-center">
-        <h1 class="section-title animate__animated animate__fadeInUp">Virtual Doctor Consultation</h1>
-        <p class="lead animate__animated animate__fadeInUp animate__delay-1s" style="color:#333;">
+        <h1 class="section-title animate__animated animate__fadeInUp">
+          <i class="fa fa-stethoscope"></i> Virtual Doctor Consultation
+        </h1>
+        <p class="lead animate__animated animate__fadeInUp animate__delay-1s" style="color:#333;max-width:600px;margin:auto;">
           <span style="color:#00bfae; font-weight:600;">Connect</span> with top healthcare professionals, <span style="color:#1a73e8; font-weight:600;">anytime, anywhere</span>.<br>
           Experience the future of telemedicine with <b>Medivance</b>.
         </p>
-        <div class="d-flex justify-content-center gap-3 mt-3">
-          <a href="#book" class="btn btn-gradient btn-lg shadow animate__animated animate__pulse animate__infinite"><i class="fa fa-calendar-plus me-2"></i>Book Appointment</a>
-          <a href="#consult" class="btn btn-outline-primary btn-lg shadow"><i class="fa fa-video me-2"></i>Start Consultation</a>
+        <div class="hero-cta">
+          <a href="#book" class="btn btn-gradient btn-lg shadow animate__animated animate__pulse animate__infinite">
+            <i class="fa fa-calendar-plus me-2"></i>Book Appointment
+          </a>
+          <a href="#consult" class="btn btn-outline-primary btn-lg shadow">
+            <i class="fa fa-video me-2"></i>Start Consultation
+          </a>
         </div>
       </div>
     </section>
@@ -192,164 +317,176 @@
         <!-- Left Column -->
         <div class="col-lg-8">
           <!-- Book Appointment Card -->
-          <div class="appointment-card glass p-4" id="book" data-aos="fade-up">
-            <h2 class="mb-3 section-title" style="font-size:1.4rem;">
-              <i class="fa fa-calendar-plus me-2"></i>Book New Appointment
-            </h2>
-            <form action="{{ url_for('main.book') }}" method="POST" class="row g-3">
-              <div class="col-md-6">
-                <label for="doctor" class="form-label">Doctor</label>
-                <input
-                  type="text"
-                  id="doctor"
-                  name="doctor"
-                  class="form-control form-control-lg"
-                  placeholder="Dr. Smith"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="patient" class="form-label">Your Name</label>
-                <input
-                  type="text"
-                  id="patient"
-                  name="patient"
-                  class="form-control form-control-lg"
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-              <div class="col-md-12">
-                <label for="time" class="form-label">Appointment Time</label>
-                <input
-                  type="datetime-local"
-                  id="time"
-                  name="time"
-                  class="form-control form-control-lg"
-                  required
-                />
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-gradient btn-lg w-100 shadow">
-                  <i class="fa fa-calendar-check me-2"></i>Book Appointment
-                </button>
-              </div>
-            </form>
+          <div class="modern-card glass-modern p-4" id="book" data-aos="fade-up">
+            <div class="card-content">
+              <h2 class="mb-3 section-title" style="font-size:1.4rem;">
+                <i class="fa fa-calendar-plus me-2"></i>Book New Appointment
+              </h2>
+              <form action="{{ url_for('main.book') }}" method="POST" class="row g-3">
+                <div class="col-md-6">
+                  <label for="doctor" class="modern-form-label">Doctor</label>
+                  <input
+                    type="text"
+                    id="doctor"
+                    name="doctor"
+                    class="modern-form-control form-control-lg"
+                    placeholder="Dr. Smith"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="patient" class="modern-form-label">Your Name</label>
+                  <input
+                    type="text"
+                    id="patient"
+                    name="patient"
+                    class="modern-form-control form-control-lg"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div class="col-md-12">
+                  <label for="time" class="modern-form-label">Appointment Time</label>
+                  <input
+                    type="datetime-local"
+                    id="time"
+                    name="time"
+                    class="modern-form-control form-control-lg"
+                    required
+                  />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-gradient btn-lg w-100 shadow">
+                    <i class="fa fa-calendar-check me-2"></i>Book Appointment
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
           <!-- Current Appointments -->
-          <div class="appointment-card glass p-4" data-aos="fade-up" data-aos-delay="100">
-            <h2 class="mb-3 section-title" style="font-size:1.4rem;">
-              <i class="fa fa-calendar-alt me-2"></i>Your Appointments
-            </h2>
-            {% if appointments %}
-            <div class="list-group">
-              {% for appointment in appointments %}
-              <div class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeInUp">
-                <div>
-                  <span class="badge bg-primary badge-status mb-2">
-                    <i class="fa fa-clock me-1"></i>Scheduled
-                  </span>
-                  <h5 class="mb-1">{{ appointment['doctor'] }}</h5>
-                  <small class="text-muted">
-                    <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
-                  </small>
-                  <div class="mt-2">
-                    <small>
-                      <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+          <div class="modern-card glass-modern p-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-content">
+              <h2 class="mb-3 section-title" style="font-size:1.4rem;">
+                <i class="fa fa-calendar-alt me-2"></i>Your Appointments
+              </h2>
+              {% if appointments %}
+              <div>
+                {% for appointment in appointments %}
+                <div class="modern-list-group-item animate__animated animate__fadeInUp">
+                  <div>
+                    <span class="modern-badge scheduled mb-2">
+                      <i class="fa fa-clock me-1"></i>Scheduled
+                    </span>
+                    <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
+                    <small class="text-muted d-block">
+                      <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
                     </small>
+                    <div class="mt-2">
+                      <small>
+                        <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <small class="d-block text-muted mb-2" style="font-size:0.98em;">
+                      ID: <span class="fw-bold" style="color:#1a73e8;">{{ appointment['appointment_id'] }}</span>
+                    </small>
+                    <button
+                      class="btn btn-sm modern-copy-btn"
+                      onclick="copyToClipboard('{{ appointment['appointment_id'] }}')"
+                    >
+                      <i class="fa fa-copy me-1"></i>Copy ID
+                    </button>
                   </div>
                 </div>
-                <div class="text-end">
-                  <small class="d-block text-muted mb-2">ID: <span class="fw-bold" style="color:#1a73e8;">{{ appointment['appointment_id'] }}</span></small>
-                  <button
-                    class="btn btn-sm btn-outline-primary copy-btn"
-                    onclick="copyToClipboard('{{ appointment['appointment_id'] }}')"
-                  >
-                    <i class="fa fa-copy me-1"></i>Copy ID
-                  </button>
-                </div>
+                {% endfor %}
               </div>
-              {% endfor %}
+              {% else %}
+              <div class="text-center py-4">
+                <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No upcoming appointments</p>
+              </div>
+              {% endif %}
             </div>
-            {% else %}
-            <div class="text-center py-4">
-              <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
-              <p class="text-muted">No upcoming appointments</p>
-            </div>
-            {% endif %}
           </div>
         </div>
 
         <!-- Right Column -->
         <div class="col-lg-4">
           <!-- Start Consultation -->
-          <div class="glass p-4 mb-4" id="consult" data-aos="fade-left">
-            <h2 class="mb-3 section-title" style="font-size:1.2rem;">
-              <i class="fa fa-video me-2"></i>Start Consultation
-            </h2>
-            <div class="mb-3">
-              <label for="appointmentIdInput" class="form-label">Appointment ID</label>
-              <input
-                type="text"
-                id="appointmentIdInput"
-                class="form-control form-control-lg"
-                placeholder="Enter your appointment ID"
-              />
-            </div>
-            <button
-              id="validateAppointment"
-              class="btn btn-gradient w-100 mb-3 shadow"
-            >
-              <i class="fa fa-check-circle me-2"></i>Validate Appointment
-            </button>
-            <div class="alert alert-info d-flex align-items-center">
-              <i class="fa fa-info-circle me-2"></i>
-              <span>Enter your appointment ID to start your virtual consultation.</span>
+          <div class="modern-card glass-modern p-4 mb-4" id="consult" data-aos="fade-left">
+            <div class="card-content">
+              <h2 class="mb-3 section-title" style="font-size:1.2rem;">
+                <i class="fa fa-video me-2"></i>Start Consultation
+              </h2>
+              <div class="mb-3">
+                <label for="appointmentIdInput" class="modern-form-label">Appointment ID</label>
+                <input
+                  type="text"
+                  id="appointmentIdInput"
+                  class="modern-form-control form-control-lg"
+                  placeholder="Enter your appointment ID"
+                />
+              </div>
+              <button
+                id="validateAppointment"
+                class="btn btn-gradient w-100 mb-3 shadow"
+              >
+                <i class="fa fa-check-circle me-2"></i>Validate Appointment
+              </button>
+              <div class="modern-alert-info">
+                <i class="fa fa-info-circle"></i>
+                <span>Enter your appointment ID to start your virtual consultation.</span>
+              </div>
             </div>
           </div>
 
           <!-- Completed Appointments -->
-          <div class="completed-card glass p-4" data-aos="fade-left" data-aos-delay="100">
-            <h2 class="mb-3 section-title" style="font-size:1.2rem;">
-              <i class="fa fa-check-circle me-2"></i>Completed Appointments
-            </h2>
-            {% if completed_appointments %}
-            <div class="list-group">
-              {% for appointment in completed_appointments %}
-              <div class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeInUp">
-                <div>
-                  <span class="badge bg-success badge-status mb-2">
-                    <i class="fa fa-check me-1"></i>Completed
-                  </span>
-                  <h5 class="mb-1">{{ appointment['doctor'] }}</h5>
-                  <small class="text-muted">
-                    <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
-                  </small>
+          <div class="modern-card glass-modern p-4" data-aos="fade-left" data-aos-delay="100">
+            <div class="card-content">
+              <h2 class="mb-3 section-title" style="font-size:1.2rem;">
+                <i class="fa fa-check-circle me-2"></i>Completed Appointments
+              </h2>
+              {% if completed_appointments %}
+              <div>
+                {% for appointment in completed_appointments %}
+                <div class="modern-list-group-item animate__animated animate__fadeInUp">
+                  <div>
+                    <span class="modern-badge success mb-2">
+                      <i class="fa fa-check me-1"></i>Completed
+                    </span>
+                    <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
+                    <small class="text-muted d-block">
+                      <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
+                    </small>
+                  </div>
+                  <div>
+                    <small class="text-muted">
+                      <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+                    </small>
+                  </div>
                 </div>
-                <div>
-                  <small class="text-muted">
-                    <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
-                  </small>
-                </div>
+                {% endfor %}
               </div>
-              {% endfor %}
+              {% else %}
+              <div class="text-center py-4">
+                <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No completed appointments yet</p>
+              </div>
+              {% endif %}
             </div>
-            {% else %}
-            <div class="text-center py-4">
-              <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
-              <p class="text-muted">No completed appointments yet</p>
-            </div>
-            {% endif %}
           </div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <footer class="glass py-4 mt-5" style="background:rgba(26,115,232,0.07);">
+    <footer class="modern-footer glass-modern py-4 mt-5">
       <div class="container text-center">
-        <p class="mb-0 text-muted">© 2024 Medivance. All Rights Reserved. | Designed with <i class="fa fa-heart" style="color:#00bfae;"></i> for modern healthcare</p>
+        <p class="mb-0 text-muted" style="font-size:1.05em;">
+          © 2024 Medivance. All Rights Reserved. | Designed with <i class="fa fa-heart" style="color:#00bfae;"></i> for modern healthcare
+        </p>
       </div>
     </footer>
 

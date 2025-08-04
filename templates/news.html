@@ -1,211 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>News</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-      <!-- Style CSS -->
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-      <!-- Responsive CSS -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-      <!-- Favicon -->
-      <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/gif">
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.mCustomScrollbar.min.css') }}">
-      <!-- FontAwesome -->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <!-- Owl Carousel Stylesheets -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
-      <!-- Fancybox -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-   </head>
-   <body>
-      <!--header section start -->
-      <div class="header_section header_bg">
-         <div class="container-fluid">
-               <div class="main">
-                  <div class="logo"> <a href="{{ url_for('main.index') }}">
-                     <img src="{{ url_for('static', filename='images/logo.png') }}"></div>
-                  <div class="menu_text">
-                     <ul>
-                        <div class="togle_">
-                           <div class="menu_main">
-                              <ul>
-                                 <li><a href="#">Login</a></li>
-                                 <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                              </ul>
-                           </div>
+<head>
+    <meta charset="utf-8">
+    <title>Medivance | News & Updates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom Modern Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/fevicon.png') }}" type="image/png">
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8fafc 0%, #e3f6fd 100%);
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        .glass {
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        .news-hero-bg {
+            background: linear-gradient(100deg, #1a73e8 0%, #00bfae 100%);
+            min-height: 260px;
+            border-radius: 0 0 3rem 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(26,115,232,0.10);
+        }
+        .news-hero-bg .hero-content {
+            color: #fff;
+            padding: 4.5rem 0 2.5rem 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .news-hero-bg .hero-content h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(90deg, #fff 0%, #e3f6fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        .news-hero-bg .hero-content p {
+            font-size: 1.18rem;
+            opacity: 0.95;
+            margin-bottom: 1.2rem;
+        }
+        .news-hero-bg .ai-bubble {
+            position: absolute;
+            right: 5%;
+            top: 10%;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #00bfae 0%, #1a73e8 100%);
+            border-radius: 50%;
+            opacity: 0.18;
+            z-index: 1;
+            filter: blur(2px);
+            animation: floatBubble 6s ease-in-out infinite alternate;
+        }
+        @keyframes floatBubble {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(30px);}
+        }
+        .breadcrumb-modern {
+            background: transparent;
+            margin-top: 1.2rem;
+            margin-bottom: 0;
+            padding: 0;
+        }
+        .breadcrumb-modern .breadcrumb-item a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            opacity: 0.85;
+        }
+        .breadcrumb-modern .breadcrumb-item.active {
+            color: #e3f6fd;
+            opacity: 0.7;
+        }
+        .news-section-title {
+            font-size: 2.1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2.2rem;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.2rem;
+        }
+        .news-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px 0 rgba(26,115,232,0.10);
+            overflow: hidden;
+            transition: box-shadow 0.25s, transform 0.22s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #1a73e8 0%, #00bfae 100%);
+            opacity: 0.08;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .news-card:hover {
+            box-shadow: 0 12px 36px 0 rgba(26,115,232,0.18);
+            transform: translateY(-6px) scale(1.025);
+        }
+        .news-card-img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            background: #e3f6fd;
+            border-bottom: 4px solid #00bfae22;
+            filter: grayscale(0.08) contrast(1.08);
+        }
+        .news-card-body {
+            padding: 1.7rem 1.4rem 1.3rem 1.4rem;
+            position: relative;
+            z-index: 1;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-card-meta {
+            font-size: 0.98rem;
+            color: #00bfae;
+            margin-bottom: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .news-card-title {
+            font-size: 1.32rem;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 0.6rem;
+            line-height: 1.3;
+        }
+        .news-card-text {
+            color: #444;
+            font-size: 1.08rem;
+            margin-bottom: 1.2rem;
+            flex: 1 1 auto;
+        }
+        .btn-readmore {
+            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.6rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 0.2px;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10);
+            position: relative;
+            z-index: 2;
+        }
+        .btn-readmore:hover, .btn-readmore:focus {
+            background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px 0 rgba(26,115,232,0.16);
+            transform: translateY(-2px) scale(1.04);
+        }
+        /* Newsletter */
+        .newsletter-glass {
+            background: rgba(255,255,255,0.92);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px 0 rgba(26,115,232,0.10);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .newsletter-glass input[type="email"] {
+            border-radius: 2rem;
+            border: 1.5px solid #e3f6fd;
+            font-size: 1.08rem;
+            padding-left: 1.2rem;
+        }
+        .newsletter-glass input[type="email"]:focus {
+            border-color: #00bfae;
+            box-shadow: 0 0 0 0.15rem #00bfae33;
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-gradient:hover, .btn-gradient:focus {
+            background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px 0 rgba(26,115,232,0.13);
+        }
+        /* Footer */
+        .footer-glass {
+            background: rgba(255,255,255,0.92);
+            border-radius: 2rem 2rem 0 0;
+            box-shadow: 0 -4px 24px 0 rgba(26,115,232,0.10);
+        }
+        .footer-social a {
+            background: linear-gradient(135deg, #1a73e8 0%, #00bfae 100%);
+            color: #fff !important;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+            transition: background 0.2s, transform 0.18s;
+        }
+        .footer-social a:hover {
+            background: linear-gradient(135deg, #00bfae 0%, #1a73e8 100%);
+            transform: scale(1.12) rotate(-6deg);
+        }
+        .footer-title {
+            font-weight: 700;
+            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 991px) {
+            .news-hero-bg .hero-content h1 { font-size: 2.1rem; }
+            .news-card-img { height: 150px; }
+            .news-section-title { font-size: 1.5rem; }
+        }
+        @media (max-width: 767px) {
+            .news-hero-bg { min-height: 120px; }
+            .news-hero-bg .hero-content { padding: 2.2rem 0 1.2rem 0; }
+            .news-card-img { height: 110px; }
+            .news-section-title { font-size: 1.2rem; }
+            .news-grid { gap: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- New Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass shadow animate__animated animate__fadeInDown">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" style="height:38px;">
+                <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.endpoint == 'main.index' %} active{% endif %}" href="{{ url_for('main.index') }}">
+                            <i class="fa fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.endpoint == 'main.summerize' %} active{% endif %}" href="{{ url_for('main.summerize') }}">
+                            <i class="fa fa-magic me-1"></i> Summarize
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.endpoint == 'main.about' %} active{% endif %}" href="{{ url_for('main.about') }}">
+                            <i class="fa fa-info-circle me-1"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.endpoint == 'main.doctors' %} active{% endif %}" href="{{ url_for('main.doctors') }}">
+                            <i class="fa fa-user-md me-1"></i> Doctors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.endpoint == 'main.news' %} active{% endif %}" href="{{ url_for('main.news') }}">
+                            <i class="fa fa-newspaper me-1"></i> News
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="#"><i class="fa fa-search"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="news-hero-bg position-relative animate__animated animate__fadeIn">
+        <div class="ai-bubble"></div>
+        <div class="container hero-content position-relative z-2">
+            <h1 class="animate__animated animate__fadeInUp"><i class="fa fa-newspaper me-2"></i>AI-Powered Health News</h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                Stay ahead with the latest, AI-curated news in healthcare, research, and innovation. <span class="d-none d-md-inline">Handpicked for you by Medivance's intelligent engine.</span>
+            </p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-modern justify-content-center">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">News</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+    <!-- News Grid Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="news-section-title animate__animated animate__fadeInDown">
+                <i class="fa fa-bolt me-2"></i>Trending & Recent
+            </div>
+            <div class="news-grid">
+                <!-- News Card 1 -->
+                <div class="news-card animate__animated animate__fadeInUp" style="animation-delay:0.1s;">
+                    <img src="{{ url_for('static', filename='images/news-img.png') }}" class="news-card-img" alt="News Image">
+                    <div class="news-card-body">
+                        <div class="news-card-meta">
+                            <span><i class="fa fa-calendar-alt me-1"></i> June 2024</span>
+                            <span><i class="fa fa-tag me-1"></i> COVID-19</span>
                         </div>
-                        <div id="myNav" class="overlay">
-                           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                           <div class="overlay-content">
-                              <a href="{{ url_for('main.index') }}">Home</a>
-                              <a href="{{ url_for('main.summerize') }}">Protect</a>
-                              <a href="{{ url_for('main.about') }}">About</a>
-                              <a href="{{ url_for('main.doctors') }}">Doctors</a>
-                              <a href="{{ url_for('main.news') }}">News</a>
-                           </div>   
+                        <div class="news-card-title">AI Predicts New COVID-19 Variants with Unprecedented Accuracy</div>
+                        <div class="news-card-text">
+                            Researchers leverage advanced AI models to forecast emerging coronavirus variants, enabling faster global response and vaccine adaptation.
                         </div>
-                        <span class="navbar-toggler-icon"></span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon.png') }}" class="toggle_menu">
-                        </span>
-                        <span onclick="openNav()">
-                           <img src="{{ url_for('static', filename='images/toogle-icon1.png') }}" class="toggle_menu_1">
-                        </span>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-            <!-- banner section start -->
-            <div class="container">
-               <div class="about_taital_main">
-                  <h2 class="about_tag">News Corona Virus</h2>
-                  <div class="about_menu">
-                     <ul>
-                        <li><a href="{{url_for('main.index')}}">Home</a></li>
-                        <li>News</li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         <!-- banner section end -->
-      </div>
-      <!-- header section end -->
-      <!-- news section start -->
-      <div class="news_section layout_padding">
-         <div class="container">
-            <div id="main_slider" class="carousel slide" data-ride="carousel">
-               <div class="carousel-inner">
-                  <div class="carousel-item active">
-                     <h1 class="news_taital">Latest News</h1>
-                     <p class="news_text">when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using</p>
-                     <div class="news_section_2 layout_padding">
-                        <div class="box_main">
-                           <div class="image_1"><img src="{{url_for('static', filename='images/news-img.png')}}"></div>
-                           <h2 class="design_text">Coronavirus is Very dangerous</h2>
-                           <p class="lorem_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look</p>
-                           <div class="read_btn"><a href="#">Read More</a></div>
+                        <a href="#" class="btn btn-readmore mt-auto">Read More <i class="fa fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- News Card 2 -->
+                <div class="news-card animate__animated animate__fadeInUp" style="animation-delay:0.2s;">
+                    <img src="{{ url_for('static', filename='images/news-img2.png') }}" class="news-card-img" alt="News Image">
+                    <div class="news-card-body">
+                        <div class="news-card-meta">
+                            <span><i class="fa fa-calendar-alt me-1"></i> May 2024</span>
+                            <span><i class="fa fa-tag me-1"></i> Innovation</span>
                         </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item">
-                    <h1 class="news_taital">Latest News</h1>
-                     <p class="news_text">when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using</p>
-                     <div class="news_section_2 layout_padding">
-                        <div class="box_main">
-                           <div class="image_1"><img src="{{url_for('static', filename='images/news-img.png')}}"></div>
-                           <h2 class="design_text">Coronavirus is Very dangerous</h2>
-                           <p class="lorem_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look</p>
-                           <div class="read_btn"><a href="#">Read More</a></div>
+                        <div class="news-card-title">Virtual Consultations Surge: Telemedicine Becomes Mainstream</div>
+                        <div class="news-card-text">
+                            The adoption of telemedicine has skyrocketed, with AI-driven platforms ensuring secure, efficient, and accessible healthcare for all.
                         </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item">
-                    <h1 class="news_taital">Latest News</h1>
-                     <p class="news_text">when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using</p>
-                     <div class="news_section_2 layout_padding">
-                        <div class="box_main">
-                           <div class="image_1"><img src="{{url_for('static', filename='images/news-img.png')}}"></div>
-                           <h2 class="design_text">Coronavirus is Very dangerous</h2>
-                           <p class="lorem_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look</p>
-                           <div class="read_btn"><a href="#">Read More</a></div>
+                        <a href="#" class="btn btn-readmore mt-auto">Read More <i class="fa fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- News Card 3 -->
+                <div class="news-card animate__animated animate__fadeInUp" style="animation-delay:0.3s;">
+                    <img src="{{ url_for('static', filename='images/news-img3.png') }}" class="news-card-img" alt="News Image">
+                    <div class="news-card-body">
+                        <div class="news-card-meta">
+                            <span><i class="fa fa-calendar-alt me-1"></i> April 2024</span>
+                            <span><i class="fa fa-tag me-1"></i> Research</span>
                         </div>
-                     </div>      
-                  </div>
-               </div>
-               <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
-               <i class="fa fa-angle-left"></i>
-               </a>
-               <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
-               <i class="fa fa-angle-right"></i>
-               </a>
+                        <div class="news-card-title">AI Summarizes EHRs: Doctors Save Hours Weekly</div>
+                        <div class="news-card-text">
+                            New AI tools are transforming electronic health records into concise, actionable insights, freeing up valuable time for clinicians and improving patient care.
+                        </div>
+                        <a href="#" class="btn btn-readmore mt-auto">Read More <i class="fa fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- News Card 4 (Example of more news) -->
+                <div class="news-card animate__animated animate__fadeInUp" style="animation-delay:0.4s;">
+                    <img src="{{ url_for('static', filename='images/news-img4.png') }}" class="news-card-img" alt="News Image">
+                    <div class="news-card-body">
+                        <div class="news-card-meta">
+                            <span><i class="fa fa-calendar-alt me-1"></i> March 2024</span>
+                            <span><i class="fa fa-tag me-1"></i> AI in Medicine</span>
+                        </div>
+                        <div class="news-card-title">AI Detects Early Signs of Heart Disease from Wearables</div>
+                        <div class="news-card-text">
+                            A breakthrough in wearable tech: AI algorithms now detect subtle heart irregularities, empowering patients and clinicians with real-time insights.
+                        </div>
+                        <a href="#" class="btn btn-readmore mt-auto">Read More <i class="fa fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
+    <!-- Newsletter Signup -->
+    <section class="py-5">
+        <div class="container">
+            <div class="newsletter-glass p-4 p-md-5 text-center animate__animated animate__fadeInUp">
+                <h3 class="mb-2 fw-bold text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Stay Ahead with Medivance</h3>
+                <p class="mb-3 text-muted">Subscribe to our newsletter for the latest AI-powered healthcare news, tips, and updates.</p>
+                <form class="row g-2 justify-content-center" autocomplete="off">
+                    <div class="col-12 col-md-8">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <button type="submit" class="btn btn-gradient btn-lg w-100 rounded-pill shadow"><i class="fa fa-paper-plane me-2"></i>Subscribe</button>
+                    </div>
+                </form>
             </div>
-         </div>
-      </div>
-      <!-- news section end -->
-      <!-- footer section start -->
-      <div class="footer_section layout_padding">
-         <div class="container">
-            <div class="footer_section_2">
-               <div class="row">
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Resources</h2>
-                     <div class="footer_menu">
-                        <ul>
-                           <li><a href="#">What we do</a></li>
-                           <li><a href="#">Media</a></li>
-                           <li><a href="#">Travel Advice</a></li>
-                           <li><a href="#">Protection</a></li>
-                           <li><a href="#">Care</a></li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">About</h2>
-                     <p class="footer_text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various</p>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">Contact Us</h2>
-                     <div class="location_text">
-                        <ul>
-                           <li>
-                              <a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i>
-                              <span class="padding_15">Location</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>
-                              <span class="padding_15">Call +01 1234567890</span></a>
-                           </li>
-                           <li>
-                              <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i>
-                              <span class="padding_15">demo@gmail.com</span></a>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                     <h2 class="useful_text">countrys</h2>
-                     <div class="map_image"><img src="{{url_for('static', filename='images/map-bg.png')}}"></div>
-                  </div>
-               </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="pt-5 pb-3 mt-4 footer-glass">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-title fs-4 mb-2">Medivance</div>
+                    <p class="text-muted mb-2">Empowering healthcare with AI-driven insights, modern tools, and next-level user experience.</p>
+                    <div class="footer-social d-flex gap-2 mt-3">
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-title fs-6">Quick Links</div>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('main.index') }}" class="text-muted">Home</a></li>
+                        <li><a href="{{ url_for('main.summerize') }}" class="text-muted">Summarize</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="text-muted">About</a></li>
+                        <li><a href="{{ url_for('main.doctors') }}" class="text-muted">Doctors</a></li>
+                        <li><a href="{{ url_for('main.news') }}" class="text-muted">News</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-title fs-6">Contact</div>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fa fa-map-marker-alt me-2"></i>123 Health St, Innovation City</li>
+                        <li><i class="fa fa-envelope me-2"></i>support@medivance.ai</li>
+                        <li><i class="fa fa-phone me-2"></i>+1 234 567 8901</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-title fs-6">Resources</div>
+                    <ul class="list-unstyled text-muted">
+                        <li><a href="#" class="text-muted">Blog</a></li>
+                        <li><a href="#" class="text-muted">Media</a></li>
+                        <li><a href="#" class="text-muted">Careers</a></li>
+                        <li><a href="#" class="text-muted">Privacy Policy</a></li>
+                    </ul>
+                </div>
             </div>
-         </div>
-      </div>
-      <!-- footer section end -->
-      <!-- copyright section start -->
-      <div class="copyright_section">
-         <div class="container">
-            <div class="row">
-               <div class="col-sm-12">
-                  <p class="copyright_text">© 2020 All Rights Reserved.<a href="https://html.design"> Free  html Templates</a></p>
-               </div>
+            <hr class="my-4" />
+            <div class="text-center text-muted small">
+                &copy; {{ 2024 }} Medivance. All rights reserved. &mdash; Designed with <i class="fa fa-heart text-danger"></i> by the Medivance Team.
             </div>
-         </div>
-      </div>
-      <!-- copyright section end -->
-      <!-- Javascript files-->
-      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-      <script src="{{url_for('static', filename='js/plugin.js')}}"></script>
-      <script src="{{url_for('static', filename='js/news.js')}}"></script>  
-   </body>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        // Animate news cards on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.news-card');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            cards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
 </html>
