@@ -1,0 +1,21 @@
+
+    Patient Info:
+    - Name: Unknown
+    - Age: Unknown
+    - Gender: Unknown
+
+    Diagnoses:
+    No diagnoses provided.
+
+    Medications:
+    No medications prescribed.
+
+    Lab Results:
+    No lab results available.
+
+    Recommendations:
+    No recommendations provided.
+
+    Notes:
+    i have an high fever with symptoms. like headache, body pain, headaches and muscle pain. if you have a fever, you will have to deal with the symptoms.
+    
