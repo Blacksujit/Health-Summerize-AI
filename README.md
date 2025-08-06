@@ -100,7 +100,7 @@ All in a single, modern, and intuitive web application.
 - **Database:** Firebase Firestore (real-time), SQLite (local)
 - **Cloud & APIs:** Google Cloud, OpenAI, ElevenLabs, RapidAPI
 
-> For a detailed architecture, see [System Architecture Diagram](Flow-Diagrams/system_architecture_diagram.md)
+> For a detailed architecture, see [System Architecture Diagram](./Flow-Diagrams/system_architecture_diagram.md)
 
 ---
 
