@@ -51,40 +51,27 @@
       -webkit-text-fill-color: transparent;
       letter-spacing: -1px;
     }
-    .navbar .navbar-brand img {
-      height: 38px;
+    .navbar .navbar-brand img.medivance-logo {
+      height: 44px;
       width: auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 2px 6px;
+      box-shadow: 0 2px 8px 0 rgba(26,115,232,0.08);
+      /* Ensures logo is visible on white and colored backgrounds */
+      transition: box-shadow 0.2s;
     }
-    .navbar-nav .nav-link {
-      color: var(--primary);
-      font-weight: 500;
-      font-size: 1.08rem;
-      border-radius: 2rem;
-      padding: 0.6rem 1.2rem;
-      transition: background 0.2s, color 0.2s;
-      margin: 0 0.1rem;
-    }
-    .navbar-nav .nav-link.active,
-    .navbar-nav .nav-link:hover,
-    .navbar-nav .nav-link:focus {
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      color: #fff !important;
-      box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10);
-    }
-    .navbar-toggler {
-      border: none;
-      font-size: 1.3rem;
-      color: var(--primary);
-      background: transparent;
-      outline: none;
-      box-shadow: none !important;
+    .navbar .navbar-brand img.medivance-logo:hover {
+      box-shadow: 0 4px 16px 0 rgba(0,191,174,0.18);
     }
     @media (max-width: 991px) {
       .navbar .navbar-brand .logo-text { font-size: 1.5rem; }
+      .navbar .navbar-brand img.medivance-logo { height: 34px; }
       .navbar-nav .nav-link { font-size: 1rem; padding: 0.5rem 1rem; }
     }
     @media (max-width: 767px) {
       .navbar .navbar-brand .logo-text { font-size: 1.2rem; }
+      .navbar .navbar-brand img.medivance-logo { height: 28px; }
       .navbar-nav .nav-link { font-size: 0.98rem; padding: 0.45rem 0.8rem; }
     }
 
@@ -305,7 +292,7 @@
   <nav class="navbar navbar-expand-lg modern-navbar fixed-top animate__animated animate__fadeInDown">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" />
+        <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo" />
         <span class="logo-text">Medivance</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -330,7 +317,10 @@
     <div class="hero-bg-shape"></div>
     <div class="hero-bg-shape2"></div>
     <div class="container about-hero-content">
-      <h1 class="animate__animated animate__fadeInUp">About <span style="color:#00bfae;">Medivance</span></h1>
+      <h1 class="animate__animated animate__fadeInUp">
+        <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo mb-2" style="height: 54px; vertical-align: middle; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10); margin-right: 10px;">
+        About <span style="color:#00bfae;">Medivance</span>
+      </h1>
       <p class="animate__animated animate__fadeInUp animate__delay-1s">
         Empowering healthcare with the synergy of <span class="fw-bold" style="color:#fff;">AI</span> and human expertise.<br>
         <span class="fw-bold" style="color:#fff;">Your health, our mission—delivered with innovation, security, and care.</span>
@@ -389,7 +379,10 @@
         </div>
         <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
           <h5>About</h5>
-          <p>Medivance is redefining healthcare with AI, making medical information accessible, secure, and actionable for everyone.</p>
+          <p>
+            <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo mb-2" style="height: 32px; vertical-align: middle; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10); margin-right: 8px;">
+            Medivance is redefining healthcare with AI, making medical information accessible, secure, and actionable for everyone.
+          </p>
         </div>
         <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
           <h5>Contact Us</h5>
@@ -413,7 +406,10 @@
     </div>
     <div class="copyright_section mt-4 pb-3">
       <div class="container">
-        <p class="mb-0 text-center">© 2024 Medivance. All Rights Reserved. | Designed with <i class="fa fa-heart"></i> for modern healthcare</p>
+        <p class="mb-0 text-center">
+          <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo" style="height: 22px; vertical-align: middle; background: #fff; border-radius: 6px; margin-right: 6px;">
+          © 2024 Medivance. All Rights Reserved. | Designed with <i class="fa fa-heart"></i> for modern healthcare
+        </p>
       </div>
     </div>
   </footer>

@@ -70,6 +70,29 @@
             border-bottom: 1.5px solid var(--border-card);
             backdrop-filter: var(--glass-blur);
         }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .navbar-brand .medivance-logo {
+            height: 44px;
+            width: auto;
+            max-width: 48px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px #00e6d355;
+            padding: 2px 4px;
+            object-fit: contain;
+            /* Ensures logo is visible on dark backgrounds */
+        }
+        @media (max-width: 767px) {
+            .navbar-brand .medivance-logo {
+                height: 32px;
+                max-width: 36px;
+                padding: 1px 2px;
+            }
+        }
         .navbar-brand .brand-gradient {
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 60%, var(--accent) 100%);
             -webkit-background-clip: text;
@@ -372,8 +395,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-modern animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-                <!-- Only logo, no extra name (e.g., "CONVID") next to the logo image -->
-                <img src="{{ url_for('static', filename='images/logo1.png') }}" alt="Medivance Logo" style="height:42px;filter:drop-shadow(0 2px 8px #00e6d355);">
+                <!-- Updated logo: use medivance_logo.png, styled for visibility and coordination -->
+                <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo">
                 <span class="brand-gradient">Medivance</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">

@@ -248,10 +248,31 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
         }
+        /* Logo styling for new logo */
+        .medivance-logo-navbar {
+            height: 44px;
+            width: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 3px 8px;
+            box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10);
+            object-fit: contain;
+        }
+        .footer-logo-img {
+            height: 38px;
+            width: auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 2px 6px;
+            box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10);
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
         @media (max-width: 991px) {
             .news-hero-bg .hero-content h1 { font-size: 2.1rem; }
             .news-card-img { height: 150px; }
             .news-section-title { font-size: 1.5rem; }
+            .medivance-logo-navbar { height: 36px; }
         }
         @media (max-width: 767px) {
             .news-hero-bg { min-height: 120px; }
@@ -259,6 +280,7 @@
             .news-card-img { height: 110px; }
             .news-section-title { font-size: 1.2rem; }
             .news-grid { gap: 1.2rem; }
+            .medivance-logo-navbar { height: 30px; }
         }
     </style>
 </head>
@@ -267,7 +289,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top glass shadow animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Medivance Logo" style="height:38px;">
+                <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo-navbar me-2">
                 <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -418,6 +440,7 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="footer-logo-img">
                     <div class="footer-title fs-4 mb-2">Medivance</div>
                     <p class="text-muted mb-2">Empowering healthcare with AI-driven insights, modern tools, and next-level user experience.</p>
                     <div class="footer-social d-flex gap-2 mt-3">

@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/summerize_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <!-- Favicon -->
-    <link rel="icon" href="{{url_for('static', filename='images/HealthSummerizeAI.jpg')}}" type="image/jpeg">
+    <link rel="icon" href="{{url_for('static', filename='images/medivance_logo.png')}}" type="image/png">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- SweetAlert2 -->
@@ -48,7 +48,22 @@
       }
       .navbar-brand img {
         height: 48px;
-        filter: drop-shadow(0 2px 8px #00bfae33);
+        width: 48px;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 12px;
+        border: 2px solid #e3f0ff;
+        box-shadow: 0 2px 8px #00bfae33;
+        margin-right: 0.75rem;
+      }
+      @media (max-width: 576px) {
+        .navbar-brand img {
+          height: 38px;
+          width: 38px;
+        }
+        .navbar-brand span {
+          font-size: 1.05rem !important;
+        }
       }
       .navbar-nav .nav-link {
         font-weight: 600;
@@ -219,7 +234,7 @@
     <nav class="navbar navbar-expand-lg navbar-light sticky-top glass py-2">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
-          <img src="{{ url_for('static', filename='images/HealthSummerizeAI.jpg') }}" alt="Medivance EHR Summarizer" class="me-2" style="height:44px;">
+          <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="me-2" style="height:48px;width:48px;object-fit:contain;background:#fff;border-radius:12px;border:2px solid #e3f0ff;box-shadow:0 2px 8px #00bfae33;">
           <span class="fw-bold" style="font-size:1.35rem; color:#1a73e8;">Medivance EHR Summarizer</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
