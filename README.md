@@ -1,7 +1,7 @@
 # **Medivance.AI: Revolutionizing Healthcare Documentation** 🏥✨
 <!-- Medivance.AI Banner -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Blacksujit/Health-Summerize-AI/static/images/medivance_logo.png" alt="Medivance.AI Logo" width="120" style="border-radius:16px; background:#fff; box-shadow:0 2px 12px #00bfae33;">
+  <img src="static/images/medivance_logo.png" alt="Medivance.AI Logo" width="120" style="border-radius:16px; background:#fff; box-shadow:0 2px 12px #00bfae33;">
 </p>
 
 <h1 align="center">
