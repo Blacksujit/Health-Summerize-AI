@@ -91,7 +91,13 @@ All in a single, modern, and intuitive web application.
 ## 🏗️ System Architecture
 
 <p align="center">
-  <img src="Flow-Diagrams/system_architecture_diagram.md" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
+  <img src="Flow-Diagrams/deepseek_mermaid_20250504_b49ca2.png" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
+</p>
+<br>
+<br>
+<br>
+<p align="center">
+  <img src="Flow-Diagrams/AI-mode-Pipeline-arcitecture.txt" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
 </p>
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
