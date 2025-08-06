@@ -91,7 +91,7 @@ All in a single, modern, and intuitive web application.
 ## 🏗️ System Architecture
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Blacksujit/HealthSummarizeAI/main/Flow-Diagrams/medivance_architecture_banner.png" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
+  <img src="Flow-Diagrams/system_architecture_diagram.md" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
 </p>
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
@@ -100,7 +100,7 @@ All in a single, modern, and intuitive web application.
 - **Database:** Firebase Firestore (real-time), SQLite (local)
 - **Cloud & APIs:** Google Cloud, OpenAI, ElevenLabs, RapidAPI
 
-> For a detailed architecture, see [System Architecture Diagram](./Flow-Diagrams/system_architecture_diagram.md)
+> For a detailed architecture, see [System Architecture Diagram](Flow-Diagrams/system_architecture_diagram.md)
 
 ---
 

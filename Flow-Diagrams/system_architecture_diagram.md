@@ -1,4 +1,4 @@
-# HealthSummarizeAI System Architecture Diagram
+# Medivance.AI System Architecture Diagram
 
 ## Complete System Architecture
 
