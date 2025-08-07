@@ -12,3 +12,9 @@ venv/
 config/water-management-91e4a-firebase-adminsdk-drmsv-dd559d16f2.json
 
 .env
+
+env.example
+
+setup_env.py
+
+test_env.py

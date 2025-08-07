@@ -24,6 +24,9 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from .__init__ import db, socketio
 from .utility_script import MedicalNLPipeline
+from .news_service import NewsService
+from .models import init_news_db, News, NewsCategory, NewsSubscription
+from sqlalchemy import desc
 
 # Load environment variables
 load_dotenv()
@@ -50,6 +53,9 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json'}
 # Create necessary directories
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 VIDEO_DIRECTORY.mkdir(exist_ok=True)
+
+# Initialize news service
+news_service = NewsService()
 
 def allowed_file(filename):
     """Check if the file extension is allowed."""
@@ -365,7 +371,288 @@ def about():
 
 @main.route('/news')
 def news():
-    return render_template('news.html')
+    """Main news page with filtering and search capabilities"""
+    try:
+        # Get query parameters
+        category = request.args.get('category', '')
+        search_query = request.args.get('search', '')
+        page = int(request.args.get('page', 1))
+        limit = 12
+        offset = (page - 1) * limit
+        
+        # Get news articles
+        if search_query:
+            articles = news_service.search_news(search_query, limit=limit)
+        elif category:
+            articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
+        else:
+            articles = news_service.get_news_from_db(limit=limit, offset=offset)
+        
+        # Get featured news
+        featured_news = news_service.get_featured_news(limit=5)
+        
+        # Get categories
+        categories = news_service.get_news_categories()
+        
+        # If no articles in database, fetch from API
+        if not articles:
+            articles = news_service.fetch_healthcare_news()
+            if articles:
+                news_service.save_news_to_db(articles)
+        
+        return render_template(
+            'news.html',
+            articles=articles,
+            featured_news=featured_news,
+            categories=categories,
+            current_category=category,
+            search_query=search_query,
+            current_page=page
+        )
+    except Exception as e:
+        logger.error(f"Error in news route: {e}")
+        return render_template('news.html', articles=[], featured_news=[], categories=[])
+
+@main.route('/news/<int:news_id>')
+def news_detail(news_id):
+    """News article detail page"""
+    try:
+        db = news_service.get_db_session()
+        news = db.query(News).filter(News.id == news_id, News.is_active == True).first()
+        
+        if not news:
+            flash('News article not found', 'error')
+            return redirect(url_for('main.news'))
+        
+        # Increment read count
+        news_service.increment_read_count(news_id)
+        
+        # Get related news
+        related_news = db.query(News).filter(
+            News.category == news.category,
+            News.id != news_id,
+            News.is_active == True
+        ).order_by(desc(News.published_date)).limit(3).all()
+        
+        return render_template(
+            'news_detail.html',
+            news=news.to_dict(),
+            related_news=[article.to_dict() for article in related_news]
+        )
+    except Exception as e:
+        logger.error(f"Error in news_detail route: {e}")
+        flash('Error loading news article', 'error')
+        return redirect(url_for('main.news'))
+    finally:
+        db.close()
+
+@main.route('/api/news')
+def api_news():
+    """API endpoint for news articles"""
+    try:
+        category = request.args.get('category', '')
+        search_query = request.args.get('search', '')
+        limit = int(request.args.get('limit', 20))
+        offset = int(request.args.get('offset', 0))
+        
+        if search_query:
+            articles = news_service.search_news(search_query, limit=limit)
+        elif category:
+            articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
+        else:
+            articles = news_service.get_news_from_db(limit=limit, offset=offset)
+        
+        return jsonify({
+            'status': 'success',
+            'articles': articles,
+            'total': len(articles)
+        })
+    except Exception as e:
+        logger.error(f"Error in api_news: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/api/news/featured')
+def api_featured_news():
+    """API endpoint for featured news"""
+    try:
+        featured_news = news_service.get_featured_news(limit=5)
+        return jsonify({
+            'status': 'success',
+            'articles': featured_news
+        })
+    except Exception as e:
+        logger.error(f"Error in api_featured_news: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/api/news/categories')
+def api_news_categories():
+    """API endpoint for news categories"""
+    try:
+        categories = news_service.get_news_categories()
+        return jsonify({
+            'status': 'success',
+            'categories': categories
+        })
+    except Exception as e:
+        logger.error(f"Error in api_news_categories: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/api/news/search')
+def api_news_search():
+    """API endpoint for news search"""
+    try:
+        query = request.args.get('q', '')
+        if not query:
+            return jsonify({'status': 'error', 'message': 'Search query required'}), 400
+        
+        articles = news_service.search_news(query, limit=20)
+        return jsonify({
+            'status': 'success',
+            'articles': articles,
+            'query': query,
+            'total': len(articles)
+        })
+    except Exception as e:
+        logger.error(f"Error in api_news_search: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/api/news/subscribe', methods=['POST'])
+def api_news_subscribe():
+    """API endpoint for newsletter subscription"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip()
+        categories = data.get('categories', [])
+        
+        if not email:
+            return jsonify({'status': 'error', 'message': 'Email is required'}), 400
+        
+        success = news_service.subscribe_to_newsletter(email, categories)
+        
+        if success:
+            return jsonify({
+                'status': 'success',
+                'message': 'Successfully subscribed to newsletter'
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to subscribe to newsletter'
+            }), 500
+    except Exception as e:
+        logger.error(f"Error in api_news_subscribe: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/api/news/fetch', methods=['POST'])
+def api_fetch_news():
+    """API endpoint to fetch fresh news from external APIs"""
+    try:
+        category = request.json.get('category', 'health')
+        page_size = request.json.get('page_size', 20)
+        
+        articles = news_service.fetch_healthcare_news(category=category, page_size=page_size)
+        
+        if articles:
+            success = news_service.save_news_to_db(articles)
+            if success:
+                return jsonify({
+                    'status': 'success',
+                    'message': f'Successfully fetched and saved {len(articles)} articles',
+                    'articles_count': len(articles)
+                })
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Failed to save articles to database'
+                }), 500
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'No articles fetched'
+            }), 404
+    except Exception as e:
+        logger.error(f"Error in api_fetch_news: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@main.route('/news/refresh', methods=['POST'])
+@handle_error
+def refresh_news():
+    """Refresh news from external APIs"""
+    try:
+        articles = news_service.fetch_healthcare_news()
+        if articles:
+            success = news_service.save_news_to_db(articles)
+            if success:
+                return jsonify({
+                    'status': 'success',
+                    'message': f'Successfully refreshed {len(articles)} news articles',
+                    'articles_count': len(articles)
+                })
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Failed to save news articles'
+                }), 500
+        else:
+            return jsonify({
+                'status': 'info',
+                'message': 'No new articles found'
+            }), 200
+    except Exception as e:
+        logger.error(f"Error in refresh_news: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Error refreshing news'
+        }), 500
+
+@main.route('/news/category/<category>')
+def news_by_category(category):
+    """News filtered by category"""
+    try:
+        page = int(request.args.get('page', 1))
+        limit = 12
+        offset = (page - 1) * limit
+        
+        articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
+        categories = news_service.get_news_categories()
+        
+        return render_template(
+            'news.html',
+            articles=articles,
+            categories=categories,
+            current_category=category,
+            current_page=page
+        )
+    except Exception as e:
+        logger.error(f"Error in news_by_category: {e}")
+        return redirect(url_for('main.news'))
+
+@main.route('/news/search')
+def news_search():
+    """News search page"""
+    try:
+        query = request.args.get('q', '')
+        page = int(request.args.get('page', 1))
+        limit = 12
+        offset = (page - 1) * limit
+        
+        if query:
+            articles = news_service.search_news(query, limit=limit)
+        else:
+            articles = []
+        
+        categories = news_service.get_news_categories()
+        
+        return render_template(
+            'news.html',
+            articles=articles,
+            categories=categories,
+            search_query=query,
+            current_page=page
+        )
+    except Exception as e:
+        logger.error(f"Error in news_search: {e}")
+        return redirect(url_for('main.news'))
 
 @main.route('/serve_video/<filename>')
 @handle_error
