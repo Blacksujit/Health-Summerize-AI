@@ -65,7 +65,7 @@ All in a single, modern, and intuitive web application.
     <td><b>AI-Powered EHR Summarization</b><br>Upload your medical records and get clear, structured, and clinically accurate summaries using advanced NLP models.</td>
   </tr>
   <tr>
-    <td><img src="https://img.icons8.com/color/48/000000/x-ray.png"/></td>
+    <td><img src="static/images/x-ray.png"/></td>
     <td><b>X-ray & Medical Image Analysis</b><br>Analyze X-ray scans and medical images with AI for instant, actionable insights.</td>
   </tr>
   <tr>
