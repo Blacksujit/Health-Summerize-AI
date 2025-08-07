@@ -72,7 +72,7 @@ if __name__ == "__main__":
         # Use socketio.run() instead of app.run()
 # Start Flask server in a separate thread
         def run_flask():
-            socketio.run(app, debug=True, port=600)
+            socketio.run(app, debug=True, port=600, use_reloader=True)
 
         flask_thread = threading.Thread(target=run_flask, daemon=True)
         flask_thread.start()
