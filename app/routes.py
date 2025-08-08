@@ -72,6 +72,8 @@ def handle_error(func):
             return jsonify({'status': 'error', 'message': 'An error occurred'}), 500
     return wrapper
 
+# --- ROUTES NOT RELATED TO NEWS SERVICE/MODELS ---
+
 @main.route('/')
 def index():
     return render_template('index.html')
@@ -79,14 +81,10 @@ def index():
 @main.route('/doctors', methods=['GET'])
 @handle_error
 def doctors():
-    # Fetch active appointments
     appointments_ref = db.collection('appointments')
     appointments = [doc.to_dict() for doc in appointments_ref.stream()]
-    
-    # Fetch completed appointments
     completed_ref = db.collection('completed_appointments')
     completed_appointments = [doc.to_dict() for doc in completed_ref.stream()]
-    
     return render_template(
         'doctors.html',
         appointments=appointments,
@@ -96,24 +94,18 @@ def doctors():
 @main.route('/book', methods=['POST'])
 @handle_error
 def book():
-    # Validate and format input
     doctor = request.form.get('doctor', '').strip()
     patient = request.form.get('patient', '').strip()
     time_str = request.form.get('time', '').strip()
-    
     if not all([doctor, patient, time_str]):
         flash("All fields are required", "error")
         return redirect(url_for('main.doctors'))
-    
-    # Format datetime
     try:
         time_obj = datetime.datetime.strptime(time_str, '%Y-%m-%dT%H:%M')
         formatted_time = time_obj.strftime('%B %d, %Y at %I:%M %p')
     except ValueError:
         flash("Invalid date and time format", "error")
         return redirect(url_for('main.doctors'))
-    
-    # Create appointment
     appointment_id = str(uuid.uuid4())
     appointment_data = {
         'doctor': doctor,
@@ -123,10 +115,7 @@ def book():
         'status': 'scheduled',
         'created_at': datetime.datetime.now().isoformat()
     }
-    
-    # Save to Firestore
     db.collection('appointments').document(appointment_id).set(appointment_data)
-    
     flash(f"Appointment booked successfully! Your ID: {appointment_id}", "success")
     return redirect(url_for('main.doctors'))
 
@@ -142,29 +131,19 @@ def get_appointments():
 def validate_appointment():
     data = request.get_json()
     appointment_id = data.get('appointment_id', '').strip()
-
     if not appointment_id:
         return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
-
-    # Check active appointments
     doc_ref = db.collection('appointments').document(appointment_id)
     doc = doc_ref.get()
-
     if not doc.exists:
         return jsonify({'status': 'error', 'message': 'Invalid or expired appointment ID'}), 404
-
-    # Check appointment status and time
     appointment_data = doc.to_dict()
     appointment_time = datetime.datetime.strptime(appointment_data['time'], '%B %d, %Y at %I:%M %p')
     current_time = datetime.datetime.now()
-
     if appointment_time.date() != current_time.date():
         return jsonify({'status': 'error', 'message': 'This appointment is not scheduled for today'}), 400
-
     if appointment_data.get('status') != 'scheduled':
         return jsonify({'status': 'error', 'message': 'This appointment is not active'}), 400
-
-    # Redirect to Hugging Face Spaces
     hugging_face_url = f"https://huggingface.co/spaces/blackshadow1/Multi-Modal-Medical-Analysis-System?appointment_id={appointment_id}"
     return jsonify({'status': 'success', 'redirect_url': hugging_face_url})
 
@@ -173,98 +152,65 @@ def validate_appointment():
 def complete_appointment():
     data = request.get_json()
     appointment_id = data.get('appointment_id')
-    
     if not appointment_id:
         return jsonify({'status': 'error', 'message': 'Appointment ID is required'}), 400
-        
-    # Get appointment
     doc_ref = db.collection('appointments').document(appointment_id)
     doc = doc_ref.get()
-    
     if not doc.exists:
         return jsonify({'status': 'error', 'message': 'Appointment not found'}), 404
-        
     appointment_data = doc.to_dict()
     appointment_data['status'] = 'completed'
     appointment_data['completed_at'] = datetime.datetime.now().isoformat()
-    
-    # Move to completed appointments
     completed_ref = db.collection('completed_appointments').document(appointment_id)
     completed_ref.set(appointment_data)
-    
-    # Delete from active appointments
     doc_ref.delete()
-    
     return jsonify({'status': 'success', 'message': 'Appointment completed successfully'})
 
 @main.route('/complete_appointment_manual', methods=['GET', 'POST'])
 @handle_error
 def complete_appointment_manual():
-    """Manual appointment completion page for users returning from Hugging Face."""
-    
     if request.method == 'POST':
         appointment_id = request.form.get('appointment_id', '').strip()
-        
         if not appointment_id:
             flash("Please enter an appointment ID", "error")
             return redirect(url_for('main.complete_appointment_manual'))
-        
-        # Try to complete the appointment
         try:
-            # Get appointment
             doc_ref = db.collection('appointments').document(appointment_id)
             doc = doc_ref.get()
-            
             if not doc.exists:
                 flash("Appointment not found. Please check the appointment ID.", "error")
                 return redirect(url_for('main.complete_appointment_manual'))
-                
             appointment_data = doc.to_dict()
             appointment_data['status'] = 'completed'
             appointment_data['completed_at'] = datetime.datetime.now().isoformat()
-            
-            # Move to completed appointments
             completed_ref = db.collection('completed_appointments').document(appointment_id)
             completed_ref.set(appointment_data)
-            
-            # Delete from active appointments
             doc_ref.delete()
-            
             flash(f"Appointment {appointment_id} completed successfully!", "success")
             return redirect(url_for('main.doctors'))
-            
         except Exception as e:
             flash(f"Error completing appointment: {str(e)}", "error")
             return redirect(url_for('main.complete_appointment_manual'))
-    
-    # GET request - show the form
     return render_template('complete_appointment_manual.html')
 
 @main.route('/virtual_consultation_voice/<appointment_id>')
 @handle_error
 def virtual_consultation_voice(appointment_id):
-    # Fetch the appointment from the database
     doc_ref = db.collection('appointments').document(appointment_id)
     doc = doc_ref.get()
-    
     if not doc.exists:
         flash("Invalid or expired appointment.", "error")
         return redirect(url_for('main.doctors'))
-    
-    # Validate appointment time
     appointment_data = doc.to_dict()
     try:
         appointment_time = datetime.datetime.strptime(appointment_data['time'], '%B %d, %Y at %I:%M %p')
     except ValueError as e:
         flash("Invalid appointment time format.", "error")
         return redirect(url_for('main.doctors'))
-    
     current_time = datetime.datetime.now()
     if appointment_time.date() != current_time.date():
         flash("This appointment is not scheduled for today.", "error")
         return redirect(url_for('main.doctors'))
-    
-    # Render the consultation page
     return render_template(
         'virtual_consultation_voice.html',
         appointment_id=appointment_id,
@@ -278,62 +224,40 @@ def summerize():
         file = request.files.get('file')
         text_input = request.form.get('text')
         medical_nlp = MedicalNLPipeline()
-
         try:
             result = None
-
-            # Validate input
             if file and allowed_file(file.filename):
-                # Save the uploaded file
                 filename = secure_filename(file.filename)
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
-
-                # Process the uploaded file
                 result = medical_nlp.process_document(file_path=filepath)
-
             elif text_input:
-                # Process the entered text
                 result = medical_nlp.process_document(prompt=text_input)
-
             else:
                 flash('Please provide a valid file or text input for summarization.')
                 return redirect(url_for('main.summerize'))
-
             if result:
-                # Extract sentiment results
                 sentiment_data = result.get('sentiment', {})
                 sentiment_label = sentiment_data.get('label', 'Unknown')
                 report = result.get('report', 'No structured report available.')
                 sentiment_score = sentiment_data.get('score') or sentiment_data.get('confidence', 'N/A')
-
-                # Save the report as a file
-                report_filename = f"report_{uuid.uuid4().hex}.txt"  # Generate a unique filename
+                report_filename = f"report_{uuid.uuid4().hex}.txt"
                 report_filepath = os.path.join(UPLOAD_FOLDER, report_filename)
                 with open(report_filepath, 'w') as f:
-                    f.write(report)  # Save the report content to the file
-
-                # Log the saved file path
+                    f.write(report)
                 logging.info(f"Report saved at: {report_filepath}")
-
-
-                # Pass relevant data to the reports.html template
                 return render_template(
                     'reports.html',
                     report=report,
                     sentiment_label=sentiment_label,
                     sentiment_score=sentiment_score,
-                    report_filename=report_filename  # Pass the filename to the template
+                    report_filename=report_filename
                 )
-
         except Exception as e:
             logging.error(f"Error in processing: {str(e)}")
             flash(f"An error occurred: {str(e)}")
             return redirect(url_for('main.summerize'))
-
-    # Render the summarize page
     return render_template('summerize.html')
-
 
 @main.route('/Reports')
 def Reports():
@@ -343,24 +267,16 @@ def Reports():
 @handle_error
 def download_report(filename):
     try:
-        # Log the filename being requested
         logging.info(f"Attempting to download file: {filename}")
-        
-        # Fix the file path construction
         file_path = os.path.join(UPLOAD_FOLDER, filename)
-        
-        # Check if the file exists
         if not os.path.exists(file_path):
             logging.error(f"File not found: {file_path}")
             return jsonify({'error': 'File not found'}), 404
-        
-        # Return the file with attachment disposition
         return send_from_directory(
             directory=UPLOAD_FOLDER,
             path=filename,
             as_attachment=True
         )
-        
     except Exception as e:
         logging.error(f"Error in download_report: {str(e)}")
         return jsonify({'error': 'Error downloading file'}), 500
@@ -369,37 +285,36 @@ def download_report(filename):
 def about():
     return render_template('about.html')
 
+# --- NEWS SERVICE & MODELS INTEGRATION TEST ROUTES ---
+
 @main.route('/news')
 def news():
-    """Main news page with filtering and search capabilities"""
+    """
+    Main news page with filtering and search capabilities.
+    Integration check: news_service.get_news_from_db, search_news, get_featured_news, get_news_categories.
+    """
     try:
-        # Get query parameters
         category = request.args.get('category', '')
         search_query = request.args.get('search', '')
         page = int(request.args.get('page', 1))
         limit = 12
         offset = (page - 1) * limit
-        
-        # Get news articles
+
         if search_query:
             articles = news_service.search_news(search_query, limit=limit)
         elif category:
             articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
         else:
             articles = news_service.get_news_from_db(limit=limit, offset=offset)
-        
-        # Get featured news
+
         featured_news = news_service.get_featured_news(limit=5)
-        
-        # Get categories
         categories = news_service.get_news_categories()
-        
-        # If no articles in database, fetch from API
+
         if not articles:
             articles = news_service.fetch_healthcare_news()
             if articles:
                 news_service.save_news_to_db(articles)
-        
+
         return render_template(
             'news.html',
             articles=articles,
@@ -415,25 +330,22 @@ def news():
 
 @main.route('/news/<int:news_id>')
 def news_detail(news_id):
-    """News article detail page"""
+    """
+    News article detail page.
+    Integration check: news_service.get_db_session, News model, news_service.increment_read_count.
+    """
     try:
-        db = news_service.get_db_session()
-        news = db.query(News).filter(News.id == news_id, News.is_active == True).first()
-        
+        db_session = news_service.get_db_session()
+        news = db_session.query(News).filter(News.id == news_id, News.is_active == True).first()
         if not news:
             flash('News article not found', 'error')
             return redirect(url_for('main.news'))
-        
-        # Increment read count
         news_service.increment_read_count(news_id)
-        
-        # Get related news
-        related_news = db.query(News).filter(
+        related_news = db_session.query(News).filter(
             News.category == news.category,
             News.id != news_id,
             News.is_active == True
         ).order_by(desc(News.published_date)).limit(3).all()
-        
         return render_template(
             'news_detail.html',
             news=news.to_dict(),
@@ -444,24 +356,28 @@ def news_detail(news_id):
         flash('Error loading news article', 'error')
         return redirect(url_for('main.news'))
     finally:
-        db.close()
+        try:
+            db_session.close()
+        except Exception:
+            pass
 
 @main.route('/api/news')
 def api_news():
-    """API endpoint for news articles"""
+    """
+    API endpoint for news articles.
+    Integration check: news_service.get_news_from_db, search_news.
+    """
     try:
         category = request.args.get('category', '')
         search_query = request.args.get('search', '')
         limit = int(request.args.get('limit', 20))
         offset = int(request.args.get('offset', 0))
-        
         if search_query:
             articles = news_service.search_news(search_query, limit=limit)
         elif category:
             articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
         else:
             articles = news_service.get_news_from_db(limit=limit, offset=offset)
-        
         return jsonify({
             'status': 'success',
             'articles': articles,
@@ -473,7 +389,10 @@ def api_news():
 
 @main.route('/api/news/featured')
 def api_featured_news():
-    """API endpoint for featured news"""
+    """
+    API endpoint for featured news.
+    Integration check: news_service.get_featured_news.
+    """
     try:
         featured_news = news_service.get_featured_news(limit=5)
         return jsonify({
@@ -486,7 +405,10 @@ def api_featured_news():
 
 @main.route('/api/news/categories')
 def api_news_categories():
-    """API endpoint for news categories"""
+    """
+    API endpoint for news categories.
+    Integration check: news_service.get_news_categories.
+    """
     try:
         categories = news_service.get_news_categories()
         return jsonify({
@@ -499,12 +421,14 @@ def api_news_categories():
 
 @main.route('/api/news/search')
 def api_news_search():
-    """API endpoint for news search"""
+    """
+    API endpoint for news search.
+    Integration check: news_service.search_news.
+    """
     try:
         query = request.args.get('q', '')
         if not query:
             return jsonify({'status': 'error', 'message': 'Search query required'}), 400
-        
         articles = news_service.search_news(query, limit=20)
         return jsonify({
             'status': 'success',
@@ -518,17 +442,17 @@ def api_news_search():
 
 @main.route('/api/news/subscribe', methods=['POST'])
 def api_news_subscribe():
-    """API endpoint for newsletter subscription"""
+    """
+    API endpoint for newsletter subscription.
+    Integration check: news_service.subscribe_to_newsletter.
+    """
     try:
         data = request.get_json()
         email = data.get('email', '').strip()
         categories = data.get('categories', [])
-        
         if not email:
             return jsonify({'status': 'error', 'message': 'Email is required'}), 400
-        
         success = news_service.subscribe_to_newsletter(email, categories)
-        
         if success:
             return jsonify({
                 'status': 'success',
@@ -545,13 +469,14 @@ def api_news_subscribe():
 
 @main.route('/api/news/fetch', methods=['POST'])
 def api_fetch_news():
-    """API endpoint to fetch fresh news from external APIs"""
+    """
+    API endpoint to fetch fresh news from external APIs.
+    Integration check: news_service.fetch_healthcare_news, save_news_to_db.
+    """
     try:
         category = request.json.get('category', 'health')
         page_size = request.json.get('page_size', 20)
-        
         articles = news_service.fetch_healthcare_news(category=category, page_size=page_size)
-        
         if articles:
             success = news_service.save_news_to_db(articles)
             if success:
@@ -577,7 +502,10 @@ def api_fetch_news():
 @main.route('/news/refresh', methods=['POST'])
 @handle_error
 def refresh_news():
-    """Refresh news from external APIs"""
+    """
+    Refresh news from external APIs.
+    Integration check: news_service.fetch_healthcare_news, save_news_to_db.
+    """
     try:
         articles = news_service.fetch_healthcare_news()
         if articles:
@@ -607,15 +535,16 @@ def refresh_news():
 
 @main.route('/news/category/<category>')
 def news_by_category(category):
-    """News filtered by category"""
+    """
+    News filtered by category.
+    Integration check: news_service.get_news_from_db, get_news_categories.
+    """
     try:
         page = int(request.args.get('page', 1))
         limit = 12
         offset = (page - 1) * limit
-        
         articles = news_service.get_news_from_db(category=category, limit=limit, offset=offset)
         categories = news_service.get_news_categories()
-        
         return render_template(
             'news.html',
             articles=articles,
@@ -629,20 +558,20 @@ def news_by_category(category):
 
 @main.route('/news/search')
 def news_search():
-    """News search page"""
+    """
+    News search page.
+    Integration check: news_service.search_news, get_news_categories.
+    """
     try:
         query = request.args.get('q', '')
         page = int(request.args.get('page', 1))
         limit = 12
         offset = (page - 1) * limit
-        
         if query:
             articles = news_service.search_news(query, limit=limit)
         else:
             articles = []
-        
         categories = news_service.get_news_categories()
-        
         return render_template(
             'news.html',
             articles=articles,
@@ -654,6 +583,8 @@ def news_search():
         logger.error(f"Error in news_search: {e}")
         return redirect(url_for('main.news'))
 
+# --- END NEWS SERVICE/MODELS INTEGRATION TEST ROUTES ---
+
 @main.route('/serve_video/<filename>')
 @handle_error
 def serve_video(filename):
@@ -661,7 +592,6 @@ def serve_video(filename):
         video_path = VIDEO_DIRECTORY / filename
         if not video_path.exists():
             return jsonify({'error': 'Video not found'}), 404
-            
         return send_file(str(video_path), mimetype='video/mp4')
     except Exception as e:
         logger.error(f"Error serving video {filename}: {e}")

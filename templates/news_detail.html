@@ -27,6 +27,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ... (styles unchanged for brevity) ... */
         body {
             font-family: 'Inter', Arial, sans-serif;
             background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
@@ -360,7 +361,7 @@
             <div class="row align-items-center">
                 <div class="col-md-8 mx-auto text-center" data-aos="fade-up">
                     <h1 class="hero-title animate__animated animate__fadeInUp">
-                        <i class="fa fa-newspaper me-3"></i>{{ news.category }}
+                        <i class="fa fa-newspaper me-3"></i>{{ news.category if news.category else 'News' }}
                     </h1>
                     <p class="hero-desc animate__animated animate__fadeInUp animate__delay-1s">
                         Stay informed with the latest healthcare insights and innovations
@@ -380,20 +381,48 @@
                 <div class="news-meta">
                     <div class="news-meta-item">
                         <i class="fa fa-calendar-alt"></i>
-                        <span>{{ news.published_date.split('T')[0] if news.published_date else 'Recent' }}</span>
+                        <span>
+                            {% if news.published_date %}
+                                {% if 'T' in news.published_date %}
+                                    {{ news.published_date.split('T')[0] }}
+                                {% else %}
+                                    {{ news.published_date }}
+                                {% endif %}
+                            {% else %}
+                                Recent
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="news-meta-item">
                         <i class="fa fa-user"></i>
-                        <span>{{ news.source }}</span>
+                        <span>{{ news.source if news.source else 'Unknown' }}</span>
                     </div>
                     <div class="news-meta-item">
                         <i class="fa fa-eye"></i>
-                        <span>{{ news.read_count }} reads</span>
+                        <span>
+                            {% if news.read_count is not none %}
+                                {{ news.read_count }} reads
+                            {% else %}
+                                0 reads
+                            {% endif %}
+                        </span>
                     </div>
                     {% if news.sentiment_score is not none %}
-                    <div class="sentiment-indicator {% if news.sentiment_score > 0.1 %}sentiment-positive{% elif news.sentiment_score < -0.1 %}sentiment-negative{% else %}sentiment-neutral{% endif %}">
+                    <div class="sentiment-indicator 
+                        {% if news.sentiment_score > 0.1 %}sentiment-positive
+                        {% elif news.sentiment_score < -0.1 %}sentiment-negative
+                        {% else %}sentiment-neutral
+                        {% endif %}">
                         <i class="fa fa-{% if news.sentiment_score > 0.1 %}smile{% elif news.sentiment_score < -0.1 %}frown{% else %}meh{% endif %}"></i>
-                        <span>{% if news.sentiment_score > 0.1 %}Positive{% elif news.sentiment_score < -0.1 %}Negative{% else %}Neutral{% endif %}</span>
+                        <span>
+                            {% if news.sentiment_score > 0.1 %}
+                                Positive
+                            {% elif news.sentiment_score < -0.1 %}
+                                Negative
+                            {% else %}
+                                Neutral
+                            {% endif %}
+                        </span>
                     </div>
                     {% endif %}
                 </div>
@@ -448,15 +477,23 @@
                         <div class="related-news-card">
                             <h5 class="related-news-title-small">
                                 <a href="{{ url_for('main.news_detail', news_id=article.id) }}" class="text-decoration-none">
-                                    {{ article.title[:60] }}{% if article.title|length > 60 %}...{% endif %}
+                                    {{ article.title[:60] }}{% if article.title and article.title|length > 60 %}...{% endif %}
                                 </a>
                             </h5>
                             <div class="related-news-meta">
                                 <i class="fa fa-calendar-alt me-1"></i>
-                                {{ article.published_date.split('T')[0] if article.published_date else 'Recent' }}
+                                {% if article.published_date %}
+                                    {% if 'T' in article.published_date %}
+                                        {{ article.published_date.split('T')[0] }}
+                                    {% else %}
+                                        {{ article.published_date }}
+                                    {% endif %}
+                                {% else %}
+                                    Recent
+                                {% endif %}
                                 <span class="mx-2">•</span>
                                 <i class="fa fa-user me-1"></i>
-                                {{ article.source }}
+                                {{ article.source if article.source else 'Unknown' }}
                             </div>
                         </div>
                     </div>

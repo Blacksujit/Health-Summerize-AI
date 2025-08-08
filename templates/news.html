@@ -404,7 +404,7 @@
                         <form id="searchForm" class="d-flex">
                             <input type="text" class="form-control search-box" id="searchInput" 
                                    placeholder="Search healthcare news..." 
-                                   value="{{ search_query or '' }}">
+                                   value="{{ search_query or '' }}" required aria-required="true">
                             <button type="submit" class="btn btn-gradient ms-2">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -469,20 +469,36 @@
                             {% endif %}
                             <div class="news-card-meta">
                                 <span><i class="fa fa-calendar-alt me-1"></i> 
-                                    {{ article.published_date.split('T')[0] if article.published_date else 'Recent' }}
+                                    {% if article.published_date %}
+                                        {{ article.published_date.split('T')[0] if 'T' in article.published_date else article.published_date }}
+                                    {% else %}
+                                        Recent
+                                    {% endif %}
                                 </span>
                                 <span><i class="fa fa-tag me-1"></i> {{ article.category or 'Healthcare' }}</span>
-                                {% if article.read_count %}
+                                {% if article.read_count is defined and article.read_count %}
                                 <span><i class="fa fa-eye me-1"></i> {{ article.read_count }} reads</span>
                                 {% endif %}
                             </div>
                             <h5 class="news-card-title">{{ article.title }}</h5>
                             <p class="news-card-text">
-                                {{ article.summary or article.content[:150] + '...' if article.content|length > 150 else article.content }}
+                                {% if article.summary %}
+                                    {{ article.summary }}
+                                {% elif article.content %}
+                                    {{ article.content[:150] ~ ('...' if article.content|length > 150 else '') }}
+                                {% else %}
+                                    No summary available.
+                                {% endif %}
                             </p>
+                            {% if article.id %}
                             <a href="{{ url_for('main.news_detail', news_id=article.id) }}" class="btn btn-readmore">
                                 Read More <i class="fa fa-arrow-right ms-1"></i>
                             </a>
+                            {% elif article.url %}
+                            <a href="{{ article.url }}" class="btn btn-readmore" target="_blank" rel="noopener">
+                                Read More <i class="fa fa-arrow-right ms-1"></i>
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
@@ -509,12 +525,14 @@
                     </li>
                     {% endif %}
                     
-                    {% for page_num in range(1, 6) %}
-                    <li class="page-item {% if page_num == current_page %}active{% endif %}">
-                        <a class="page-link" href="{{ url_for('main.news', page=page_num, category=current_category, search=search_query) }}">
-                            {{ page_num }}
-                        </a>
-                    </li>
+                    {% for page_num in range(current_page-2 if current_page-2 > 0 else 1, current_page+3) %}
+                        {% if page_num > 0 %}
+                        <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('main.news', page=page_num, category=current_category, search=search_query) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                        {% endif %}
                     {% endfor %}
                     
                     {% if articles|length == 12 %}
@@ -623,10 +641,14 @@
         // Search functionality
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const searchQuery = document.getElementById('searchInput').value.trim();
-            if (searchQuery) {
-                window.location.href = `{{ url_for('main.news') }}?search=${encodeURIComponent(searchQuery)}`;
+            const inputEl = document.getElementById('searchInput');
+            const searchQuery = inputEl.value.trim();
+            if (!searchQuery) {
+                alert('Please enter a search term');
+                inputEl.focus();
+                return;
             }
+            window.location.href = `{{ url_for('main.news') }}?search=${encodeURIComponent(searchQuery)}`;
         });
 
         // Refresh news functionality
@@ -651,10 +673,15 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Refresh response:', data);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                if (data.status === 'success') {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    loadingSpinner.style.display = 'none';
+                    newsGrid.style.display = 'block';
+                    alert(data.message || 'Error refreshing news. Please try again.');
+                }
             })
             .catch(error => {
                 console.error('Error refreshing news:', error);
@@ -690,7 +717,7 @@
                     alert('Successfully subscribed to newsletter!');
                     document.getElementById('newsletterEmail').value = '';
                 } else {
-                    alert('Failed to subscribe: ' + data.message);
+                    alert('Failed to subscribe: ' + (data.message || 'Unknown error'));
                 }
             })
             .catch(error => {
