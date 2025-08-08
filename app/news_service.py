@@ -54,7 +54,7 @@ class NewsService:
 
     def __init__(self):
         self.api_keys = {
-            'rapidapi': ''
+            'rapidapi': 'news_api_key_here'
         }
         self.SessionLocal = init_news_db()
         self.rapidapi_rate_limiter = RateLimiter(self.RAPIDAPI_REQUEST_LIMIT, self.RAPIDAPI_WINDOW_SECONDS)
