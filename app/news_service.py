@@ -6,7 +6,7 @@ from typing import List, Dict, Optional
 import os
 from .models import News, NewsCategory, NewsSubscription, init_news_db
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, or_, and_
 import re
 from textblob import TextBlob
 import threading
@@ -64,7 +64,7 @@ class NewsService:
     def get_db_session(self) -> Session:
         return self.SessionLocal()
 
-    def fetch_healthcare_news(self, category: str = 'HEALTH', page_size: int = 10, country: str = 'US') -> List[Dict]:
+    def fetch_healthcare_news(self, category: str = 'HEALTH', page_size: int = 10, country: str = 'IN') -> List[Dict]:
         """
         Fetch news using the RapidAPI real-time-news-data API.
         """
@@ -295,15 +295,79 @@ class NewsService:
             db.close()
 
     def search_news(self, query: str, limit: int = 20) -> List[Dict]:
+        """
+        More robust search logic to get specific articles related to the search query.
+        - Matches whole words (case-insensitive)
+        - Ranks articles by relevance (number of matches in title, content, tags)
+        - Filters out articles that are not closely related to the query
+        """
         db = self.get_db_session()
         try:
-            articles = db.query(News).filter(
+            # Preprocess query for robust matching
+            query = query.strip()
+            if not query:
+                return []
+
+            # Split query into keywords (support multi-word queries)
+            keywords = [kw.lower() for kw in re.findall(r'\w+', query)]
+            if not keywords:
+                return []
+
+            # Build SQLAlchemy filters for each keyword (whole word, case-insensitive)
+            filters = []
+            for kw in keywords:
+                # Use ilike for case-insensitive matching
+                filters.append(or_(
+                    News.title.ilike(f'%{kw}%'),
+                    News.content.ilike(f'%{kw}%'),
+                    News.tags.ilike(f'%{kw}%')
+                ))
+
+            # Only fetch a larger pool, then filter and rank in Python for best matches
+            candidate_articles = db.query(News).filter(
                 News.is_active == True,
-                (News.title.contains(query)) | 
-                (News.content.contains(query)) |
-                (News.tags.contains(query))
-            ).order_by(desc(News.published_date)).limit(limit).all()
-            return [article.to_dict() for article in articles]
+                and_(*filters)
+            ).order_by(desc(News.published_date)).limit(100).all()
+
+            # Rank and filter articles by relevance
+            def relevance_score(article):
+                score = 0
+                title = (article.title or "").lower()
+                content = (article.content or "").lower()
+                tags = (article.tags or "").lower()
+                for kw in keywords:
+                    # Whole word match in title
+                    if re.search(r'\b' + re.escape(kw) + r'\b', title):
+                        score += 5
+                    # Whole word match in tags
+                    if re.search(r'\b' + re.escape(kw) + r'\b', tags):
+                        score += 4
+                    # Whole word match in content
+                    if re.search(r'\b' + re.escape(kw) + r'\b', content):
+                        score += 2
+                    # Partial match fallback (less weight)
+                    if kw in title:
+                        score += 2
+                    if kw in tags:
+                        score += 1
+                    if kw in content:
+                        score += 1
+                return score
+
+            # Filter out articles with zero score (not really related)
+            scored_articles = [
+                (article, relevance_score(article))
+                for article in candidate_articles
+            ]
+            # Only keep articles with a positive score
+            scored_articles = [item for item in scored_articles if item[1] > 0]
+
+            # Sort by score (desc), then by published_date
+            scored_articles.sort(key=lambda x: (x[1], x[0].published_date), reverse=True)
+
+            # Return up to 'limit' articles
+            return [article.to_dict() for article, _ in scored_articles[:limit]]
+
         except Exception as e:
             logger.error(f"Error searching news: {e}")
             return []
