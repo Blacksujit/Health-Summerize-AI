@@ -66,6 +66,9 @@
         letter-spacing: 0.02em;
         position: relative;
         transition: color 0.2s;
+        font-size: 1.08rem;
+        /* Make text a bit more visible and bold, but keep spacing */
+        text-shadow: 0 1px 4px #e3f0ff, 0 1px 0 #fff;
       }
       .navbar-nav .nav-link::after {
         content: '';
@@ -83,6 +86,17 @@
       }
       .navbar-nav .nav-link:hover {
         color: #00bfae !important;
+        text-shadow: 0 2px 8px #00bfae22, 0 1px 0 #fff;
+      }
+      .navbar-nav .nav-link i {
+        font-size: 1em;
+        margin-right: 0.2em;
+        color: #1a73e8;
+        vertical-align: middle;
+        transition: color 0.2s;
+      }
+      .navbar-nav .nav-link:hover i {
+        color: #00bfae;
       }
       .btn-primary, .btn-gradient {
         background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
@@ -285,11 +299,11 @@
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}"><i class="fa fa-home"></i> Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}"><i class="fa fa-magic"></i> Summarize</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}"><i class="fa fa-info-circle"></i> About</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}"><i class="fa fa-user-md"></i> Doctors</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}"><i class="fa fa-newspaper"></i> News</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
           </ul>
         </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8">YY
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ news.title }} | Medivance News</title>
@@ -21,42 +21,28 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <!-- Favicon -->
-    <!-- Favicon -->
     <link rel="icon" href="{{url_for('static', filename='images/medivance_logo.png')}}" type="image/png">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ... (styles unchanged for brevity) ... */
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
-            color: #222;
-            min-height: 100vh;
-        }
-        .glass {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
-            border-radius: 24px;
-        }
+        /* Navbar styling from news.html */
         .navbar {
-            background: rgba(255,255,255,0.95) !important;
+            background: #fff !important;
             box-shadow: 0 2px 16px rgba(26,115,232,0.08);
             transition: background 0.3s, box-shadow 0.3s;
         }
-        .navbar-brand img {
-            height: 56px;
+        .navbar .navbar-brand img {
+            height: 48px;
             width: auto;
-            filter: drop-shadow(0 2px 8px #00bfae33);
-            border-radius: 12px;
+            border-radius: 10px;
             background: #fff;
             padding: 2px 6px;
             box-shadow: 0 2px 8px rgba(26,115,232,0.08);
             transition: box-shadow 0.2s;
         }
-        .navbar-brand img:hover {
+        .navbar .navbar-brand img:hover {
             box-shadow: 0 4px 16px rgba(0,191,174,0.13);
         }
         .navbar-nav .nav-link {
@@ -66,6 +52,9 @@
             letter-spacing: 0.02em;
             position: relative;
             transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .navbar-nav .nav-link::after {
             content: '';
@@ -83,6 +72,39 @@
         }
         .navbar-nav .nav-link:hover {
             color: #00bfae !important;
+        }
+        .navbar-nav .nav-link.active, .navbar-nav .nav-link.active:focus {
+            color: #00bfae !important;
+        }
+        .navbar-toggler {
+            border: none;
+            background: transparent !important;
+        }
+        .navbar-toggler:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .navbar .fa-bars {
+            color: #1a73e8;
+            font-size: 1.5rem;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* ...rest of your styles remain unchanged... */
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
+            color: #222;
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+            border-radius: 24px;
         }
         .btn-primary, .btn-gradient {
             background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
@@ -318,38 +340,61 @@
             .hero-title { font-size: 2.2rem; }
             .section-title { font-size: 1.5rem; }
             .news-detail-card { padding: 2rem 1rem; }
-            .navbar-brand img { height: 44px; }
+            .navbar .navbar-brand img { height: 38px; }
         }
         @media (max-width: 767px) {
             .hero-section { min-height: 30vh; }
             .hero-title { font-size: 1.5rem; }
             .section-title { font-size: 1.2rem; }
             .news-detail-card { padding: 1.2rem 0.5rem; }
-            .navbar-brand img { height: 36px; }
+            .navbar .navbar-brand img { height: 30px; }
             .news-meta { gap: 1rem; }
         }
     </style>
 </head>
 <body class="relative">
-    <!-- Modern Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass shadow animate__animated animate__fadeInDown">
+    <!-- Modern Navbar with icons from news.html -->
+    <nav class="navbar navbar-expand-lg fixed-top glass shadow animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
                 <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" />
-                <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
+                <span class="fw-bold fs-3 text-gradient">Medivance</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.news') }}">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}">
+                            <i class="fa fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.summerize') }}">
+                            <i class="fa fa-magic"></i> Summarize
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.about') }}">
+                            <i class="fa fa-info-circle"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.doctors') }}">
+                            <i class="fa fa-user-md"></i> Doctors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('main.news') }}">
+                            <i class="fa fa-newspaper"></i> News
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user"></i> Login
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

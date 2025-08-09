@@ -18,6 +18,73 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/doctors.css') }}" rel="stylesheet" />
     <style>
+      /* Navbar styles from index.html */
+      .navbar {
+        background: rgba(255,255,255,0.95) !important;
+        box-shadow: 0 2px 16px 0 rgba(26,115,232,0.07);
+        border-bottom: 1.5px solid rgba(0,191,174,0.08);
+        backdrop-filter: blur(8px);
+      }
+      .navbar-brand .logo-text {
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .navbar-brand .medivance-logo {
+        height: 48px;
+        width: auto;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 0.7em;
+        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.08);
+        padding: 2px 6px;
+        border: 1.5px solid #e3f7fa;
+      }
+      .navbar-nav .nav-link {
+        font-weight: 600;
+        color: #1a73e8 !important;
+        margin-right: 1.5rem;
+        letter-spacing: 0.02em;
+        position: relative;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+      }
+      .navbar-nav .nav-link::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        transition: width .3s;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+      }
+      .navbar-nav .nav-link:hover::after {
+        width: 100%;
+      }
+      .navbar-nav .nav-link:hover {
+        color: #00bfae !important;
+      }
+      .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+        background: linear-gradient(90deg, #e6f7fa 0%, #f8fcff 100%);
+        color: #00bfae !important;
+      }
+      @media (max-width: 991px) {
+        .navbar-brand .logo-text { font-size: 1.3rem; }
+        .navbar-brand .medivance-logo { height: 36px; }
+      }
+      @media (max-width: 767px) {
+        .navbar-brand .logo-text { font-size: 1.1rem; }
+        .navbar-brand .medivance-logo { height: 30px; }
+      }
+      /* End Navbar styles from index.html */
+      /* --- Keep rest of your page's custom styles here --- */
       body {
         min-height: 100vh;
         background: linear-gradient(120deg, #e6f0ff 0%, #f8fcff 100%);
@@ -77,42 +144,6 @@
       }
       .btn-gradient:active {
         background: #1a73e8;
-      }
-      .modern-navbar {
-        background: rgba(255,255,255,0.92);
-        box-shadow: 0 2px 16px 0 rgba(26,115,232,0.07);
-        border-bottom: 1.5px solid rgba(0,191,174,0.08);
-        backdrop-filter: blur(8px);
-      }
-      .navbar-brand .logo-text {
-        font-size: 2rem;
-        font-weight: 900;
-        letter-spacing: -1px;
-        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .navbar-brand .medivance-logo {
-        height: 48px;
-        width: auto;
-        object-fit: contain;
-        background: #fff;
-        border-radius: 0.7em;
-        box-shadow: 0 2px 8px 0 rgba(26,115,232,0.08);
-        padding: 2px 6px;
-        border: 1.5px solid #e3f7fa;
-        /* Ensures logo stands out on all backgrounds */
-      }
-      .navbar-nav .nav-link {
-        font-weight: 500;
-        color: #1a73e8;
-        border-radius: 2em;
-        padding: 0.5em 1.2em;
-        transition: background 0.18s, color 0.18s;
-      }
-      .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
-        background: linear-gradient(90deg, #e6f7fa 0%, #f8fcff 100%);
-        color: #00bfae;
       }
       .hero-section {
         padding: 5.5rem 0 3.5rem 0;
@@ -254,15 +285,11 @@
       @media (max-width: 991px) {
         .section-title { font-size: 1.5rem; }
         .hero-section { padding: 2.5rem 0 1.5rem 0; }
-        .navbar-brand .logo-text { font-size: 1.3rem; }
-        .navbar-brand .medivance-logo { height: 36px; }
       }
       @media (max-width: 767px) {
         .hero-section { padding: 1.5rem 0 0.5rem 0; }
         .section-title { font-size: 1.2rem; }
         .modern-card, .glass-modern { border-radius: 1em; }
-        .navbar-brand .logo-text { font-size: 1.1rem; }
-        .navbar-brand .medivance-logo { height: 30px; }
       }
     </style>
     <!-- SweetAlert2 -->
@@ -283,8 +310,8 @@
       {% endif %}
     {% endwith %}
 
-    <!-- Modern Navbar -->
-    <nav class="navbar navbar-expand-lg modern-navbar fixed-top shadow animate__animated animate__fadeInDown">
+    <!-- Navbar from index.html with icons -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow animate__animated animate__fadeInDown">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
           <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo" />
@@ -295,17 +322,41 @@
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
           <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.index') }}">
+                <i class="fa fa-home"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.summerize') }}">
+                <i class="fa fa-file-alt"></i> Summarize
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.about') }}">
+                <i class="fa fa-info-circle"></i> About
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('main.doctors') }}">
+                <i class="fa fa-user-md"></i> Doctors
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.news') }}">
+                <i class="fa fa-newspaper"></i> News
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fa fa-user"></i> Login
+              </a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
+    <!-- End Navbar -->
 
     <!-- Hero Section -->
     <section class="hero-section d-flex align-items-center animate__animated animate__fadeInDown">

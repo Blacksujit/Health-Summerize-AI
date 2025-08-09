@@ -35,44 +35,84 @@
       color: var(--text-dark);
       scroll-behavior: smooth;
     }
-    /* Navbar */
-    .modern-navbar {
+    /* Navbar (match index.html) */
+    .main-navbar {
       background: #fff;
-      border-bottom: 1.5px solid #e0e7ef;
-      box-shadow: 0 2px 12px 0 rgba(26,115,232,0.04);
-      padding: 0.7rem 0;
-      transition: box-shadow 0.2s;
+      border-bottom: 1px solid #e0e7ef;
+      box-shadow: 0 2px 8px 0 rgba(26,115,232,0.04);
+      padding-top: 0.35rem;
+      padding-bottom: 0.35rem;
+      transition: box-shadow 0.2s, background 0.2s;
+      z-index: 1000;
     }
-    .navbar .navbar-brand .logo-text {
-      font-size: 2rem;
+    .main-navbar .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .main-navbar .navbar-brand .logo-text {
+      font-size: 1.45rem;
       font-weight: 800;
       background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -1px;
+      margin-left: 0.2rem;
     }
-    .navbar .navbar-brand img.medivance-logo {
-      height: 44px;
+    .main-navbar .navbar-brand img.medivance-logo {
+      height: 32px;
       width: auto;
       background: #fff;
-      border-radius: 10px;
-      padding: 2px 6px;
+      border-radius: 8px;
+      padding: 1px 4px;
       box-shadow: 0 2px 8px 0 rgba(26,115,232,0.08);
-      /* Ensures logo is visible on white and colored backgrounds */
       transition: box-shadow 0.2s;
     }
-    .navbar .navbar-brand img.medivance-logo:hover {
+    .main-navbar .navbar-brand img.medivance-logo:hover {
       box-shadow: 0 4px 16px 0 rgba(0,191,174,0.18);
     }
+    .main-navbar .navbar-nav .nav-link {
+      font-weight: 500;
+      color: var(--text-dark);
+      font-size: 1rem;
+      padding: 0.45rem 1rem;
+      border-radius: 2rem;
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .main-navbar .navbar-nav .nav-link.active,
+    .main-navbar .navbar-nav .nav-link:focus,
+    .main-navbar .navbar-nav .nav-link:hover {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      color: #fff !important;
+      box-shadow: 0 2px 12px 0 rgba(26,115,232,0.10);
+    }
+    .main-navbar .navbar-nav .nav-link i {
+      margin-right: 0.3em;
+      font-size: 1.05em;
+    }
+    .main-navbar .navbar-toggler {
+      border: none;
+      background: transparent;
+      font-size: 1.35rem;
+      color: var(--primary);
+    }
+    .main-navbar .navbar-toggler:focus {
+      outline: none;
+      box-shadow: none;
+    }
     @media (max-width: 991px) {
-      .navbar .navbar-brand .logo-text { font-size: 1.5rem; }
-      .navbar .navbar-brand img.medivance-logo { height: 34px; }
-      .navbar-nav .nav-link { font-size: 1rem; padding: 0.5rem 1rem; }
+      .main-navbar .navbar-brand .logo-text { font-size: 1.1rem; }
+      .main-navbar .navbar-brand img.medivance-logo { height: 24px; }
+      .main-navbar .navbar-nav .nav-link { font-size: 0.98rem; padding: 0.4rem 0.8rem; }
     }
     @media (max-width: 767px) {
-      .navbar .navbar-brand .logo-text { font-size: 1.2rem; }
-      .navbar .navbar-brand img.medivance-logo { height: 28px; }
-      .navbar-nav .nav-link { font-size: 0.98rem; padding: 0.45rem 0.8rem; }
+      .main-navbar .navbar-brand .logo-text { font-size: 0.98rem; }
+      .main-navbar .navbar-brand img.medivance-logo { height: 20px; }
+      .main-navbar .navbar-nav .nav-link { font-size: 0.95rem; padding: 0.35rem 0.7rem; }
     }
 
     /* Hero Section */
@@ -114,7 +154,7 @@
       width: 100%;
     }
     .about-hero-content h1 {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       font-weight: 900;
       letter-spacing: -1.5px;
       background: linear-gradient(90deg, #fff 60%, #e3f6f5 100%);
@@ -124,7 +164,7 @@
       line-height: 1.1;
     }
     .about-hero-content p {
-      font-size: 1.22rem;
+      font-size: 1.13rem;
       color: #e3f6f5;
       max-width: 700px;
       margin: 0 auto 1.5rem auto;
@@ -132,14 +172,14 @@
       word-break: break-word;
     }
     @media (max-width: 991px) {
-      .about-hero-content h1 { font-size: 2.1rem; }
-      .about-hero-content p { font-size: 1.05rem; }
+      .about-hero-content h1 { font-size: 1.5rem; }
+      .about-hero-content p { font-size: 1rem; }
       .about-hero { min-height: 220px; }
     }
     @media (max-width: 767px) {
-      .about-hero-content h1 { font-size: 1.3rem; }
-      .about-hero-content p { font-size: 0.98rem; }
-      .about-hero { min-height: 140px; }
+      .about-hero-content h1 { font-size: 1.1rem; }
+      .about-hero-content p { font-size: 0.95rem; }
+      .about-hero { min-height: 120px; }
     }
 
     /* About Section */
@@ -288,25 +328,36 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg modern-navbar fixed-top animate__animated animate__fadeInDown">
+  <!-- Navbar (copied and matched from index.html for consistency) -->
+  <nav class="navbar navbar-expand-lg main-navbar fixed-top animate__animated animate__fadeInDown">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+      <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
         <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo" />
-        <span class="logo-text">Medivance</span>
+        <span class="logo-text ms-1">Medivance</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="fa fa-bars"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-          <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.about') }}">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.index') }}"><i class="fa fa-home"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.summerize') }}"><i class="fa fa-magic"></i>Summarize</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('main.about') }}"><i class="fa fa-info-circle"></i>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.doctors') }}"><i class="fa fa-user-md"></i>Doctors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.news') }}"><i class="fa fa-newspaper"></i>News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa fa-user"></i>Login</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -318,7 +369,7 @@
     <div class="hero-bg-shape2"></div>
     <div class="container about-hero-content">
       <h1 class="animate__animated animate__fadeInUp">
-        <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo mb-2" style="height: 54px; vertical-align: middle; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10); margin-right: 10px;">
+        <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo mb-2" style="height: 38px; vertical-align: middle; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(26,115,232,0.10); margin-right: 8px;">
         About <span style="color:#00bfae;">Medivance</span>
       </h1>
       <p class="animate__animated animate__fadeInUp animate__delay-1s">
@@ -421,12 +472,12 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
   <script>
-    // Navbar scroll effect
+    // Navbar scroll effect (match index.html)
     $(window).scroll(function() {
       if ($(this).scrollTop() > 50) {
-        $('.navbar').addClass('shadow-lg');
+        $('.main-navbar').addClass('shadow-lg');
       } else {
-        $('.navbar').removeClass('shadow-lg');
+        $('.main-navbar').removeClass('shadow-lg');
       }
     });
     // AOS init

@@ -21,360 +21,397 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <!-- Favicon -->
-    <link rel="icon" href="{{url_for('static', filename='images/medivance_logo.png')}}" type="image/png">
+    <link rel="icon" href="{{url_for('static', filename='images/fevicon.png')}}" type="image/png">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
-            color: #222;
-            min-height: 100vh;
-        }
-        .glass {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
-            border-radius: 24px;
-        }
-        .navbar {
-            background: rgba(255,255,255,0.95) !important;
-            box-shadow: 0 2px 16px rgba(26,115,232,0.08);
-            transition: background 0.3s, box-shadow 0.3s;
-        }
-        .navbar-brand img {
-            height: 56px;
-            width: auto;
-            filter: drop-shadow(0 2px 8px #00bfae33);
-            border-radius: 12px;
-            background: #fff;
-            padding: 2px 6px;
-            box-shadow: 0 2px 8px rgba(26,115,232,0.08);
-            transition: box-shadow 0.2s;
-        }
-        .navbar-brand img:hover {
-            box-shadow: 0 4px 16px rgba(0,191,174,0.13);
-        }
-        .navbar-nav .nav-link {
-            font-weight: 600;
-            color: #1a73e8 !important;
-            margin-right: 1.5rem;
-            letter-spacing: 0.02em;
-            position: relative;
-            transition: color 0.2s;
-        }
-        .navbar-nav .nav-link::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            transition: width .3s;
-            position: absolute;
-            left: 0;
-            bottom: -4px;
-        }
-        .navbar-nav .nav-link:hover::after {
-            width: 100%;
-        }
-        .navbar-nav .nav-link:hover {
-            color: #00bfae !important;
-        }
-        .btn-primary, .btn-gradient {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            border: none;
-            border-radius: 30px;
-            padding: 0.7rem 2.2rem;
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(26,115,232,0.10);
-            transition: background 0.2s, box-shadow 0.2s;
-        }
-        .btn-primary:hover, .btn-gradient:hover {
-            background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
-            color: #fff;
-            box-shadow: 0 8px 32px rgba(0,191,174,0.12);
-        }
-        .hero-section {
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(120deg, #e3f0ff 0%, #f7fafd 100%);
-            border-radius: 0 0 48px 48px;
-            box-shadow: 0 4px 32px rgba(26,115,232,0.10);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-bg-shape {
-            position: absolute;
-            right: -120px;
-            top: -80px;
-            width: 480px;
-            height: 480px;
-            background: radial-gradient(circle at 60% 40%, #00bfae33 0%, transparent 80%);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .hero-title {
-            font-size: 3.2rem;
-            font-weight: 800;
-            color: #1a73e8;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.02em;
-            text-shadow: 0 2px 8px #00bfae11;
-        }
-        .hero-desc {
-            font-size: 1.35rem;
-            color: #444;
-            margin-bottom: 2.2rem;
-            line-height: 1.6;
-        }
-        .section-title {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #1a73e8;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.01em;
-        }
-        .section-desc {
-            color: #555;
-            font-size: 1.15rem;
-            margin-bottom: 2.2rem;
-        }
-        .search-filter-section {
-            background: linear-gradient(120deg, #fff 80%, #e3f0ff 100%);
-            border-radius: 32px;
-            box-shadow: 0 4px 24px rgba(26,115,232,0.10);
-            padding: 3.2rem 2.2rem;
-            margin-bottom: 3.2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .search-box {
-            border-radius: 30px;
-            border: 1.5px solid #e3f0ff;
-            font-size: 1.08rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255,255,255,0.9);
-            transition: all 0.2s;
-        }
-        .search-box:focus {
-            border-color: #00bfae;
-            box-shadow: 0 0 0 0.15rem #00bfae33;
-            background: #fff;
-        }
-        .category-filter {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-        .category-btn {
-            background: linear-gradient(120deg, #fff 60%, #e3f0ff 100%);
-            color: #1a73e8;
-            border: 1.5px solid #e3f0ff;
-            border-radius: 30px;
-            padding: 0.6rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(26,115,232,0.08);
-        }
-        .category-btn:hover, .category-btn.active {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 16px rgba(26,115,232,0.15);
-            transform: translateY(-2px);
-        }
-        .news-card {
-            background: linear-gradient(120deg, #fff 80%, #e3f0ff 100%);
-            border-radius: 22px;
-            box-shadow: 0 4px 24px rgba(26,115,232,0.10);
-            padding: 2.2rem 1.7rem;
-            margin-bottom: 2.2rem;
-            transition: box-shadow 0.2s, transform 0.2s;
-            border: 1.5px solid #e3f0ff;
-            position: relative;
-            overflow: hidden;
-        }
-        .news-card:hover {
-            box-shadow: 0 12px 32px rgba(0,191,174,0.13);
-            transform: translateY(-6px) scale(1.03);
-        }
-        .news-card-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 16px rgba(26,115,232,0.10);
-            border: 2px solid #e3f0ff;
-        }
-        .news-card-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: #00bfae;
-            font-weight: 600;
-        }
-        .news-card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1a73e8;
-            margin-bottom: 1rem;
-            line-height: 1.4;
-        }
-        .news-card-text {
-            color: #555;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        .btn-readmore {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            padding: 0.6rem 1.5rem;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(26,115,232,0.10);
-        }
-        .btn-readmore:hover {
-            background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(26,115,232,0.15);
-            transform: translateY(-2px);
-        }
-        .newsletter-section {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            border-radius: 32px;
-            color: #fff;
-            padding: 3.2rem 2.2rem;
-            margin-bottom: 3.2rem;
-            box-shadow: 0 4px 24px rgba(26,115,232,0.13);
-            position: relative;
-            overflow: hidden;
-        }
-        .newsletter-section input[type="email"] {
-            border-radius: 30px;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1.08rem;
-            background: rgba(255,255,255,0.9);
-        }
-        .newsletter-section input[type="email"]:focus {
-            background: #fff;
-            box-shadow: 0 0 0 0.15rem rgba(255,255,255,0.3);
-        }
-        .footer_section {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            color: #fff;
-            padding: 3.2rem 0 1.2rem 0;
-            border-radius: 32px 32px 0 0;
-            box-shadow: 0 -2px 16px rgba(26,115,232,0.10);
-        }
-        .footer_section a, .footer_section a:visited {
-            color: #fff;
-            opacity: 0.9;
-            transition: opacity 0.2s;
-        }
-        .footer_section a:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
-        .copyright_section {
-            background: #0d47a1;
-            color: #fff;
-            padding: 1.2rem 0;
-            font-size: 1rem;
-            text-align: center;
-            letter-spacing: 0.01em;
-        }
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-        }
-        .spinner-border {
-            color: #1a73e8;
-        }
-        .no-results {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-        }
-        .no-results i {
-            font-size: 4rem;
-            color: #ccc;
-            margin-bottom: 1.5rem;
-        }
-        .pagination-custom .page-link {
-            border-radius: 30px;
-            border: 1.5px solid #e3f0ff;
-            color: #1a73e8;
-            margin: 0 0.3rem;
-            padding: 0.6rem 1rem;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .pagination-custom .page-link:hover {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            color: #fff;
-            border-color: transparent;
-            transform: translateY(-2px);
-        }
-        .pagination-custom .page-item.active .page-link {
-            background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
-            border-color: transparent;
-            color: #fff;
-        }
-        /* Responsive */
-        @media (max-width: 991px) {
-            .hero-title { font-size: 2.2rem; }
-            .section-title { font-size: 1.5rem; }
-            .search-filter-section { padding: 2rem 1rem; }
-            .navbar-brand img { height: 44px; }
-        }
-        @media (max-width: 767px) {
-            .hero-section { min-height: 40vh; }
-            .hero-title { font-size: 1.5rem; }
-            .section-title { font-size: 1.2rem; }
-            .search-filter-section { padding: 1.2rem 0.5rem; }
-            .navbar-brand img { height: 36px; }
-            .news-card { padding: 1.5rem 1rem; }
-        }
+      body {
+        font-family: 'Inter', Arial, sans-serif;
+        background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
+        color: #222;
+        min-height: 100vh;
+      }
+      .glass {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+        border-radius: 24px;
+      }
+      .navbar {
+        background: rgba(255,255,255,0.95) !important;
+        box-shadow: 0 2px 16px rgba(26,115,232,0.08);
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+      .navbar-brand img {
+        height: 56px;
+        width: auto;
+        filter: drop-shadow(0 2px 8px #00bfae33);
+        border-radius: 12px;
+        background: #fff;
+        padding: 2px 6px;
+        box-shadow: 0 2px 8px rgba(26,115,232,0.08);
+        transition: box-shadow 0.2s;
+      }
+      .navbar-brand img:hover {
+        box-shadow: 0 4px 16px rgba(0,191,174,0.13);
+      }
+      .navbar-nav .nav-link {
+        font-weight: 600;
+        color: #1a73e8 !important;
+        margin-right: 1.5rem;
+        letter-spacing: 0.02em;
+        position: relative;
+        transition: color 0.2s;
+        font-size: 1.08rem;
+        /* Make text a bit more visible and bold, but keep spacing */
+        text-shadow: 0 1px 4px #e3f0ff, 0 1px 0 #fff;
+      }
+      .navbar-nav .nav-link::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        transition: width .3s;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+      }
+      .navbar-nav .nav-link:hover::after {
+        width: 100%;
+      }
+      .navbar-nav .nav-link:hover {
+        color: #00bfae !important;
+        text-shadow: 0 2px 8px #00bfae22, 0 1px 0 #fff;
+      }
+      .navbar-nav .nav-link i {
+        font-size: 1em;
+        margin-right: 0.2em;
+        color: #1a73e8;
+        vertical-align: middle;
+        transition: color 0.2s;
+      }
+      .navbar-nav .nav-link:hover i {
+        color: #00bfae;
+      }
+      .btn-primary, .btn-gradient {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 2.2rem;
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(26,115,232,0.10);
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      .btn-primary:hover, .btn-gradient:hover {
+        background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
+        color: #fff;
+        box-shadow: 0 8px 32px rgba(0,191,174,0.12);
+      }
+      .hero-section {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(120deg, #e3f0ff 0%, #f7fafd 100%);
+        border-radius: 0 0 48px 48px;
+        box-shadow: 0 4px 32px rgba(26,115,232,0.10);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg-shape {
+        position: absolute;
+        right: -120px;
+        top: -80px;
+        width: 480px;
+        height: 480px;
+        background: radial-gradient(circle at 60% 40%, #00bfae33 0%, transparent 80%);
+        z-index: 0;
+        pointer-events: none;
+      }
+      .hero-title {
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: #1a73e8;
+        margin-bottom: 1.2rem;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 8px #00bfae11;
+      }
+      .hero-desc {
+        font-size: 1.35rem;
+        color: #444;
+        margin-bottom: 2.2rem;
+        line-height: 1.6;
+      }
+      .section-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: #1a73e8;
+        margin-bottom: 1.2rem;
+        letter-spacing: -0.01em;
+      }
+      .section-desc {
+        color: #555;
+        font-size: 1.15rem;
+        margin-bottom: 2.2rem;
+      }
+      .search-filter-section {
+        background: linear-gradient(120deg, #fff 80%, #e3f0ff 100%);
+        border-radius: 32px;
+        box-shadow: 0 4px 24px rgba(26,115,232,0.10);
+        padding: 3.2rem 2.2rem;
+        margin-bottom: 3.2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .search-box {
+        border-radius: 30px;
+        border: 1.5px solid #e3f0ff;
+        font-size: 1.08rem;
+        padding: 0.8rem 1.5rem;
+        background: rgba(255,255,255,0.9);
+        transition: all 0.2s;
+      }
+      .search-box:focus {
+        border-color: #00bfae;
+        box-shadow: 0 0 0 0.15rem #00bfae33;
+        background: #fff;
+      }
+      .category-filter {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+      }
+      .category-btn {
+        background: linear-gradient(120deg, #fff 60%, #e3f0ff 100%);
+        color: #1a73e8;
+        border: 1.5px solid #e3f0ff;
+        border-radius: 30px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(26,115,232,0.08);
+      }
+      .category-btn:hover, .category-btn.active {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 4px 16px rgba(26,115,232,0.15);
+        transform: translateY(-2px);
+      }
+      .news-card {
+        background: linear-gradient(120deg, #fff 80%, #e3f0ff 100%);
+        border-radius: 22px;
+        box-shadow: 0 4px 24px rgba(26,115,232,0.10);
+        padding: 2.2rem 1.7rem;
+        margin-bottom: 2.2rem;
+        transition: box-shadow 0.2s, transform 0.2s;
+        border: 1.5px solid #e3f0ff;
+        position: relative;
+        overflow: hidden;
+      }
+      .news-card:hover {
+        box-shadow: 0 12px 32px rgba(0,191,174,0.13);
+        transform: translateY(-6px) scale(1.03);
+      }
+      .news-card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 16px rgba(26,115,232,0.10);
+        border: 2px solid #e3f0ff;
+      }
+      .news-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #00bfae;
+        font-weight: 600;
+      }
+      .news-card-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1a73e8;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+      }
+      .news-card-text {
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+      .btn-readmore {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(26,115,232,0.10);
+      }
+      .btn-readmore:hover {
+        background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(26,115,232,0.15);
+        transform: translateY(-2px);
+      }
+      .newsletter-section {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        border-radius: 32px;
+        color: #fff;
+        padding: 3.2rem 2.2rem;
+        margin-bottom: 3.2rem;
+        box-shadow: 0 4px 24px rgba(26,115,232,0.13);
+        position: relative;
+        overflow: hidden;
+      }
+      .newsletter-section input[type="email"] {
+        border-radius: 30px;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.08rem;
+        background: rgba(255,255,255,0.9);
+      }
+      .newsletter-section input[type="email"]:focus {
+        background: #fff;
+        box-shadow: 0 0 0 0.15rem rgba(255,255,255,0.3);
+      }
+      .footer_section {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        color: #fff;
+        padding: 3.2rem 0 1.2rem 0;
+        border-radius: 32px 32px 0 0;
+        box-shadow: 0 -2px 16px rgba(26,115,232,0.10);
+      }
+      .footer_section a, .footer_section a:visited {
+        color: #fff;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+      }
+      .footer_section a:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+      .copyright_section {
+        background: #0d47a1;
+        color: #fff;
+        padding: 1.2rem 0;
+        font-size: 1rem;
+        text-align: center;
+        letter-spacing: 0.01em;
+      }
+      .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 3rem;
+      }
+      .spinner-border {
+        color: #1a73e8;
+      }
+      .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+      }
+      .no-results i {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 1.5rem;
+      }
+      .pagination-custom .page-link {
+        border-radius: 30px;
+        border: 1.5px solid #e3f0ff;
+        color: #1a73e8;
+        margin: 0 0.3rem;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+      .pagination-custom .page-link:hover {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        color: #fff;
+        border-color: transparent;
+        transform: translateY(-2px);
+      }
+      .pagination-custom .page-item.active .page-link {
+        background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
+        border-color: transparent;
+        color: #fff;
+      }
+      /* Responsive */
+      @media (max-width: 991px) {
+        .hero-title { font-size: 2.2rem; }
+        .section-title { font-size: 1.5rem; }
+        .search-filter-section { padding: 2rem 1rem; }
+        .navbar-brand img { height: 44px; }
+      }
+      @media (max-width: 767px) {
+        .hero-section { min-height: 40vh; }
+        .hero-title { font-size: 1.5rem; }
+        .section-title { font-size: 1.2rem; }
+        .search-filter-section { padding: 1.2rem 0.5rem; }
+        .navbar-brand img { height: 36px; }
+        .news-card { padding: 1.5rem 1rem; }
+      }
     </style>
 </head>
 <body class="relative">
     <!-- Modern Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top glass shadow animate__animated animate__fadeInDown">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-                <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" />
-                <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.news') }}">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
-                </ul>
-            </div>
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+          <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" />
+          <span class="fw-bold fs-3 text-gradient" style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Medivance</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.index') }}">
+                <i class="fa fa-home"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.summerize') }}">
+                <i class="fa fa-lightbulb"></i> Summarize
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.about') }}">
+                <i class="fa fa-info-circle"></i> About
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.doctors') }}">
+                <i class="fa fa-user-md"></i> Doctors
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('main.news') }}">
+                <i class="fa fa-newspaper"></i> News
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fa fa-user"></i> Login
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
     <!-- Hero Section -->

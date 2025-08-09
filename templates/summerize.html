@@ -29,22 +29,14 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: 'Inter', Arial, sans-serif;
-        background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
-        color: #222;
-        min-height: 100vh;
-      }
-      .glass {
-        background: rgba(255,255,255,0.8);
-        backdrop-filter: blur(16px);
-        box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
-        border-radius: 24px;
-      }
+      /* --- Navbar Styling from index.html --- */
       .navbar {
         background: rgba(255,255,255,0.95) !important;
         box-shadow: 0 2px 16px rgba(26,115,232,0.08);
         transition: background 0.3s, box-shadow 0.3s;
+      }
+      .navbar .container {
+        max-width: 1200px;
       }
       .navbar-brand img {
         height: 48px;
@@ -72,6 +64,16 @@
         letter-spacing: 0.02em;
         position: relative;
         transition: color 0.2s;
+        background: transparent !important;
+        border-radius: 0 !important;
+        padding: 0.5rem 0 !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .navbar-nav .nav-link i {
+        font-size: 1.1em;
+        min-width: 1.2em;
       }
       .navbar-nav .nav-link::after {
         content: '';
@@ -90,21 +92,51 @@
       .navbar-nav .nav-link:hover {
         color: #00bfae !important;
       }
+      .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+        color: #00bfae !important;
+      }
       .btn-gradient {
         background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%);
         border: none;
         border-radius: 30px;
-        padding: 0.7rem 2.2rem;
+        padding: 0.5rem 1.5rem;
         font-weight: 700;
-        font-size: 1.15rem;
+        font-size: 1rem;
         color: #fff;
         box-shadow: 0 4px 16px rgba(26,115,232,0.10);
         transition: background 0.2s, box-shadow 0.2s;
+        display: inline-flex;
+        align-items: center;
       }
       .btn-gradient:hover {
         background: linear-gradient(90deg, #00bfae 0%, #1a73e8 100%);
         color: #fff;
         box-shadow: 0 8px 32px rgba(0,191,174,0.12);
+      }
+      .btn-gradient i {
+        margin-right: 0.5rem;
+      }
+      .navbar-toggler {
+        border: none;
+        outline: none;
+        box-shadow: none !important;
+      }
+      .navbar-toggler:focus {
+        box-shadow: none !important;
+      }
+      /* --- End Navbar Styling --- */
+
+      body {
+        font-family: 'Inter', Arial, sans-serif;
+        background: linear-gradient(135deg, #e3f0ff 0%, #f7fafd 100%);
+        color: #222;
+        min-height: 100vh;
+      }
+      .glass {
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+        border-radius: 24px;
       }
       .hero-section {
         min-height: 60vh;
@@ -230,25 +262,48 @@
         {% endfor %}
     {% endwith %}
 
-    <!-- Navbar Start -->
+    <!-- Navbar Start (from index.html, with icons) -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top glass py-2">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
-          <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="me-2" style="height:48px;width:48px;object-fit:contain;background:#fff;border-radius:12px;border:2px solid #e3f0ff;box-shadow:0 2px 8px #00bfae33;">
-          <span class="fw-bold" style="font-size:1.35rem; color:#1a73e8;">Medivance EHR Summarizer</span>
+          <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="me-2">
+          <span class="fw-bold" style="font-size:1.35rem; color:#1a73e8;">Medivance</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav align-items-center">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.news') }}">News</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user-circle"></i> Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav align-items-center mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" href="{{ url_for('main.index') }}">
+                <i class="fa fa-home"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.endpoint == 'main.summerize' %}active{% endif %}" href="{{ url_for('main.summerize') }}">
+                <i class="fa fa-magic"></i> Summarize
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">
+                <i class="fa fa-info-circle"></i> About
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.endpoint == 'main.doctors' %}active{% endif %}" href="{{ url_for('main.doctors') }}">
+                <i class="fa fa-user-md"></i> Doctors
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.endpoint == 'main.news' %}active{% endif %}" href="{{ url_for('main.news') }}">
+                <i class="fa fa-newspaper"></i> News
+              </a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-gradient d-flex align-items-center" href="#">
+                <i class="fa fa-user-circle"></i> Login
+              </a>
+            </li>
           </ul>
         </div>
       </div>

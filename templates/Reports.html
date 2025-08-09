@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Fix typo in viewport meta tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI Summarized Report | Medivance EHR</title>
     <meta name="keywords" content="Medivance, EHR, AI, NLP, Summarization, Healthcare, Report">
@@ -20,10 +19,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
-    {# Only include custom.css if it exists. If not, comment out or remove to avoid 404 #}
-    {# <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"> #}
-   <!-- Favicon -->
-   <link rel="icon" href="{{url_for('static', filename='images/medivance_logo.png')}}" type="image/png">
+    <!-- Favicon -->
+    <link rel="icon" href="{{url_for('static', filename='images/medivance_logo.png')}}" type="image/png">
     <style>
         :root {
             --primary: #00e6d3;
@@ -64,7 +61,7 @@
             0% { background-position: 0 0, 0 0; }
             100% { background-position: 200px 200px, 0 0; }
         }
-        /* Navbar */
+        /* Navbar Styling (copied as-is from index.html template) */
         .navbar-modern {
             background: var(--bg-navbar) !important;
             box-shadow: 0 2px 24px 0 rgba(30, 144, 255, 0.10);
@@ -85,7 +82,6 @@
             box-shadow: 0 2px 12px #00e6d355;
             padding: 2px 4px;
             object-fit: contain;
-            /* Ensures logo is visible on dark backgrounds */
         }
         @media (max-width: 767px) {
             .navbar-brand .medivance-logo {
@@ -111,6 +107,9 @@
             transition: color 0.18s;
             position: relative;
             letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
         }
         .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
             color: var(--primary) !important;
@@ -129,7 +128,8 @@
         .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after {
             width: 100%;
         }
-        /* Hero Section */
+        /* End Navbar Styling */
+        /* ...rest of your styles remain unchanged... */
         .hero-section {
             position: relative;
             z-index: 2;
@@ -161,7 +161,6 @@
             animation: fadeInUp 1.2s;
             text-shadow: 0 1px 8px #232b3e55;
         }
-        /* Card Section */
         .glass-card {
             background: var(--glass);
             box-shadow: 0 8px 32px 0 rgba(30, 144, 255, 0.18);
@@ -232,7 +231,6 @@
             opacity: 0.13;
             pointer-events: none;
         }
-        /* Sentiment Analysis Card */
         .sentiment-analysis {
             display: flex;
             gap: 2.5rem;
@@ -268,7 +266,6 @@
             color: #7f8fa6 !important;
             font-weight: 600;
         }
-        /* Action Buttons */
         .action-buttons .btn {
             min-width: 160px;
             margin: 0.5rem 0.7rem 0 0;
@@ -308,7 +305,6 @@
         .action-buttons .btn:active {
             transform: scale(0.98);
         }
-        /* Data Security Note */
         .data-security {
             font-size: 1.02rem;
             color: var(--text-muted);
@@ -331,7 +327,6 @@
             font-weight: 900 !important;
             text-shadow: 0 2px 8px #00e6d355;
         }
-        /* Footer */
         .footer_section {
             background: linear-gradient(90deg, #181f32 0%, #232b3e 100%);
             border-top-left-radius: 32px 16px;
@@ -367,7 +362,6 @@
             box-shadow: 0 2px 16px 0 rgba(30, 144, 255, 0.10);
             border: 2px solid var(--primary);
         }
-        /* Responsive */
         @media (max-width: 991px) {
             .glass-card { padding: 1.2rem 0.7rem; }
             .hero-title { font-size: 2.1rem; }
@@ -380,7 +374,6 @@
             .report-content { font-size: 0.98rem; }
             .sentiment-analysis { font-size: 0.98rem; }
         }
-        /* Custom Animations */
         @keyframes fadeInDown {
             0% { opacity: 0; transform: translateY(-40px);}
             100% { opacity: 1; transform: translateY(0);}
@@ -392,11 +385,10 @@
     </style>
 </head>
 <body>
-    <!-- Navbar Start -->
+    <!-- Navbar Start (copied as-is from index.html template, with icons in nav links) -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-modern animate__animated animate__fadeInDown">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-                <!-- Updated logo: use medivance_logo.png, styled for visibility and coordination -->
                 <img src="{{ url_for('static', filename='images/medivance_logo.png') }}" alt="Medivance Logo" class="medivance-logo">
                 <span class="brand-gradient">Medivance</span>
             </a>
@@ -405,13 +397,36 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" href="{{ url_for('main.index') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.summerize' %}active{% endif %}" href="{{ url_for('main.summerize') }}">Summarize</a></li>
-                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">About</a></li>
-                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.doctors' %}active{% endif %}" href="{{ url_for('main.doctors') }}">Doctors</a></li>
-                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.news' %}active{% endif %}" href="{{ url_for('main.news') }}">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" href="{{ url_for('main.index') }}">
+                            <i class="fa fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.summerize' %}active{% endif %}" href="{{ url_for('main.summerize') }}">
+                            <i class="fa fa-magic"></i> Summarize
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">
+                            <i class="fa fa-info-circle"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.doctors' %}active{% endif %}" href="{{ url_for('main.doctors') }}">
+                            <i class="fa fa-user-md"></i> Doctors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.news' %}active{% endif %}" href="{{ url_for('main.news') }}">
+                            <i class="fa fa-newspaper"></i> News
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user"></i> Login
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -518,18 +533,11 @@
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    {# Remove custom.js if it contains errors from missing plugins #}
-    {# <script src="{{ url_for('static', filename='js/custom.js') }}"></script> #}
     <!-- Hamburger menu fix for mobile view -->
     <script>
-        // Remove any jQuery plugin code that depends on missing plugins (niceScroll, meanmenu, sticky)
-        // Fix for hamburger menu toggle on mobile devices using only Bootstrap 5
-
         document.addEventListener('DOMContentLoaded', function () {
             var navbarToggler = document.querySelector('.navbar-toggler');
             var navbarCollapse = document.getElementById('mainNavbar');
-
-            // Ensure toggler toggles the menu on click (Bootstrap 5 handles this natively)
             if (navbarToggler && navbarCollapse) {
                 navbarToggler.addEventListener('click', function () {
                     setTimeout(function() {
@@ -537,13 +545,10 @@
                         navbarToggler.setAttribute('aria-expanded', isShown ? 'true' : 'false');
                     }, 200);
                 });
-
-                // Close navbar when a nav-link is clicked (for mobile)
                 var navLinks = navbarCollapse.querySelectorAll('.nav-link');
                 navLinks.forEach(function(link) {
                     link.addEventListener('click', function() {
                         if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
-                            // Use Bootstrap 5's Collapse API
                             if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
                                 var bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
                                 bsCollapse.hide();
