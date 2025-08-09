@@ -43,7 +43,7 @@ Medivance.AI is a **cutting-edge, all-in-one AI healthcare platform** that trans
 It’s not just about summarizing EHRs—Medivance.AI brings together:
 
 - **AI-powered EHR Summarization**
-- **Medical Image (X-ray) Analysis**
+- **Medisync: End-to-End Medical Imaging, Diagnostics & Report Generation System**
 - **Doctor & Professional Verification**
 - **Virtual Appointment & Consultation System**
 - **Secure, HIPAA-compliant Data Handling**
@@ -66,7 +66,7 @@ All in a single, modern, and intuitive web application.
   </tr>
   <tr>
     <td><img src="https://img.icons8.com/color/48/000000/skeleton.png"/></td>
-    <td><b>X-ray & Medical Image Analysis</b><br>Analyze X-ray scans and medical images with AI for instant, actionable insights.</td>
+    <td><b>Medisync</b><br>An  End-to-End Medical Imaging, Diagnostics & Report Generation System that Analyze , enhance  X-ray scans and medical images with AI for instant, actionable insights and also generated the corresponding report for patients well-being and also help the healthcare professionals to manage the patients health records.</td>
   </tr>
   <tr>
     <td><img src="https://img.icons8.com/color/48/000000/online-support.png"/></td>
@@ -82,7 +82,7 @@ All in a single, modern, and intuitive web application.
   </tr>
   <tr>
     <td><img src="https://img.icons8.com/color/48/000000/news.png"/></td>
-    <td><b>AI-Curated Health News</b><br>Stay updated with the latest, AI-curated news in healthcare, research, and innovation.</td>
+    <td><b>AI-Curated Health News</b><br>Stay updated with the latest, AI-curated news in healthcare, research, and innovation and HealthTech.</td>
   </tr>
 </table>
 

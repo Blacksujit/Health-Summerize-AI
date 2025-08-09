@@ -11,6 +11,7 @@ import re
 from textblob import TextBlob
 import threading
 import time
+from dateutil import parser as date_parser
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +54,9 @@ class NewsService:
     RAPIDAPI_WINDOW_SECONDS = 3600  # 1 hour
 
     def __init__(self):
+        # Load API keys from environment variables
         self.api_keys = {
-            'rapidapi': 'news_api_key_here'
+            'rapidapi': os.environ.get('RAPID_API_KEY', None)
         }
         self.SessionLocal = init_news_db()
         self.rapidapi_rate_limiter = RateLimiter(self.RAPIDAPI_REQUEST_LIMIT, self.RAPIDAPI_WINDOW_SECONDS)
@@ -78,11 +80,11 @@ class NewsService:
 
             rapidapi_key = self.api_keys.get('rapidapi')
             if not rapidapi_key:
-                logger.error("RapidAPI key is missing.")
+                logger.error("RapidAPI key is missing. Please set the RAPIDAPI_KEY environment variable.")
                 return [{
                     "status": "error",
                     "code": "apiKeyMissing",
-                    "message": "Your RapidAPI key is missing."
+                    "message": "Your RapidAPI key is missing. Please set the RAPIDAPI_KEY environment variable."
                 }]
 
             url = "https://real-time-news-data.p.rapidapi.com/topic-news-by-section"
@@ -151,6 +153,13 @@ class NewsService:
             url = article.get('url', '')
             image_url = article.get('image_url', '') or article.get('image', '') or article.get('urlToImage', '')
             published_date = article.get('published_datetime', '') or article.get('publishedAt', '')
+            # Convert published_date to datetime object if possible
+            published_date_dt = None
+            if published_date:
+                try:
+                    published_date_dt = date_parser.parse(published_date)
+                except Exception:
+                    published_date_dt = None
             tags = self._extract_tags(f"{title} {content}")
             return {
                 'title': title,
@@ -161,7 +170,7 @@ class NewsService:
                 'image_url': image_url,
                 'category': 'HEALTH',
                 'tags': tags,
-                'published_date': published_date,
+                'published_date': published_date_dt,
                 'sentiment_score': sentiment_score,
                 'ai_generated': False
             }
@@ -195,8 +204,7 @@ class NewsService:
     def _extract_tags(self, text: str) -> List[str]:
         try:
             keywords = [
-                'technology', 'ai', 'artificial intelligence', 'machine learning', 'software',
-                'hardware', 'cloud', 'data', 'cybersecurity', 'internet', 'mobile', 'innovation'
+                'health', 'healthcare', 'medicine', 'medical', 'doctor', 'physician', 'nurse', 'patient', 'diagnosis', 'treatment', 'therapy', 'hospital', 'clinic', 'telemedicine', 'telehealth', 'ehr', 'emr', 'electronic health record', 'summarization', 'virtual consultation', 'appointment', 'consultation', 'ai', 'artificial intelligence', 'machine learning', 'deep learning', 'nlp', 'natural language processing', 'medisync', 'imaging', 'x-ray', 'radiology', 'ct', 'mri', 'ultrasound', 'scan', 'pharmacy', 'drug', 'medication', 'prescription', 'wellness', 'mental health', 'psychology', 'psychiatry', 'cardiology', 'oncology', 'pediatrics', 'geriatrics', 'innovation', 'technology', 'data', 'cloud', 'cybersecurity', 'privacy', 'security', 'mobile', 'software', 'hardware', 'internet', 'research', 'biotech', 'genomics', 'public health', 'insurance', 'compliance', 'hipaa', 'report', 'analysis', 'analytics', 'monitoring', 'wearable', 'device', 'remote monitoring', 'triage', 'screening', 'prevention', 'chronic disease', 'diabetes', 'cancer', 'covid', 'infection', 'emergency', 'surgery', 'lab', 'test', 'blood', 'vitals', 'record', 'care', 'support', 'access', 'outcome', 'quality', 'safety'
             ]
             text_lower = text.lower()
             found_tags = []
@@ -216,10 +224,10 @@ class NewsService:
                 'summary': 'AI is driving major changes in technology.',
                 'source': 'Tech News',
                 'url': '#',
-                'image_url': '/static/images/news-img-tech.png',
-                'category': 'TECHNOLOGY',
-                'tags': ['AI', 'Technology', 'Innovation'],
-                'published_date': datetime.now().isoformat(),
+                'image_url': '/static/images/news-img.png',
+                'category': 'HEALTH',
+                'tags': ['Healthcare', 'Telemedicine', 'AI', 'Technology', 'Innovation'],
+                'published_date': datetime.now(),
                 'sentiment_score': 0.5,
                 'ai_generated': False
             }
@@ -237,6 +245,16 @@ class NewsService:
                     # Ensure tags are stored as comma-separated string if needed
                     if isinstance(article_data.get('tags'), list):
                         article_data['tags'] = ','.join(article_data['tags'])
+                    # Ensure published_date is a datetime object or None
+                    published_date = article_data.get('published_date')
+                    if published_date:
+                        if isinstance(published_date, str):
+                            try:
+                                article_data['published_date'] = date_parser.parse(published_date)
+                            except Exception:
+                                article_data['published_date'] = None
+                        elif not isinstance(published_date, (datetime, )):
+                            article_data['published_date'] = None
                     news = News(**article_data)
                     db.add(news)
             db.commit()
