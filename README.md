@@ -15,12 +15,35 @@
 <p align="center">
   <b>Revolutionizing Healthcare with AI-Powered Summarization, Medical Analysis, and Virtual Consultations</b>
   <br>
+  <br>
   <img src="https://img.shields.io/badge/Python-3.x-blue?style=flat-square&logo=python">
   <img src="https://img.shields.io/badge/Flask-%23000.svg?style=flat-square&logo=flask&logoColor=white">
   <img src="https://img.shields.io/badge/Hugging%20Face-Transformers-yellow?style=flat-square&logo=huggingface">
   <img src="https://img.shields.io/badge/Firebase-Firestore-orange?style=flat-square&logo=firebase">
   <img src="https://img.shields.io/badge/Google%20Cloud-%234285F4.svg?style=flat-square&logo=googlecloud&logoColor=white">
 </p>
+
+---
+
+## ❗🏥 Problem Statement :
+
+The healthcare industry faces significant challenges in managing and utilizing the vast amounts of medical data generated every day. Manual documentation is time-consuming and error-prone, leading to physician burnout and inefficiencies. Patients often struggle to access, understand, and act on their health records. There is a lack of seamless integration between EHRs, imaging, and real-time consultations, resulting in fragmented care and delayed decision-making. Additionally, ensuring data privacy, regulatory compliance, and secure communication between patients and providers remains a persistent concern.
+
+## 🩻💉💡 What Are We Solving? :
+
+Medivance.AI addresses these challenges by providing an all-in-one AI-powered platform that:
+
+**- Automates and streamlines medical documentation and EHR summarization, reducing administrative burden for healthcare professionals.**
+
+**- Integrates advanced AI for medical imaging analysis and instant report generation, improving diagnostic accuracy and speed.**
+
+**- Enables secure, virtual consultations and appointment management, making healthcare more accessible and efficient.**
+
+**- Delivers real-time, AI-curated medical news and insights to keep practitioners and patients informed.**
+
+**- Ensures HIPAA-compliant, encrypted data handling and robust verification for both patients and professionals.**
+
+By bridging the gap between data, diagnostics, and care delivery, Medivance.AI empowers all stakeholders—patients, doctors, researchers, and administrators—to achieve better health outcomes through innovation and intelligent automation.
 
 ---
 
