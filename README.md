@@ -4,6 +4,7 @@
   <img src="static/images/medivance_logo.png" alt="Medivance.AI Logo" width="120" style="border-radius:16px; background:#fff; box-shadow:0 2px 12px #00bfae33;">
 </p>
 
+
 <h1 align="center">
   <span style="background: linear-gradient(90deg, #1a73e8 0%, #00bfae 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #1a73e8;">
     Medivance.AI
@@ -28,6 +29,36 @@
   <img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge&logo=github">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
 </p>
+
+---
+
+---
+
+## 🧑‍⚕️❗ Problem Statement
+
+Healthcare systems today are overwhelmed by the complexity and volume of medical data, including unstructured Electronic Health Records (EHRs), medical images, and patient documentation. This leads to several critical challenges:
+
+- **Time-consuming documentation:** Clinicians spend excessive time on manual data entry and paperwork, reducing time for patient care.
+- **Fragmented and inaccessible information:** Medical data is often scattered across different systems, making it difficult to access and synthesize for clinical decision-making.
+- **Information overload:** The sheer volume of records and imaging makes it hard for healthcare professionals to extract actionable insights quickly.
+- **Patient confusion:** Patients struggle to understand their own health data and medical reports due to technical jargon and lack of clear summaries.
+- **Security and compliance risks:** Ensuring the privacy and security of sensitive health data while maintaining regulatory compliance (e.g., HIPAA) is a persistent challenge.
+- **Limited integration:** Existing solutions often lack seamless integration for appointments, imaging, documentation, and communication, leading to inefficiencies.
+
+---
+
+## 💡🩺📄💉🩻🏥 💡 Solution: Medivance.AI
+
+**Medivance.AI** is a cutting-edge, all-in-one AI healthcare platform designed to address these challenges by:
+
+- **Automating EHR Summarization:** Uses advanced NLP models to convert complex, unstructured medical records into clear, structured, and clinically accurate summaries.
+- **AI-Powered Medical Imaging & Diagnostics:** Analyzes and enhances X-ray scans and other medical images, providing instant, actionable insights and generating comprehensive reports for both patients and healthcare professionals.
+- **Virtual Appointment & Consultation System:** Enables secure, HIPAA-compliant virtual consultations, appointment scheduling, and real-time communication between patients and certified healthcare providers.
+- **Doctor & Professional Verification:** Streamlines the process of verifying healthcare professionals, ensuring trust and authenticity in virtual care.
+- **Real-time Medical News & Insights:** Delivers AI-curated, up-to-date news and research in healthcare and health technology.
+- **End-to-End Integration:** Combines all these features into a single, modern, and intuitive web application, eliminating fragmentation and improving workflow efficiency for all stakeholders.
+
+Medivance.AI empowers clinicians to focus on patient care, helps patients better understand their health, and enables healthcare organizations to operate more efficiently and securely.
 
 ---
 
@@ -98,206 +129,3 @@ All in a single, modern, and intuitive web application.
 <br>
 
 **🏹🎯 Model Pipeline Arcitecture:**
-
-```
-
-┌───────────────────────────────────────────────────────────────────────────┐
-│                                                                           │
-│                         AI Doctor Model Pipeline                          │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                       Input Processing & NLU Module                       │
-│                                                                           │
-│  - Symptom extraction                                                     │
-│  - Medical entity recognition                                             │
-│  - Patient intent classification                                          │
-│  - Medical context understanding                                          │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                        Diagnostic Reasoning Module                        │
-│                                                                           │
-│  - Symptom-disease matching                                               │
-│  - Medical knowledge retrieval                                            │
-│  - Differential diagnosis generation                                      │
-│  - Confidence scoring                                                     │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                      Treatment Recommendation Module                      │
-│                                                                           │
-│  - Treatment protocol retrieval                                           │
-│  - Medication suggestion                                                  │
-│  - Lifestyle recommendation                                               │
-│  - Dietary advice generation                                              │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                       Response Generation Module                          │
-│                                                                           │
-│  - Medical report formatting                                              │
-│  - Patient-friendly explanation                                           │
-│  - Appropriate disclaimer addition                                        │
-│  - Referral generation when needed                                        │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                        Safety & Compliance Module                         │
-│                                                                           │
-│  - Critical condition detection                                           │
-│  - Emergency warning generation                                           │
-│  - Medical ethics compliance                                              │
-│  - Regulatory adherence                                                   │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
-
-```
-
-- **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
-- **Backend:** Python 3.x, Flask, RESTful APIs, SocketIO
-- **AI/ML:** Hugging Face Transformers (BioBERT, T5, GPT-2, Longformer), BLIP for image analysis, spaCy
-- **Database:** Firebase Firestore (real-time), SQLite (local)
-- **Cloud & APIs:** Google Cloud, OpenAI, ElevenLabs, RapidAPI
-
-> For a detailed architecture, see [System Architecture Diagram](Flow-Diagrams/system_architecture_diagram.md)
-
----
-
-## 👤 Who Is Medivance.AI For?
-
-| 👨‍⚕️ Medical Practitioners | 🏥 Healthcare Facilities | 📊 Medical Researchers | 👩‍💼 Healthcare Administrators | 🧑‍💻 Patients |
-|:-------------------------:|:-----------------------:|:---------------------:|:-----------------------------:|:------------:|
-| Streamline documentation, automate analysis, and collaborate with patients. | Manage appointments, records, and AI-powered workflows. | Analyze large datasets, extract insights, and accelerate research. | Oversee secure, efficient, and compliant healthcare operations. | Get your records analyzed, book appointments, and consult with real doctors. |
-
----
-
-## 🚦 Complete Workflow
-
-1. **Book Appointment:**  
-   Patients schedule appointments with doctors via the web portal.
-
-2. **Verify & Start Consultation:**  
-   Enter your appointment ID to begin a virtual consultation. The system verifies your identity and appointment details.
-
-3. **AI Analysis:**  
-   Upload X-ray images or medical documents. The AI analyzes and summarizes your records, providing instant feedback.
-
-4. **End Consultation:**  
-   Doctors and patients can mark appointments as complete. Reports are securely stored and accessible for future reference.
-
-5. **Review & Download Reports:**  
-   Access structured summaries, sentiment analysis, and diagnostic suggestions from your dashboard.
-
-> See the [COMPLETE_WORKFLOW_GUIDE](hugging-face-feature-docs/COMPLETE_WORKFLOW_GUIDE.md) for a step-by-step guide.
-
----
-
-## 🛠️ Getting Started
-
-<details>
-<summary><b>Quickstart (Local Development)</b></summary>
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/Blacksujit/HealthSummarizeAI.git
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the Application**
-   ```bash
-   flask run --port=600
-   ```
-
-4. **Access the Platform**  
-   Open [http://localhost:600](http://localhost:600) in your browser.
-
-</details>
-
----
-
-## 🧠 Technologies Used
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/Flask-%23000.svg?logo=flask&logoColor=white">
-  <img src="https://img.shields.io/badge/Hugging%20Face-Transformers-yellow?logo=huggingface">
-  <img src="https://img.shields.io/badge/Firebase-Firestore-orange?logo=firebase">
-  <img src="https://img.shields.io/badge/Google%20Cloud-%234285F4.svg?logo=googlecloud&logoColor=white">
-  <img src="https://img.shields.io/badge/Bootstrap-5.3-blueviolet?logo=bootstrap">
-  <img src="https://img.shields.io/badge/TailwindCSS-3.x-38bdf8?logo=tailwindcss">
-</p>
-
----
-
-## 📱 Roadmap & Upcoming Features
-
-- 📱 **Mobile Application** (iOS & Android)
-- 🤖 **Advanced AI Diagnostics & Recommendations**
-- 🌐 **Multi-language Support**
-- 📈 **Analytics Dashboard for Providers**
-- 🗣️ **Real-time Chat & Voice Consultation**
-- 🛡️ **Enhanced Security & Compliance**
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from the community!  
-Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 📬 Contact & Support
-
-<p align="center">
-  <img src="https://img.icons8.com/color/48/000000/new-post.png" width="32"/>
-</p>
-
-For questions, support, or partnership inquiries:
-
-- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
-
----
-
-<p align="center" style="font-size:1.2rem;">
-  <b>Empowering Healthcare Through AI Innovation</b> <br>
-  <img src="https://img.icons8.com/color/48/000000/artificial-intelligence.png" width="32"/>
-</p>
-
-### **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📫 **Contact**
-
-For inquiries and support:
-- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
-
----
-
-*Empowering Healthcare Through Innovation* 🌟
-
----
