@@ -25,6 +25,15 @@
 
 ---
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge&logo=github">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
+</p>
+
+---
+
+---
+
 ## ❗🏥 Problem Statement :
 
 The healthcare industry faces significant challenges in managing and utilizing the vast amounts of medical data generated every day. Manual documentation is time-consuming and error-prone, leading to physician burnout and inefficiencies. Patients often struggle to access, understand, and act on their health records. There is a lack of seamless integration between EHRs, imaging, and real-time consultations, resulting in fragmented care and delayed decision-making. Additionally, ensuring data privacy, regulatory compliance, and secure communication between patients and providers remains a persistent concern.
@@ -44,13 +53,6 @@ Medivance.AI addresses these challenges by providing an all-in-one AI-powered pl
 **- Ensures HIPAA-compliant, encrypted data handling and robust verification for both patients and professionals.**
 
 By bridging the gap between data, diagnostics, and care delivery, Medivance.AI empowers all stakeholders—patients, doctors, researchers, and administrators—to achieve better health outcomes through innovation and intelligent automation.
-
----
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge&logo=github">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
-</p>
 
 ---
 
