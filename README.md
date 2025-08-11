@@ -36,7 +36,6 @@
 
 ## ❗🏥 Problem Statement :
 
-**Hackathon Problem Statement**
 
 How might we revolutionize the way healthcare data is managed, accessed, and utilized?
 
