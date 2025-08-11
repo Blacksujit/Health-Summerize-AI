@@ -1,7 +1,7 @@
 // Notify user with SweetAlert after booking an appointment
-document
-    .querySelector('form[action="/book"]')
-    .addEventListener("submit", async function (event) {
+const bookForm = document.querySelector('form[action="/book"]');
+if (bookForm) {
+    bookForm.addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent the default form submission
 
         const form = this;
@@ -11,25 +11,46 @@ document
             const response = await fetch(form.action, {
                 method: "POST",
                 body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                cache: 'no-store'
             });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // Show SweetAlert popup for success
+            // Try to get the new appointment from the response
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                data = {};
+            }
+
+            // Show SweetAlert popup for success with auto-close
             Swal.fire({
                 icon: "success",
                 title: "Appointment Booked!",
                 text: "Your appointment has been booked successfully.",
                 confirmButtonText: "OK",
+                timer: 1800,
+                timerProgressBar: true,
             }).then(() => {
                 // Clear the form after success
                 form.reset();
 
-                // Fetch and update the appointments list dynamically
-                fetchUpdatedAppointments();
+                // If server returned the newly created appointment(s), optimistically update UI
+                if (data && data.status === 'success' && data.appointments) {
+                    updateAppointmentsList(data.appointments);
+                    if (data.completed_appointments) {
+                        updateCompletedAppointmentsList(data.completed_appointments);
+                    }
+                } else {
+                    // Fallback: fetch fresh data
+                    fetchUpdatedAppointments();
+                }
             });
+
         } catch (error) {
             console.error("Error booking appointment:", error);
 
@@ -42,11 +63,12 @@ document
             });
         }
     });
+}
 
 // Function to fetch and update the appointments list dynamically
 async function fetchUpdatedAppointments() {
     try {
-        const response = await fetch('/get_appointments');
+        const response = await fetch(`/get_appointments?_=${Date.now()}`, { cache: 'no-store', headers: { 'X-Requested-With': 'XMLHttpRequest' } });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -68,48 +90,62 @@ async function fetchUpdatedAppointments() {
 
 // Function to update the "Your Appointments" list in the DOM
 function updateAppointmentsList(appointments) {
-    const appointmentsContainer = document.querySelector(".card.appointment-card .list-group");
-    
-    if (!appointmentsContainer) return;
+    // Cache full list for filtering
+    window.__ALL_APPOINTMENTS__ = Array.isArray(appointments) ? appointments : [];
+    renderFilteredAppointments();
+}
 
-    if (appointments.length > 0) {
-        appointmentsContainer.innerHTML = appointments
-            .map(
-                (appointment) => `
-  <div class="list-group-item list-group-item-action">
-    <div class="d-flex justify-content-between align-items-start">
-      <div class="me-3">
-        <span class="badge bg-primary badge-status mb-2">
-          <i class="fas fa-clock me-1"></i>Scheduled
-        </span>
-        <h5 class="mb-1">${appointment.doctor}</h5>
-        <small class="text-muted">
-          <i class="fas fa-user me-1"></i>${appointment.patient}
-        </small>
-        <div class="mt-2">
-          <small>
-            <i class="fas fa-calendar me-1"></i>${appointment.time}
-          </small>
-        </div>
-      </div>
-      <div class="text-end">
-        <small class="d-block text-muted mb-2">ID: ${appointment.appointment_id}</small>
-        <button
-          class="btn btn-sm btn-outline-primary copy-btn"
-          onclick="copyToClipboard('${appointment.appointment_id}')"
-        >
-          <i class="fas fa-copy me-1"></i>Copy ID
-        </button>
-      </div>
+// Render appointments applying current search query
+function renderFilteredAppointments() {
+    const container = document.getElementById('appointmentsList');
+    if (!container) return;
+
+    const all = window.__ALL_APPOINTMENTS__ || [];
+    const q = (document.getElementById('appointmentsSearch')?.value || '').trim().toLowerCase();
+
+    const filtered = q
+        ? all.filter(a =>
+            String(a.appointment_id || '').toLowerCase().includes(q) ||
+            String(a.doctor || '').toLowerCase().includes(q) ||
+            String(a.patient || '').toLowerCase().includes(q) ||
+            String(a.time || '').toLowerCase().includes(q)
+          )
+        : all;
+
+    if (filtered.length > 0) {
+        container.innerHTML = filtered.map((appointment) => `
+<div class="modern-list-group-item animate__animated animate__fadeInUp">
+  <div>
+    <span class="modern-badge scheduled mb-2">
+      <i class="fa fa-clock me-1"></i>Scheduled
+    </span>
+    <h5 class="mb-1" style="font-weight:700;">${appointment.doctor}</h5>
+    <small class="text-muted d-block">
+      <i class="fa fa-user me-1"></i>${appointment.patient}
+    </small>
+    <div class="mt-2">
+      <small>
+        <i class="fa fa-calendar me-1"></i>${appointment.time}
+      </small>
     </div>
   </div>
-`
-            )
-            .join("");
+  <div class="text-end">
+    <small class="d-block text-muted mb-2" style="font-size:0.98em;">
+      ID: <span class="fw-bold" style="color:#1a73e8;">${appointment.appointment_id}</span>
+    </small>
+    <button
+      class="btn modern-copy-btn btn-sm"
+      onclick="copyToClipboard('${appointment.appointment_id}')"
+    >
+      <i class="fa fa-copy me-1"></i>Copy ID
+    </button>
+  </div>
+</div>
+`).join('');
     } else {
-        appointmentsContainer.innerHTML = `
+        container.innerHTML = `
 <div class="text-center py-4">
-  <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+  <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
   <p class="text-muted">No upcoming appointments</p>
 </div>
 `;
@@ -118,39 +154,36 @@ function updateAppointmentsList(appointments) {
 
 // Function to update the "Completed Appointments" list in the DOM
 function updateCompletedAppointmentsList(appointments) {
-    const completedContainer = document.querySelector(".card.completed-card .list-group");
-    
+    const completedContainer = document.getElementById('completedAppointmentsList');
     if (!completedContainer) return;
 
     if (appointments.length > 0) {
         completedContainer.innerHTML = appointments
             .map(
                 (appointment) => `
-  <div class="list-group-item">
-    <div class="d-flex justify-content-between align-items-start">
-      <div class="me-3">
-        <span class="badge bg-success badge-status mb-2">
-          <i class="fas fa-check me-1"></i>Completed
-        </span>
-        <h5 class="mb-1">${appointment.doctor}</h5>
-        <small class="text-muted">
-          <i class="fas fa-user me-1"></i>${appointment.patient}
-        </small>
-      </div>
-      <div>
-        <small class="text-muted">
-          <i class="fas fa-calendar me-1"></i>${appointment.time}
-        </small>
-      </div>
+<div class="modern-list-group-item animate__animated animate__fadeInUp">
+  <div>
+    <span class="modern-badge success mb-2">
+      <i class="fa fa-check me-1"></i>Completed
+    </span>
+    <h5 class="mb-1" style="font-weight:700;">${appointment.doctor}</h5>
+    <small class="text-muted d-block">
+      <i class="fa fa-user me-1"></i>${appointment.patient}
+    </small>
+    <div class="mt-2">
+      <small>
+        <i class="fa fa-calendar me-1"></i>${appointment.time}
+      </small>
     </div>
   </div>
+</div>
 `
             )
             .join("");
     } else {
         completedContainer.innerHTML = `
 <div class="text-center py-4">
-  <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+  <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
   <p class="text-muted">No completed appointments yet</p>
 </div>
 `;
@@ -172,7 +205,7 @@ function copyToClipboard(text) {
             `;
         document.body.appendChild(toast);
 
-        // Remove after 3 seconds
+        // Remove after 2 seconds
         setTimeout(() => {
             toast.remove();
         }, 2000);
@@ -299,5 +332,22 @@ window.addEventListener('load', () => {
         if (consultationsSection) {
             consultationsSection.scrollIntoView();
         }
+    }
+    // Wire up live search for appointments list
+    const search = document.getElementById('appointmentsSearch');
+    if (search) {
+        search.addEventListener('input', renderFilteredAppointments);
+        // Enter key triggers search
+        search.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                renderFilteredAppointments();
+            }
+        });
+    }
+    // Search button click
+    const searchBtn = document.getElementById('appointmentsSearchBtn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', renderFilteredAppointments);
     }
 });

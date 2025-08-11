@@ -429,6 +429,35 @@
         .section-title { font-size: 1.2rem; }
         .modern-card, .glass-modern { border-radius: 1em; }
       }
+
+      /* Appointments search input-group: compact and intuitive styling */
+      .search-appointments .input-group-text {
+        background: #f1f7ff;
+        color: #1a73e8;
+        border: 1.5px solid #e3f7fa;
+        padding: 0.35rem 0.6rem;
+        border-top-left-radius: 0.9rem;
+        border-bottom-left-radius: 0.9rem;
+      }
+      #appointmentsSearch {
+        padding: 0.55rem 0.8rem;
+        font-size: 0.95rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-left: none;
+      }
+      #appointmentsSearchBtn {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.95rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        white-space: nowrap;
+      }
+      @media (max-width: 575px) {
+        .search-appointments { max-width: 100% !important; }
+        #appointmentsSearch { font-size: 0.92rem; padding: 0.5rem 0.7rem; }
+        #appointmentsSearchBtn { font-size: 0.92rem; padding: 0.4rem 0.7rem; }
+      }
     </style>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -576,44 +605,103 @@
               <h2 class="mb-3 section-title" style="font-size:1.4rem;">
                 <i class="fa fa-calendar-alt me-2"></i>Your Appointments
               </h2>
-              {% if appointments %}
-              <div>
-                {% for appointment in appointments %}
-                <div class="modern-list-group-item animate__animated animate__fadeInUp">
-                  <div>
-                    <span class="modern-badge scheduled mb-2">
-                      <i class="fa fa-clock me-1"></i>Scheduled
-                    </span>
-                    <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
-                    <small class="text-muted d-block">
-                      <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
-                    </small>
-                    <div class="mt-2">
-                      <small>
-                        <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+              <!-- Quick search for filtering appointments -->
+              <div class="mb-3">
+                <div class="input-group search-appointments" style="max-width: 520px; width: 100%;">
+                  <span class="input-group-text" id="appointmentsSearchIcon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                  <input
+                    type="text"
+                    id="appointmentsSearch"
+                    class="modern-form-control form-control"
+                    placeholder="Search by ID, doctor, or patient"
+                    aria-label="Search appointments"
+                    aria-describedby="appointmentsSearchIcon appointmentsSearchBtn"
+                    autocomplete="off"
+                    oninput="
+                      if (!this.value.trim()) {
+                        this.classList.add('is-invalid');
+                        this.setCustomValidity('Please enter a search term.');
+                      } else {
+                        this.classList.remove('is-invalid');
+                        this.setCustomValidity('');
+                      }
+                    "
+                    required
+                  />
+
+                  <!-- Add spacing between input and button -->
+                  <button 
+                    class="btn btn-gradient btn-sm rounded-pill d-flex align-items-center"
+                    id="appointmentsSearchBtn"
+                    type="button"
+                    style="margin-left: 0.5rem; min-width: 0; padding: 0.375rem 0.75rem; font-size: 0.95rem;"
+                    onclick="
+                      const searchInput = document.getElementById('appointmentsSearch');
+                      if (!searchInput.value.trim()) {
+                        searchInput.classList.add('is-invalid');
+                        searchInput.setCustomValidity('Please enter a search term.');
+                        searchInput.reportValidity();
+                        searchInput.focus();
+                        return;
+                      } else {
+                        searchInput.classList.remove('is-invalid');
+                        searchInput.setCustomValidity('');
+                        renderFilteredAppointments();
+                      }
+                    "
+                  >
+                    <i class="fa fa-search me-1"></i>
+                    <span class="d-none d-sm-inline">Search</span>
+                  </button>
+            
+                </div>
+              </div>
+              <!-- 
+                The appointments list below will be dynamically updated by doctors.js.
+                The server will render the initial appointments, but after booking,
+                JS will update this list in real time without a page refresh.
+                The .modern-list-group container is required for JS to target.
+              -->
+              <div id="appointmentsList" class="modern-list-group">
+                {% if appointments %}
+                  {% for appointment in appointments %}
+                  <div class="modern-list-group-item animate__animated animate__fadeInUp">
+                    <div>
+                      <span class="modern-badge scheduled mb-2">
+                        <i class="fa fa-clock me-1"></i>Scheduled
+                      </span>
+                      <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
+                      <small class="text-muted d-block">
+                        <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
                       </small>
+                      <div class="mt-2">
+                        <small>
+                          <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+                        </small>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <small class="d-block text-muted mb-2" style="font-size:0.98em;">
+                        ID: <span class="fw-bold" style="color:#1a73e8;">{{ appointment['appointment_id'] }}</span>
+                      </small>
+                      <button
+                        class="btn btn-sm modern-copy-btn"
+                        onclick="copyToClipboard('{{ appointment['appointment_id'] }}')"
+                      >
+                        <i class="fa fa-copy me-1"></i>Copy ID
+                      </button>
                     </div>
                   </div>
-                  <div class="text-end">
-                    <small class="d-block text-muted mb-2" style="font-size:0.98em;">
-                      ID: <span class="fw-bold" style="color:#1a73e8;">{{ appointment['appointment_id'] }}</span>
-                    </small>
-                    <button
-                      class="btn btn-sm modern-copy-btn"
-                      onclick="copyToClipboard('{{ appointment['appointment_id'] }}')"
-                    >
-                      <i class="fa fa-copy me-1"></i>Copy ID
-                    </button>
-                  </div>
+                  {% endfor %}
+                {% else %}
+                <div class="text-center py-4">
+                  <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                  <p class="text-muted">No upcoming appointments</p>
                 </div>
-                {% endfor %}
+                {% endif %}
               </div>
-              {% else %}
-              <div class="text-center py-4">
-                <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
-                <p class="text-muted">No upcoming appointments</p>
-              </div>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -654,33 +742,33 @@
               <h2 class="mb-3 section-title" style="font-size:1.2rem;">
                 <i class="fa fa-check-circle me-2"></i>Completed Appointments
               </h2>
-              {% if completed_appointments %}
-              <div>
-                {% for appointment in completed_appointments %}
-                <div class="modern-list-group-item animate__animated animate__fadeInUp">
-                  <div>
-                    <span class="modern-badge success mb-2">
-                      <i class="fa fa-check me-1"></i>Completed
-                    </span>
-                    <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
-                    <small class="text-muted d-block">
-                      <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
-                    </small>
+              <div id="completedAppointmentsList" class="modern-list-group">
+                {% if completed_appointments %}
+                  {% for appointment in completed_appointments %}
+                  <div class="modern-list-group-item animate__animated animate__fadeInUp">
+                    <div>
+                      <span class="modern-badge success mb-2">
+                        <i class="fa fa-check me-1"></i>Completed
+                      </span>
+                      <h5 class="mb-1" style="font-weight:700;">{{ appointment['doctor'] }}</h5>
+                      <small class="text-muted d-block">
+                        <i class="fa fa-user me-1"></i>{{ appointment['patient'] }}
+                      </small>
+                    </div>
+                    <div>
+                      <small class="text-muted">
+                        <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
+                      </small>
+                    </div>
                   </div>
-                  <div>
-                    <small class="text-muted">
-                      <i class="fa fa-calendar me-1"></i>{{ appointment['time'] }}
-                    </small>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-center py-4">
+                    <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No completed appointments yet</p>
                   </div>
-                </div>
-                {% endfor %}
+                {% endif %}
               </div>
-              {% else %}
-              <div class="text-center py-4">
-                <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
-                <p class="text-muted">No completed appointments yet</p>
-              </div>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -707,5 +795,6 @@
     </script>
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/doctors.js') }}"></script>
+    
   </body>
 </html>
