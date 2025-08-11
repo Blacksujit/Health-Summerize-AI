@@ -36,7 +36,13 @@
 
 ## ❗🏥 Problem Statement :
 
-The healthcare industry faces significant challenges in managing and utilizing the vast amounts of medical data generated every day. Manual documentation is time-consuming and error-prone, leading to physician burnout and inefficiencies. Patients often struggle to access, understand, and act on their health records. There is a lack of seamless integration between EHRs, imaging, and real-time consultations, resulting in fragmented care and delayed decision-making. Additionally, ensuring data privacy, regulatory compliance, and secure communication between patients and providers remains a persistent concern.
+**Hackathon Problem Statement**
+
+How might we revolutionize the way healthcare data is managed, accessed, and utilized?
+
+Today’s healthcare system is drowning in data—massive volumes of medical records, imaging, and real-time consultation notes are generated every day. Yet, manual documentation remains slow and error-prone, contributing to physician burnout and inefficiency. Patients are often left in the dark, unable to easily access or understand their own health information. Disconnected systems—EHRs, imaging platforms, and telehealth tools—create silos, leading to fragmented care and delayed decisions. On top of this, data privacy, regulatory compliance, and secure communication between patients and providers are ongoing challenges.
+
+**Your mission:** Build innovative solutions that break down these barriers. Can you create a platform that streamlines documentation, empowers patients, integrates data sources, and ensures security and compliance—all while delivering a seamless healthcare experience?
 
 ## 🩻💉💡 What Are We Solving? :
 
