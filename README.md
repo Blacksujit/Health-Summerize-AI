@@ -160,210 +160,137 @@ All in a single, modern, and intuitive web application.
   'theme': 'base',
   'themeVariables': {
     'fontFamily': 'Inter, Segoe UI, Arial',
-    'fontSize': '18px',
-    'lineColor': '#334155',
-    'textColor': '#0f172a',
-    'primaryColor': '#e0f2fe',
-    'primaryBorderColor': '#0284c7',
-    'primaryTextColor': '#0c4a6e',
-    'secondaryColor': '#f3e8ff',
-    'secondaryBorderColor': '#7c3aed',
-    'tertiaryColor': '#ecfdf5',
-    'tertiaryBorderColor': '#10b981',
+    'fontSize': '24px',
+    'lineColor': '#0f172a',
+    'textColor': '#0b1220',
     'clusterBkg': '#f8fafc',
-    'clusterBorder': '#94a3b8',
-    'edgeLabelBackground': '#ffffff'
+    'clusterBorder': '#0f172a'
   },
   'flowchart': {
-    'diagramPadding': 16,
-    'nodeSpacing': 60,
-    'rankSpacing': 90,
+    'diagramPadding': 32,
+    'nodeSpacing': 120,
+    'rankSpacing': 160,
     'htmlLabels': true,
     'curve': 'basis',
-    'padding': 12,
-    'useMaxWidth': false
+    'padding': 20,
+    'useMaxWidth': true
   }
 }%%
 
-graph TD
+flowchart TD
 
-    %% User Interface Layer
-    subgraph "User Interface Layer"
+    %% LAYER 1: User Interface
+    subgraph L1["1) User Interface"]
         direction TB
-        UI_CORE((UI Layer))
-        UI[Web Interface<br/>HTML5/CSS3/JS]
-        AV[3D Avatar Interface<br/>Virtual Consultation]
-        MOB[Mobile Interface<br/>Future Implementation]
-        UI_CORE --> UI
-        UI_CORE --> AV
-        UI_CORE --> MOB
+        UI_Web[Web App<br/>HTML5/CSS3/JS]
+        UI_Avatar[3D Avatar UI<br/>Virtual Consultation]
+        UI_Mobile[Mobile App<br/>(Future)]
     end
 
-    %% Application Layer
-    subgraph "Application Layer"
+    %% LAYER 2: Application
+    subgraph L2["2) Application"]
         direction TB
-        APP_CORE((App Layer))
-        subgraph "Flask Web Server"
-            direction TB
-            APP[Flask Application<br/>Port 600]
-            ROUTES[Route Handlers<br/>Blueprint System]
-            SOCKET[SocketIO<br/>Real-time Communication]
-        end
-        
-        subgraph "PyQt5 Desktop App"
-            direction TB
-            QT[PyQt5 Application<br/>QWebEngineView]
-            QT_WEB[Embedded Web View<br/>Flask Integration]
-        end
-        APP_CORE --> APP
-        APP_CORE --> ROUTES
-        APP_CORE --> SOCKET
-        APP_CORE --> QT
-        APP_CORE --> QT_WEB
+        APP[Flask Application<br/>Port 600]
+        ROUTES[Route Handlers<br/>Blueprints]
+        SOCKET[SocketIO<br/>Realtime]
+        QT[PyQt5 Desktop App]
+        QT_WEB[Embedded WebView]
     end
 
-    %% AI/ML Processing Layer
-    subgraph "AI/ML Processing Layer"
+    %% LAYER 3: AI / ML Processing
+    subgraph L3["3) AI / ML Processing"]
         direction TB
-        AI_CORE((AI/ML Layer))
-        subgraph "NLP Pipeline"
-            direction TB
-            NER[BioBERT NER Model<br/>Medical Entity Recognition]
-            SENT[Sentiment Analysis<br/>Longformer Model]
-            SUM[T5 Summarization<br/>Text Summarization]
-            GPT[GPT-2 Model<br/>Text Generation]
-        end
-        
-        subgraph "Medical Analysis"
-            direction TB
-            MED_NLP[Medical NLP Pipeline<br/>Document Processing]
-            IMG_ANAL[Medical Image Analysis<br/>BLIP Model]
-            DIAG[Diagnostic Reasoning<br/>Symptom Matching]
-        end
-        
-        subgraph "AI Bot"
-            direction TB
-            AI_BOT[AI Doctor Bot<br/>Virtual Consultation]
-            VOICE[Voice Processing<br/>Speech Recognition]
-            AVATAR[3D Avatar Generation<br/>Video Synthesis]
-        end
-        AI_CORE --> NER
-        AI_CORE --> SENT
-        AI_CORE --> SUM
-        AI_CORE --> GPT
-        AI_CORE --> MED_NLP
-        AI_CORE --> IMG_ANAL
-        AI_CORE --> DIAG
-        AI_CORE --> AI_BOT
-        AI_CORE --> VOICE
-        AI_CORE --> AVATAR
+        NLP[Medical NLP Pipeline]
+        NER[BioBERT NER]
+        SENT[Longformer Sentiment]
+        SUM[T5 Summarization]
+        GPT[GPT-2 Generation]
+        IMG[BLIP Image Analysis]
+        DIAG[Diagnostic Reasoning]
+        BOT[AI Doctor Bot]
+        VOICE[Speech Recognition]
+        AVATAR[Video Synthesis]
+        NLP --> NER
+        NLP --> SENT
+        NLP --> SUM
+        NLP --> GPT
+        BOT --> VOICE
+        BOT --> AVATAR
+        BOT --> DIAG
     end
 
-    %% Data Layer
-    subgraph "Data Layer"
+    %% LAYER 4: Data & Storage
+    subgraph L4["4) Data & Storage"]
         direction TB
-        DATA_CORE((Data Layer))
-        subgraph "Databases"
-            direction TB
-            SQLITE[SQLite Database<br/>Appointments]
-            FIREBASE[Firebase Firestore<br/>Real-time Data]
-        end
-        
-        subgraph "File Storage"
-            direction TB
-            UPLOADS[Upload Directory<br/>Medical Documents]
-            MODELS[Model Cache<br/>Hugging Face Models]
-            REPORTS[Report Outputs<br/>Generated Reports]
-            VIDEOS[Avatar Videos<br/>3D Avatar Assets]
-        end
-        
-        subgraph "Knowledge Base"
-            direction TB
-            MED_KB[Medical Knowledge Base<br/>Conditions & Treatments]
-            EHR_DATA[EHR Datasets<br/>Training Data]
-        end
-        DATA_CORE --> SQLITE
-        DATA_CORE --> FIREBASE
-        DATA_CORE --> UPLOADS
-        DATA_CORE --> MODELS
-        DATA_CORE --> REPORTS
-        DATA_CORE --> VIDEOS
-        DATA_CORE --> MED_KB
-        DATA_CORE --> EHR_DATA
+        DBS[Databases]
+        SQLITE[SQLite (Appointments)]
+        FIREBASE[Firestore (Realtime)]
+        FS[File Storage]
+        UPLOADS[Uploads]
+        MODELS[Model Cache]
+        REPORTS[Reports]
+        VIDEOS[Avatar Assets]
+        KB[Knowledge Base]
+        MED_KB[Conditions & Treatments]
+        EHR[EHR Datasets]
+        DBS --> SQLITE
+        DBS --> FIREBASE
+        FS --> UPLOADS
+        FS --> MODELS
+        FS --> REPORTS
+        FS --> VIDEOS
+        KB --> MED_KB
+        KB --> EHR
     end
 
-    %% External Services
-    subgraph "External Services"
+    %% LAYER 5: Security & Config
+    subgraph L5["5) Security & Config"]
         direction TB
-        EXT_CORE((External Services))
-        OPENAI[OpenAI API<br/>GPT Models]
-        ELEVEN[ElevenLabs API<br/>Voice Synthesis]
-        RAPID[RapidAPI<br/>Medical APIs]
-        GOOGLE[Google Cloud<br/>Speech Recognition]
-        EXT_CORE --> OPENAI
-        EXT_CORE --> ELEVEN
-        EXT_CORE --> RAPID
-        EXT_CORE --> GOOGLE
+        ENV[Env Variables / Keys]
+        CORS[CORS Configuration]
+        CACHE[Flask Caching]
     end
 
-    %% Security & Configuration
-    subgraph "Security & Config"
+    %% LAYER 6: External Services
+    subgraph L6["6) External Services"]
         direction TB
-        SEC_CORE((Security & Config))
-        ENV[Environment Variables<br/>API Keys & Config]
-        CORS[CORS Configuration<br/>Cross-origin Access]
-        CACHE[Flask Caching<br/>Performance Optimization]
-        SEC_CORE --> ENV
-        SEC_CORE --> CORS
-        SEC_CORE --> CACHE
+        OPENAI[OpenAI API]
+        ELEVEN[ElevenLabs API]
+        RAPID[RapidAPI]
+        GOOGLE[Google Cloud STT]
     end
 
-    %% Data Flow Connections
-    UI_CORE --> APP_CORE
-    
-    APP --> ROUTES
-    ROUTES --> SOCKET
-    APP_CORE --> QT_WEB
-    
-    APP_CORE --> MED_NLP
-    APP_CORE --> AI_BOT
-    APP_CORE --> IMG_ANAL
-    
-    MED_NLP -. feeds .-> NER
-    MED_NLP -. feeds .-> SENT
-    MED_NLP -. feeds .-> SUM
-    MED_NLP -. feeds .-> GPT
-    
-    AI_BOT -. uses .-> VOICE
-    AI_BOT -. uses .-> AVATAR
-    AI_BOT -. uses .-> DIAG
-    
-    APP_CORE --> DATA_CORE
-    
-    MED_NLP --> MED_KB
-    MED_NLP --> EHR_DATA
-    
-    AI_BOT --> OPENAI
+    %% STRICT VERTICAL FLOW
+    L1 --> L2 --> L3 --> L4
+    L2 -. config .-> L5
+    L3 --> L6
+
+    %% KEY INTERNAL FLOWS
+    APP --> ROUTES --> SOCKET
+    APP --> QT_WEB
+    ROUTES --> NLP
+    ROUTES --> BOT
+    ROUTES --> IMG
+    APP --> SQLITE
+    APP --> FIREBASE
+    APP --> UPLOADS
+    APP --> MODELS
+    APP --> REPORTS
+    APP --> VIDEOS
+    NLP --> MED_KB
+    NLP --> EHR
+    BOT --> OPENAI
     VOICE --> GOOGLE
     AVATAR --> ELEVEN
-    APP_CORE --> RAPID
-    
-    APP_CORE --> SEC_CORE
+    ROUTES --> RAPID
 
-    %% Styling
-    classDef userInterface fill:#e0f2fe,stroke:#0284c7,stroke-width:3px,color:#0c4a6e
-    classDef application fill:#f3e8ff,stroke:#7c3aed,stroke-width:3px,color:#4c1d95
-    classDef aiLayer fill:#ecfdf5,stroke:#10b981,stroke-width:3px,color:#064e3b
-    classDef dataLayer fill:#fff7ed,stroke:#ea580c,stroke-width:3px,color:#7c2d12
-    classDef external fill:#fce7f3,stroke:#be185d,stroke-width:3px,color:#831843
-    classDef security fill:#f1f5f9,stroke:#334155,stroke-width:3px,color:#0f172a
-
-    class UI,AV,MOB userInterface
-    class APP,ROUTES,SOCKET,QT,QT_WEB application
-    class NER,SENT,SUM,GPT,MED_NLP,IMG_ANAL,DIAG,AI_BOT,VOICE,AVATAR aiLayer
-    class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MED_KB,EHR_DATA dataLayer
-    class OPENAI,ELEVEN,RAPID,GOOGLE external
-    class ENV,CORS,CACHE security
+    %% STYLING PER LAYER (high-contrast, thick borders)
+    style L1 fill:#e0f2fe,stroke:#0284c7,stroke-width:5px,color:#0c4a6e
+    style L2 fill:#ede9fe,stroke:#7c3aed,stroke-width:5px,color:#4c1d95
+    style L3 fill:#ecfdf5,stroke:#10b981,stroke-width:5px,color:#064e3b
+    style L4 fill:#fff7ed,stroke:#ea580c,stroke-width:5px,color:#7c2d12
+    style L5 fill:#f1f5f9,stroke:#334155,stroke-width:5px,color:#0f172a
+    style L6 fill:#fce7f3,stroke:#be185d,stroke-width:5px,color:#831843
 ```
 
 <br>
