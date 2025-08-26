@@ -180,15 +180,15 @@ All in a single, modern, and intuitive web application.
 flowchart TD
 
     %% LAYER 1: User Interface
-    subgraph L1["1) User Interface"]
+    subgraph L1["Layer 1 - User Interface"]
         direction TB
         UI_Web[Web App<br/>HTML5/CSS3/JS]
         UI_Avatar[3D Avatar UI<br/>Virtual Consultation]
-        UI_Mobile[Mobile App<br/>(Future)]
+        UI_Mobile[Mobile App<br/>Future]
     end
 
     %% LAYER 2: Application
-    subgraph L2["2) Application"]
+    subgraph L2["Layer 2 - Application"]
         direction TB
         APP[Flask Application<br/>Port 600]
         ROUTES[Route Handlers<br/>Blueprints]
@@ -198,7 +198,7 @@ flowchart TD
     end
 
     %% LAYER 3: AI / ML Processing
-    subgraph L3["3) AI / ML Processing"]
+    subgraph L3["Layer 3 - AI / ML Processing"]
         direction TB
         NLP[Medical NLP Pipeline]
         NER[BioBERT NER]
@@ -220,11 +220,11 @@ flowchart TD
     end
 
     %% LAYER 4: Data & Storage
-    subgraph L4["4) Data & Storage"]
+    subgraph L4["Layer 4 - Data & Storage"]
         direction TB
         DBS[Databases]
-        SQLITE[SQLite (Appointments)]
-        FIREBASE[Firestore (Realtime)]
+        SQLITE[SQLite - Appointments]
+        FIREBASE[Firestore - Realtime]
         FS[File Storage]
         UPLOADS[Uploads]
         MODELS[Model Cache]
@@ -244,7 +244,7 @@ flowchart TD
     end
 
     %% LAYER 5: Security & Config
-    subgraph L5["5) Security & Config"]
+    subgraph L5["Layer 5 - Security & Config"]
         direction TB
         ENV[Env Variables / Keys]
         CORS[CORS Configuration]
@@ -252,7 +252,7 @@ flowchart TD
     end
 
     %% LAYER 6: External Services
-    subgraph L6["6) External Services"]
+    subgraph L6["Layer 6 - External Services"]
         direction TB
         OPENAI[OpenAI API]
         ELEVEN[ElevenLabs API]
