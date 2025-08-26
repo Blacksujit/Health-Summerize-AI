@@ -155,9 +155,143 @@ All in a single, modern, and intuitive web application.
 
 ## 🏗️ System Architecture
 
-<p align="center">
-  <img src="Flow-Diagrams/deepseek_mermaid_20250504_b49ca2.png" alt="System Architecture" width="80%" style="border-radius:12px; box-shadow:0 2px 16px #1a73e833;">
-</p>
+```mermaid
+graph TB
+    %% User Interface Layer
+    subgraph "User Interface Layer"
+        UI[Web Interface<br/>HTML5/CSS3/JS]
+        AV[3D Avatar Interface<br/>Virtual Consultation]
+        MOB[Mobile Interface<br/>Future Implementation]
+    end
+
+    %% Application Layer
+    subgraph "Application Layer"
+        subgraph "Flask Web Server"
+            APP[Flask Application<br/>Port 600]
+            ROUTES[Route Handlers<br/>Blueprint System]
+            SOCKET[SocketIO<br/>Real-time Communication]
+        end
+        
+        subgraph "PyQt5 Desktop App"
+            QT[PyQt5 Application<br/>QWebEngineView]
+            QT_WEB[Embedded Web View<br/>Flask Integration]
+        end
+    end
+
+    %% AI/ML Processing Layer
+    subgraph "AI/ML Processing Layer"
+        subgraph "NLP Pipeline"
+            NER[BioBERT NER Model<br/>Medical Entity Recognition]
+            SENT[Sentiment Analysis<br/>Longformer Model]
+            SUM[T5 Summarization<br/>Text Summarization]
+            GPT[GPT-2 Model<br/>Text Generation]
+        end
+        
+        subgraph "Medical Analysis"
+            MED_NLP[Medical NLP Pipeline<br/>Document Processing]
+            IMG_ANAL[Medical Image Analysis<br/>BLIP Model]
+            DIAG[Diagnostic Reasoning<br/>Symptom Matching]
+        end
+        
+        subgraph "AI Bot"
+            AI_BOT[AI Doctor Bot<br/>Virtual Consultation]
+            VOICE[Voice Processing<br/>Speech Recognition]
+            AVATAR[3D Avatar Generation<br/>Video Synthesis]
+        end
+    end
+
+    %% Data Layer
+    subgraph "Data Layer"
+        subgraph "Databases"
+            SQLITE[SQLite Database<br/>Appointments]
+            FIREBASE[Firebase Firestore<br/>Real-time Data]
+        end
+        
+        subgraph "File Storage"
+            UPLOADS[Upload Directory<br/>Medical Documents]
+            MODELS[Model Cache<br/>Hugging Face Models]
+            REPORTS[Report Outputs<br/>Generated Reports]
+            VIDEOS[Avatar Videos<br/>3D Avatar Assets]
+        end
+        
+        subgraph "Knowledge Base"
+            MED_KB[Medical Knowledge Base<br/>Conditions & Treatments]
+            EHR_DATA[EHR Datasets<br/>Training Data]
+        end
+    end
+
+    %% External Services
+    subgraph "External Services"
+        OPENAI[OpenAI API<br/>GPT Models]
+        ELEVEN[ElevenLabs API<br/>Voice Synthesis]
+        RAPID[RapidAPI<br/>Medical APIs]
+        GOOGLE[Google Cloud<br/>Speech Recognition]
+    end
+
+    %% Security & Configuration
+    subgraph "Security & Config"
+        ENV[Environment Variables<br/>API Keys & Config]
+        CORS[CORS Configuration<br/>Cross-origin Access]
+        CACHE[Flask Caching<br/>Performance Optimization]
+    end
+
+    %% Data Flow Connections
+    UI --> APP
+    AV --> APP
+    MOB -.-> APP
+    
+    APP --> ROUTES
+    ROUTES --> SOCKET
+    APP --> QT_WEB
+    
+    ROUTES --> MED_NLP
+    ROUTES --> AI_BOT
+    ROUTES --> IMG_ANAL
+    
+    MED_NLP --> NER
+    MED_NLP --> SENT
+    MED_NLP --> SUM
+    MED_NLP --> GPT
+    
+    AI_BOT --> VOICE
+    AI_BOT --> AVATAR
+    AI_BOT --> DIAG
+    
+    APP --> SQLITE
+    APP --> FIREBASE
+    APP --> UPLOADS
+    APP --> MODELS
+    APP --> REPORTS
+    APP --> VIDEOS
+    
+    MED_NLP --> MED_KB
+    MED_NLP --> EHR_DATA
+    
+    AI_BOT --> OPENAI
+    VOICE --> GOOGLE
+    AVATAR --> ELEVEN
+    ROUTES --> RAPID
+    
+    APP --> ENV
+    APP --> CORS
+    APP --> CACHE
+
+    %% Styling
+    classDef userInterface fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef application fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef aiLayer fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef dataLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef external fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef security fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+
+    class UI,AV,MOB userInterface
+    class APP,ROUTES,SOCKET,QT,QT_WEB application
+    class NER,SENT,SUM,GPT,MED_NLP,IMG_ANAL,DIAG,AI_BOT,VOICE,AVATAR aiLayer
+    class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MED_KB,EHR_DATA dataLayer
+    class OPENAI,ELEVEN,RAPID,GOOGLE external
+    class ENV,CORS,CACHE security
+```
+
 <br>
 <br>
 <br>
