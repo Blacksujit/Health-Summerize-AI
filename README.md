@@ -156,60 +156,39 @@ All in a single, modern, and intuitive web application.
 ## 🏗️ System Architecture
 
 ```mermaid
-%%{init: {
-  'theme': 'base',
-  'themeVariables': {
-    'fontFamily': 'Inter, Segoe UI, Arial',
-    'fontSize': '24px',
-    'lineColor': '#0f172a',
-    'textColor': '#0b1220',
-    'clusterBkg': '#f8fafc',
-    'clusterBorder': '#0f172a'
-  },
-  'flowchart': {
-    'diagramPadding': 32,
-    'nodeSpacing': 120,
-    'rankSpacing': 160,
-    'htmlLabels': true,
-    'curve': 'basis',
-    'padding': 20,
-    'useMaxWidth': true
-  }
-}%%
+graph TD
 
-flowchart TD
-
-    %% LAYER 1: User Interface
+    %% Layer 1 - User Interface
     subgraph L1["Layer 1 - User Interface"]
         direction TB
-        UI_Web[Web App<br/>HTML5/CSS3/JS]
-        UI_Avatar[3D Avatar UI<br/>Virtual Consultation]
-        UI_Mobile[Mobile App<br/>Future]
+        UI_Web["Web App"]
+        UI_Avatar["3D Avatar UI"]
+        UI_Mobile["Mobile App"]
     end
 
-    %% LAYER 2: Application
+    %% Layer 2 - Application
     subgraph L2["Layer 2 - Application"]
         direction TB
-        APP[Flask Application<br/>Port 600]
-        ROUTES[Route Handlers<br/>Blueprints]
-        SOCKET[SocketIO<br/>Realtime]
-        QT[PyQt5 Desktop App]
-        QT_WEB[Embedded WebView]
+        APP["Flask App"]
+        ROUTES["Routes"]
+        SOCKET["SocketIO"]
+        QT["PyQt5 App"]
+        QT_WEB["WebView"]
     end
 
-    %% LAYER 3: AI / ML Processing
-    subgraph L3["Layer 3 - AI / ML Processing"]
+    %% Layer 3 - AI and ML
+    subgraph L3["Layer 3 - AI and ML"]
         direction TB
-        NLP[Medical NLP Pipeline]
-        NER[BioBERT NER]
-        SENT[Longformer Sentiment]
-        SUM[T5 Summarization]
-        GPT[GPT-2 Generation]
-        IMG[BLIP Image Analysis]
-        DIAG[Diagnostic Reasoning]
-        BOT[AI Doctor Bot]
-        VOICE[Speech Recognition]
-        AVATAR[Video Synthesis]
+        NLP["NLP Pipeline"]
+        NER["BioBERT NER"]
+        SENT["Longformer Sentiment"]
+        SUM["T5 Summarization"]
+        GPT["GPT-2 Generation"]
+        IMG["BLIP Image Analysis"]
+        DIAG["Diagnostic Reasoning"]
+        BOT["AI Doctor Bot"]
+        VOICE["Speech Recognition"]
+        AVATAR["Video Synthesis"]
         NLP --> NER
         NLP --> SENT
         NLP --> SUM
@@ -219,53 +198,42 @@ flowchart TD
         BOT --> DIAG
     end
 
-    %% LAYER 4: Data & Storage
-    subgraph L4["Layer 4 - Data & Storage"]
+    %% Layer 4 - Data and Storage
+    subgraph L4["Layer 4 - Data and Storage"]
         direction TB
-        DBS[Databases]
-        SQLITE[SQLite - Appointments]
-        FIREBASE[Firestore - Realtime]
-        FS[File Storage]
-        UPLOADS[Uploads]
-        MODELS[Model Cache]
-        REPORTS[Reports]
-        VIDEOS[Avatar Assets]
-        KB[Knowledge Base]
-        MED_KB[Conditions & Treatments]
-        EHR[EHR Datasets]
-        DBS --> SQLITE
-        DBS --> FIREBASE
-        FS --> UPLOADS
-        FS --> MODELS
-        FS --> REPORTS
-        FS --> VIDEOS
-        KB --> MED_KB
-        KB --> EHR
+        SQLITE["SQLite Appointments"]
+        FIREBASE["Firestore Realtime"]
+        UPLOADS["Uploads"]
+        MODELS["Model Cache"]
+        REPORTS["Reports"]
+        VIDEOS["Avatar Assets"]
+        MED_KB["Conditions and Treatments"]
+        EHR["EHR Datasets"]
     end
 
-    %% LAYER 5: Security & Config
-    subgraph L5["Layer 5 - Security & Config"]
+    %% Layer 5 - Security and Config
+    subgraph L5["Layer 5 - Security and Config"]
         direction TB
-        ENV[Env Variables / Keys]
-        CORS[CORS Configuration]
-        CACHE[Flask Caching]
+        ENV["Env Variables and Keys"]
+        CORS["CORS Config"]
+        CACHE["Flask Caching"]
     end
 
-    %% LAYER 6: External Services
+    %% Layer 6 - External Services
     subgraph L6["Layer 6 - External Services"]
         direction TB
-        OPENAI[OpenAI API]
-        ELEVEN[ElevenLabs API]
-        RAPID[RapidAPI]
-        GOOGLE[Google Cloud STT]
+        OPENAI["OpenAI API"]
+        ELEVEN["ElevenLabs API"]
+        RAPID["RapidAPI"]
+        GOOGLE["Google Cloud STT"]
     end
 
-    %% STRICT VERTICAL FLOW
+    %% Vertical flow
     L1 --> L2 --> L3 --> L4
-    L2 -. config .-> L5
+    L2 -.-> L5
     L3 --> L6
 
-    %% KEY INTERNAL FLOWS
+    %% Internal flows
     APP --> ROUTES --> SOCKET
     APP --> QT_WEB
     ROUTES --> NLP
@@ -283,14 +251,6 @@ flowchart TD
     VOICE --> GOOGLE
     AVATAR --> ELEVEN
     ROUTES --> RAPID
-
-    %% STYLING PER LAYER (high-contrast, thick borders)
-    style L1 fill:#e0f2fe,stroke:#0284c7,stroke-width:5px,color:#0c4a6e
-    style L2 fill:#ede9fe,stroke:#7c3aed,stroke-width:5px,color:#4c1d95
-    style L3 fill:#ecfdf5,stroke:#10b981,stroke-width:5px,color:#064e3b
-    style L4 fill:#fff7ed,stroke:#ea580c,stroke-width:5px,color:#7c2d12
-    style L5 fill:#f1f5f9,stroke:#334155,stroke-width:5px,color:#0f172a
-    style L6 fill:#fce7f3,stroke:#be185d,stroke-width:5px,color:#831843
 ```
 
 <br>
