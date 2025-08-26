@@ -185,32 +185,49 @@ All in a single, modern, and intuitive web application.
   }
 }%%
 
-graph TB
+graph TD
 
     %% User Interface Layer
     subgraph "User Interface Layer"
+        direction TB
+        UI_CORE((UI Layer))
         UI[Web Interface<br/>HTML5/CSS3/JS]
         AV[3D Avatar Interface<br/>Virtual Consultation]
         MOB[Mobile Interface<br/>Future Implementation]
+        UI_CORE --> UI
+        UI_CORE --> AV
+        UI_CORE --> MOB
     end
 
     %% Application Layer
     subgraph "Application Layer"
+        direction TB
+        APP_CORE((App Layer))
         subgraph "Flask Web Server"
+            direction TB
             APP[Flask Application<br/>Port 600]
             ROUTES[Route Handlers<br/>Blueprint System]
             SOCKET[SocketIO<br/>Real-time Communication]
         end
         
         subgraph "PyQt5 Desktop App"
+            direction TB
             QT[PyQt5 Application<br/>QWebEngineView]
             QT_WEB[Embedded Web View<br/>Flask Integration]
         end
+        APP_CORE --> APP
+        APP_CORE --> ROUTES
+        APP_CORE --> SOCKET
+        APP_CORE --> QT
+        APP_CORE --> QT_WEB
     end
 
     %% AI/ML Processing Layer
     subgraph "AI/ML Processing Layer"
+        direction TB
+        AI_CORE((AI/ML Layer))
         subgraph "NLP Pipeline"
+            direction TB
             NER[BioBERT NER Model<br/>Medical Entity Recognition]
             SENT[Sentiment Analysis<br/>Longformer Model]
             SUM[T5 Summarization<br/>Text Summarization]
@@ -218,26 +235,42 @@ graph TB
         end
         
         subgraph "Medical Analysis"
+            direction TB
             MED_NLP[Medical NLP Pipeline<br/>Document Processing]
             IMG_ANAL[Medical Image Analysis<br/>BLIP Model]
             DIAG[Diagnostic Reasoning<br/>Symptom Matching]
         end
         
         subgraph "AI Bot"
+            direction TB
             AI_BOT[AI Doctor Bot<br/>Virtual Consultation]
             VOICE[Voice Processing<br/>Speech Recognition]
             AVATAR[3D Avatar Generation<br/>Video Synthesis]
         end
+        AI_CORE --> NER
+        AI_CORE --> SENT
+        AI_CORE --> SUM
+        AI_CORE --> GPT
+        AI_CORE --> MED_NLP
+        AI_CORE --> IMG_ANAL
+        AI_CORE --> DIAG
+        AI_CORE --> AI_BOT
+        AI_CORE --> VOICE
+        AI_CORE --> AVATAR
     end
 
     %% Data Layer
     subgraph "Data Layer"
+        direction TB
+        DATA_CORE((Data Layer))
         subgraph "Databases"
+            direction TB
             SQLITE[SQLite Database<br/>Appointments]
             FIREBASE[Firebase Firestore<br/>Real-time Data]
         end
         
         subgraph "File Storage"
+            direction TB
             UPLOADS[Upload Directory<br/>Medical Documents]
             MODELS[Model Cache<br/>Hugging Face Models]
             REPORTS[Report Outputs<br/>Generated Reports]
@@ -245,54 +278,67 @@ graph TB
         end
         
         subgraph "Knowledge Base"
+            direction TB
             MED_KB[Medical Knowledge Base<br/>Conditions & Treatments]
             EHR_DATA[EHR Datasets<br/>Training Data]
         end
+        DATA_CORE --> SQLITE
+        DATA_CORE --> FIREBASE
+        DATA_CORE --> UPLOADS
+        DATA_CORE --> MODELS
+        DATA_CORE --> REPORTS
+        DATA_CORE --> VIDEOS
+        DATA_CORE --> MED_KB
+        DATA_CORE --> EHR_DATA
     end
 
     %% External Services
     subgraph "External Services"
+        direction TB
+        EXT_CORE((External Services))
         OPENAI[OpenAI API<br/>GPT Models]
         ELEVEN[ElevenLabs API<br/>Voice Synthesis]
         RAPID[RapidAPI<br/>Medical APIs]
         GOOGLE[Google Cloud<br/>Speech Recognition]
+        EXT_CORE --> OPENAI
+        EXT_CORE --> ELEVEN
+        EXT_CORE --> RAPID
+        EXT_CORE --> GOOGLE
     end
 
     %% Security & Configuration
     subgraph "Security & Config"
+        direction TB
+        SEC_CORE((Security & Config))
         ENV[Environment Variables<br/>API Keys & Config]
         CORS[CORS Configuration<br/>Cross-origin Access]
         CACHE[Flask Caching<br/>Performance Optimization]
+        SEC_CORE --> ENV
+        SEC_CORE --> CORS
+        SEC_CORE --> CACHE
     end
 
     %% Data Flow Connections
-    UI --> APP
-    AV --> APP
-    MOB -.-> APP
+    UI_CORE --> APP_CORE
     
     APP --> ROUTES
     ROUTES --> SOCKET
-    APP --> QT_WEB
+    APP_CORE --> QT_WEB
     
-    ROUTES --> MED_NLP
-    ROUTES --> AI_BOT
-    ROUTES --> IMG_ANAL
+    APP_CORE --> MED_NLP
+    APP_CORE --> AI_BOT
+    APP_CORE --> IMG_ANAL
     
-    MED_NLP --> NER
-    MED_NLP --> SENT
-    MED_NLP --> SUM
-    MED_NLP --> GPT
+    MED_NLP -. feeds .-> NER
+    MED_NLP -. feeds .-> SENT
+    MED_NLP -. feeds .-> SUM
+    MED_NLP -. feeds .-> GPT
     
-    AI_BOT --> VOICE
-    AI_BOT --> AVATAR
-    AI_BOT --> DIAG
+    AI_BOT -. uses .-> VOICE
+    AI_BOT -. uses .-> AVATAR
+    AI_BOT -. uses .-> DIAG
     
-    APP --> SQLITE
-    APP --> FIREBASE
-    APP --> UPLOADS
-    APP --> MODELS
-    APP --> REPORTS
-    APP --> VIDEOS
+    APP_CORE --> DATA_CORE
     
     MED_NLP --> MED_KB
     MED_NLP --> EHR_DATA
@@ -300,11 +346,9 @@ graph TB
     AI_BOT --> OPENAI
     VOICE --> GOOGLE
     AVATAR --> ELEVEN
-    ROUTES --> RAPID
+    APP_CORE --> RAPID
     
-    APP --> ENV
-    APP --> CORS
-    APP --> CACHE
+    APP_CORE --> SEC_CORE
 
     %% Styling
     classDef userInterface fill:#e0f2fe,stroke:#0284c7,stroke-width:3px,color:#0c4a6e
