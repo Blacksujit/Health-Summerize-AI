@@ -156,7 +156,37 @@ All in a single, modern, and intuitive web application.
 ## 🏗️ System Architecture
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Inter, Segoe UI, Arial',
+    'fontSize': '18px',
+    'lineColor': '#334155',
+    'textColor': '#0f172a',
+    'primaryColor': '#e0f2fe',
+    'primaryBorderColor': '#0284c7',
+    'primaryTextColor': '#0c4a6e',
+    'secondaryColor': '#f3e8ff',
+    'secondaryBorderColor': '#7c3aed',
+    'tertiaryColor': '#ecfdf5',
+    'tertiaryBorderColor': '#10b981',
+    'clusterBkg': '#f8fafc',
+    'clusterBorder': '#94a3b8',
+    'edgeLabelBackground': '#ffffff'
+  },
+  'flowchart': {
+    'diagramPadding': 16,
+    'nodeSpacing': 60,
+    'rankSpacing': 90,
+    'htmlLabels': true,
+    'curve': 'basis',
+    'padding': 12,
+    'useMaxWidth': false
+  }
+}%%
+
 graph TB
+
     %% User Interface Layer
     subgraph "User Interface Layer"
         UI[Web Interface<br/>HTML5/CSS3/JS]
@@ -277,12 +307,12 @@ graph TB
     APP --> CACHE
 
     %% Styling
-    classDef userInterface fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef application fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef aiLayer fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef dataLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef external fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    classDef security fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef userInterface fill:#e0f2fe,stroke:#0284c7,stroke-width:3px,color:#0c4a6e
+    classDef application fill:#f3e8ff,stroke:#7c3aed,stroke-width:3px,color:#4c1d95
+    classDef aiLayer fill:#ecfdf5,stroke:#10b981,stroke-width:3px,color:#064e3b
+    classDef dataLayer fill:#fff7ed,stroke:#ea580c,stroke-width:3px,color:#7c2d12
+    classDef external fill:#fce7f3,stroke:#be185d,stroke-width:3px,color:#831843
+    classDef security fill:#f1f5f9,stroke:#334155,stroke-width:3px,color:#0f172a
 
     class UI,AV,MOB userInterface
     class APP,ROUTES,SOCKET,QT,QT_WEB application
