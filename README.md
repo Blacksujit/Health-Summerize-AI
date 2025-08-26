@@ -482,7 +482,7 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 
 For questions, support, or partnership inquiries:
 
-- 📧 Email: [team mail](nirmalsujit861@gmail.com)
+- 📧 Email: [nirmalsujit861@gmail.com](mailto:nirmalsujit861@gmail.com)
 
 ---
 
