@@ -322,14 +322,21 @@ All in a single, modern, and intuitive web application.
 
 ## 🤝 Contributing
 
-We welcome contributions from the community!  
-Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+We welcome contributions from the community!
+
+To contribute:
+- Fork the repository and create your branch from `main`.
+- Make your changes with clear, descriptive commit messages.
+- Ensure your code follows our style guidelines and passes all tests.
+- Submit a pull request and describe your changes in detail.
+- Be respectful and constructive in code reviews and discussions.
+
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
 ---
 
@@ -341,28 +348,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 For questions, support, or partnership inquiries:
 
-- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
+- 📧 Email: [team mail](nirmalsujit861@gmail.com)
 
 ---
 
 <p align="center" style="font-size:1.2rem;">
-  <b>Empowering Healthcare Through AI Innovation</b> <br>
+  <b>Empowering Healthcare Through Innovation 🌟</b> <br>
   <img src="https://img.icons8.com/color/48/000000/artificial-intelligence.png" width="32"/>
 </p>
 
-### **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
-## 📫 **Contact**
-
-For inquiries and support:
-- 📧 Email: [support@healthsummarizeai.com](mailto:support@healthsummarizeai.com)
-
----
-
-*Empowering Healthcare Through Innovation* 🌟
-
----
