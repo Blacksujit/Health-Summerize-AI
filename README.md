@@ -156,101 +156,140 @@ All in a single, modern, and intuitive web application.
 ## 🏗️ System Architecture
 
 ```mermaid
-graph TD
-
-    %% Layer 1 - User Interface
-    subgraph L1["Layer 1 - User Interface"]
-        direction TB
-        UI_Web["Web App"]
-        UI_Avatar["3D Avatar UI"]
-        UI_Mobile["Mobile App"]
+graph TB
+    %% User Interface Layer
+    subgraph "User Interface Layer"
+        UI[Web Interface<br/>HTML5/CSS3/JS]
+        AV[3D Avatar Interface<br/>Virtual Consultation]
+        MOB[Mobile Interface<br/>Future Implementation]
     end
 
-    %% Layer 2 - Application
-    subgraph L2["Layer 2 - Application"]
-        direction TB
-        APP["Flask App"]
-        ROUTES["Routes"]
-        SOCKET["SocketIO"]
-        QT["PyQt5 App"]
-        QT_WEB["WebView"]
+    %% Application Layer
+    subgraph "Application Layer"
+        subgraph "Flask Web Server"
+            APP[Flask Application<br/>Port 600]
+            ROUTES[Route Handlers<br/>Blueprint System]
+            SOCKET[SocketIO<br/>Real-time Communication]
+        end
+        
+        subgraph "PyQt5 Desktop App"
+            QT[PyQt5 Application<br/>QWebEngineView]
+            QT_WEB[Embedded Web View<br/>Flask Integration]
+        end
     end
 
-    %% Layer 3 - AI and ML
-    subgraph L3["Layer 3 - AI and ML"]
-        direction TB
-        NLP["NLP Pipeline"]
-        NER["BioBERT NER"]
-        SENT["Longformer Sentiment"]
-        SUM["T5 Summarization"]
-        GPT["GPT-2 Generation"]
-        IMG["BLIP Image Analysis"]
-        DIAG["Diagnostic Reasoning"]
-        BOT["AI Doctor Bot"]
-        VOICE["Speech Recognition"]
-        AVATAR["Video Synthesis"]
-        NLP --> NER
-        NLP --> SENT
-        NLP --> SUM
-        NLP --> GPT
-        BOT --> VOICE
-        BOT --> AVATAR
-        BOT --> DIAG
+    %% AI/ML Processing Layer
+    subgraph "AI/ML Processing Layer"
+        subgraph "NLP Pipeline"
+            NER[BioBERT NER Model<br/>Medical Entity Recognition]
+            SENT[Sentiment Analysis<br/>Longformer Model]
+            SUM[T5 Summarization<br/>Text Summarization]
+            GPT[GPT-2 Model<br/>Text Generation]
+        end
+        
+        subgraph "Medical Analysis"
+            MED_NLP[Medical NLP Pipeline<br/>Document Processing]
+            IMG_ANAL[Medical Image Analysis<br/>BLIP Model]
+            DIAG[Diagnostic Reasoning<br/>Symptom Matching]
+        end
+        
+        subgraph "AI Bot"
+            AI_BOT[AI Doctor Bot<br/>Virtual Consultation]
+            VOICE[Voice Processing<br/>Speech Recognition]
+            AVATAR[3D Avatar Generation<br/>Video Synthesis]
+        end
     end
 
-    %% Layer 4 - Data and Storage
-    subgraph L4["Layer 4 - Data and Storage"]
-        direction TB
-        SQLITE["SQLite Appointments"]
-        FIREBASE["Firestore Realtime"]
-        UPLOADS["Uploads"]
-        MODELS["Model Cache"]
-        REPORTS["Reports"]
-        VIDEOS["Avatar Assets"]
-        MED_KB["Conditions and Treatments"]
-        EHR["EHR Datasets"]
+    %% Data Layer
+    subgraph "Data Layer"
+        subgraph "Databases"
+            SQLITE[SQLite Database<br/>Appointments]
+            FIREBASE[Firebase Firestore<br/>Real-time Data]
+        end
+        
+        subgraph "File Storage"
+            UPLOADS[Upload Directory<br/>Medical Documents]
+            MODELS[Model Cache<br/>Hugging Face Models]
+            REPORTS[Report Outputs<br/>Generated Reports]
+            VIDEOS[Avatar Videos<br/>3D Avatar Assets]
+        end
+        
+        subgraph "Knowledge Base"
+            MED_KB[Medical Knowledge Base<br/>Conditions & Treatments]
+            EHR_DATA[EHR Datasets<br/>Training Data]
+        end
     end
 
-    %% Layer 5 - Security and Config
-    subgraph L5["Layer 5 - Security and Config"]
-        direction TB
-        ENV["Env Variables and Keys"]
-        CORS["CORS Config"]
-        CACHE["Flask Caching"]
+    %% External Services
+    subgraph "External Services"
+        OPENAI[OpenAI API<br/>GPT Models]
+        ELEVEN[ElevenLabs API<br/>Voice Synthesis]
+        RAPID[RapidAPI<br/>Medical APIs]
+        GOOGLE[Google Cloud<br/>Speech Recognition]
     end
 
-    %% Layer 6 - External Services
-    subgraph L6["Layer 6 - External Services"]
-        direction TB
-        OPENAI["OpenAI API"]
-        ELEVEN["ElevenLabs API"]
-        RAPID["RapidAPI"]
-        GOOGLE["Google Cloud STT"]
+    %% Security & Configuration
+    subgraph "Security & Config"
+        ENV[Environment Variables<br/>API Keys & Config]
+        CORS[CORS Configuration<br/>Cross-origin Access]
+        CACHE[Flask Caching<br/>Performance Optimization]
     end
 
-    %% Vertical flow
-    L1 --> L2 --> L3 --> L4
-    L2 -.-> L5
-    L3 --> L6
-
-    %% Internal flows
-    APP --> ROUTES --> SOCKET
+    %% Data Flow Connections
+    UI --> APP
+    AV --> APP
+    MOB -.-> APP
+    
+    APP --> ROUTES
+    ROUTES --> SOCKET
     APP --> QT_WEB
-    ROUTES --> NLP
-    ROUTES --> BOT
-    ROUTES --> IMG
+    
+    ROUTES --> MED_NLP
+    ROUTES --> AI_BOT
+    ROUTES --> IMG_ANAL
+    
+    MED_NLP --> NER
+    MED_NLP --> SENT
+    MED_NLP --> SUM
+    MED_NLP --> GPT
+    
+    AI_BOT --> VOICE
+    AI_BOT --> AVATAR
+    AI_BOT --> DIAG
+    
     APP --> SQLITE
     APP --> FIREBASE
     APP --> UPLOADS
     APP --> MODELS
     APP --> REPORTS
     APP --> VIDEOS
-    NLP --> MED_KB
-    NLP --> EHR
-    BOT --> OPENAI
+    
+    MED_NLP --> MED_KB
+    MED_NLP --> EHR_DATA
+    
+    AI_BOT --> OPENAI
     VOICE --> GOOGLE
     AVATAR --> ELEVEN
     ROUTES --> RAPID
+    
+    APP --> ENV
+    APP --> CORS
+    APP --> CACHE
+
+    %% Styling
+    classDef userInterface fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef application fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef aiLayer fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef dataLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef external fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef security fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+
+    class UI,AV,MOB userInterface
+    class APP,ROUTES,SOCKET,QT,QT_WEB application
+    class NER,SENT,SUM,GPT,MED_NLP,IMG_ANAL,DIAG,AI_BOT,VOICE,AVATAR aiLayer
+    class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MED_KB,EHR_DATA dataLayer
+    class OPENAI,ELEVEN,RAPID,GOOGLE external
+    class ENV,CORS,CACHE security
 ```
 
 <br>
