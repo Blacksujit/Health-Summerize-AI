@@ -155,151 +155,163 @@ All in a single, modern, and intuitive web application.
 
 ## 🏗️ System Architecture
 
+> **Medivance.AI’s architecture is engineered for performance, security, and seamless user experience. Explore the immersive, multi-layered design below:**
+
 ```mermaid
 graph TB
-    %% Main System Title
-    TITLE["**🏥 Medivance.AI System Architecture**"]
-    
-    %% User Interface Layer
-    subgraph "**🖥️ User Interface Layer**"
-        UI["**🌐 Web Interface**<br/>HTML5/CSS3/JavaScript<br/>Bootstrap & Tailwind"]
-        AV["**👤 3D Avatar Interface**<br/>Virtual Consultation<br/>Real-time Interaction"]
-        MOB["**📱 Mobile Interface**<br/>Future Implementation<br/>iOS & Android"]
-    end
+  %% Main System Title
+  TITLE["🏥 **Medivance.AI System Architecture**"]
 
-    %% Application Layer
-    subgraph "**⚙️ Application Layer**"
-        subgraph "**🐍 Flask Web Server**"
-            APP["**🚀 Flask Application**<br/>Port 600<br/>Main Server"]
-            ROUTES["**🛣️ Route Handlers**<br/>Blueprint System<br/>API Endpoints"]
-            SOCKET["**🔌 SocketIO**<br/>Real-time Communication<br/>WebSocket Support"]
-        end
-        
-        subgraph "**🖥️ PyQt5 Desktop App**"
-            QT["**💻 PyQt5 Application**<br/>QWebEngineView<br/>Desktop Integration"]
-            QT_WEB["**🌐 Embedded Web View**<br/>Flask Integration<br/>Native Desktop UI"]
-        end
-    end
+  %% User Interface Layer
+  subgraph UI_LAYER["🖥️ **User Interface Layer**"]
+    UI["🌐 **Web Portal**<br/>Modern UI/UX<br/>HTML5, CSS3, JS, Bootstrap, Tailwind"]
+    AVATAR["👤 **3D Avatar Interface**<br/>Virtual Consultations<br/>Real-time Interaction"]
+    MOBILE["📱 **Mobile App**<br/>iOS & Android<br/>(Upcoming)"]
+  end
 
-    %% AI/ML Processing Layer
-    subgraph "**🧠 AI/ML Processing Layer**"
-        subgraph "**📝 NLP Pipeline**"
-            NER["**🔍 BioBERT NER Model**<br/>Medical Entity Recognition<br/>Named Entity Extraction"]
-            SENT["**😊 Sentiment Analysis**<br/>Longformer Model<br/>Emotional Context"]
-            SUM["**📋 T5 Summarization**<br/>Text Summarization<br/>Document Condensation"]
-            GPT["**🤖 GPT-2 Model**<br/>Text Generation<br/>Response Creation"]
-        end
-        
-        subgraph "**🏥 Medical Analysis**"
-            MED_NLP["**📊 Medical NLP Pipeline**<br/>Document Processing<br/>Clinical Text Analysis"]
-            IMG_ANAL["**🩻 Medical Image Analysis**<br/>BLIP Model<br/>X-ray & Scan Processing"]
-            DIAG["**🔬 Diagnostic Reasoning**<br/>Symptom Matching<br/>Disease Prediction"]
-        end
-        
-        subgraph "**🤖 AI Bot**"
-            AI_BOT["**👨‍⚕️ AI Doctor Bot**<br/>Virtual Consultation<br/>Intelligent Responses"]
-            VOICE["**🎤 Voice Processing**<br/>Speech Recognition<br/>Audio Analysis"]
-            AVATAR["**🎭 3D Avatar Generation**<br/>Video Synthesis<br/>Visual Interface"]
-        end
-    end
+  %% Application Layer
+  subgraph APP_LAYER["⚙️ **Application Layer**"]
+    FLASK["🚀 **Flask Web Server**<br/>Port 600<br/>RESTful APIs"]
+    ROUTES["🛣️ **Route Handlers**<br/>Blueprints<br/>API Endpoints"]
+    SOCKET["🔌 **SocketIO**<br/>Real-time Communication"]
+    PYQT["💻 **PyQt5 Desktop App**<br/>QWebEngineView<br/>Native Desktop UI"]
+  end
 
-    %% Data Layer
-    subgraph "**💾 Data Layer**"
-        subgraph "**🗄️ Databases**"
-            SQLITE["**📊 SQLite Database**<br/>Appointments<br/>Local Storage"]
-            FIREBASE["**🔥 Firebase Firestore**<br/>Real-time Data<br/>Cloud Database"]
-        end
-        
-        subgraph "**📁 File Storage**"
-            UPLOADS["**📤 Upload Directory**<br/>Medical Documents<br/>File Management"]
-            MODELS["**🤖 Model Cache**<br/>Hugging Face Models<br/>AI Model Storage"]
-            REPORTS["**📄 Report Outputs**<br/>Generated Reports<br/>Analysis Results"]
-            VIDEOS["**🎬 Avatar Videos**<br/>3D Avatar Assets<br/>Media Storage"]
-        end
-        
-        subgraph "**📚 Knowledge Base**"
-            MED_KB["**🏥 Medical Knowledge Base**<br/>Conditions & Treatments<br/>Clinical Database"]
-            EHR_DATA["**📋 EHR Datasets**<br/>Training Data<br/>Model Learning"]
-        end
-    end
+  %% AI/ML Layer
+  subgraph AI_LAYER["🧠 **AI/ML Processing Layer**"]
+    NLP["📝 **NLP Pipeline**<br/>BioBERT NER<br/>Longformer Sentiment<br/>T5 Summarization<br/>GPT-2 Generation"]
+    IMG["🩻 **Medical Imaging**<br/>BLIP Model<br/>X-ray & Scan Analysis"]
+    DIAG["🔬 **Diagnostics**<br/>Symptom Matching<br/>Disease Prediction"]
+    BOT["🤖 **AI Doctor Bot**<br/>Virtual Consultations<br/>Intelligent Responses"]
+    VOICE["🎤 **Voice Processing**<br/>Speech Recognition<br/>Audio Analysis"]
+    AVGEN["🎭 **3D Avatar Generation**<br/>Video Synthesis"]
+  end
 
-    %% External Services
-    subgraph "**🌐 External Services**"
-        OPENAI["**🤖 OpenAI API**<br/>GPT Models<br/>Advanced AI"]
-        ELEVEN["**🎵 ElevenLabs API**<br/>Voice Synthesis<br/>Audio Generation"]
-        RAPID["**⚡ RapidAPI**<br/>Medical APIs<br/>External Data"]
-        GOOGLE["**☁️ Google Cloud**<br/>Speech Recognition<br/>Cloud Services"]
-    end
+  %% Data Layer
+  subgraph DATA_LAYER["💾 **Data Layer**"]
+    SQLITE["📊 **SQLite DB**<br/>Appointments<br/>Local Storage"]
+    FIREBASE["🔥 **Firebase Firestore**<br/>Real-time Cloud DB"]
+    UPLOADS["📤 **Uploads**<br/>Medical Docs<br/>File Management"]
+    MODELS["🤖 **Model Cache**<br/>Hugging Face Models"]
+    REPORTS["📄 **Reports**<br/>Generated Summaries"]
+    VIDEOS["🎬 **Avatar Videos**<br/>Media Storage"]
+    MEDKB["🏥 **Medical Knowledge Base**<br/>Clinical Data"]
+    EHR["📋 **EHR Datasets**<br/>Training Data"]
+  end
 
-    %% Security & Configuration
-    subgraph "**🔒 Security & Config**"
-        ENV["**🔑 Environment Variables**<br/>API Keys & Config<br/>Secure Settings"]
-        CORS["**🌍 CORS Configuration**<br/>Cross-origin Access<br/>Security Policy"]
-        CACHE["**⚡ Flask Caching**<br/>Performance Optimization<br/>Speed Enhancement"]
-    end
+  %% External Services
+  subgraph EXT_SERVICES["🌐 **External Services**"]
+    OPENAI["🤖 **OpenAI API**<br/>GPT Models"]
+    ELEVEN["🎵 **ElevenLabs API**<br/>Voice Synthesis"]
+    RAPID["⚡ **RapidAPI**<br/>Medical Data"]
+    GOOGLE["☁️ **Google Cloud**<br/>Speech Recognition"]
+  end
 
-    %% Data Flow Connections
-    TITLE --> UI
-    TITLE --> AV
-    TITLE --> MOB
-    
-    UI --> APP
-    AV --> APP
-    MOB -.-> APP
-    
-    APP --> ROUTES
-    ROUTES --> SOCKET
-    APP --> QT_WEB
-    
-    ROUTES --> MED_NLP
-    ROUTES --> AI_BOT
-    ROUTES --> IMG_ANAL
-    
-    MED_NLP --> NER
-    MED_NLP --> SENT
-    MED_NLP --> SUM
-    MED_NLP --> GPT
-    
-    AI_BOT --> VOICE
-    AI_BOT --> AVATAR
-    AI_BOT --> DIAG
-    
-    APP --> SQLITE
-    APP --> FIREBASE
-    APP --> UPLOADS
-    APP --> MODELS
-    APP --> REPORTS
-    APP --> VIDEOS
-    
-    MED_NLP --> MED_KB
-    MED_NLP --> EHR_DATA
-    
-    AI_BOT --> OPENAI
-    VOICE --> GOOGLE
-    AVATAR --> ELEVEN
-    ROUTES --> RAPID
-    
-    APP --> ENV
-    APP --> CORS
-    APP --> CACHE
+  %% Security & Config
+  subgraph SEC_CONFIG["🔒 **Security & Configuration**"]
+    ENV["🔑 **Environment Variables**<br/>API Keys & Config"]
+    CORS["🌍 **CORS Policy**<br/>Cross-origin Security"]
+    CACHE["⚡ **Flask Caching**<br/>Performance Boost"]
+  end
 
-    %% Enhanced Styling with Bold Elements
-    classDef mainTitle fill:#1a73e8,stroke:#0d47a1,stroke-width:6px,color:#ffffff,font-weight:bold,font-size:20px
-    classDef userInterface fill:#e3f2fd,stroke:#1976d2,stroke-width:4px,color:#1565c0,font-weight:bold,font-size:14px
-    classDef application fill:#f3e5f5,stroke:#7b1fa2,stroke-width:4px,color:#6a1b9a,font-weight:bold,font-size:14px
-    classDef aiLayer fill:#e8f5e8,stroke:#388e3c,stroke-width:4px,color:#2e7d32,font-weight:bold,font-size:14px
-    classDef dataLayer fill:#fff3e0,stroke:#f57c00,stroke-width:4px,color:#e65100,font-weight:bold,font-size:14px
-    classDef external fill:#fce4ec,stroke:#c2185b,stroke-width:4px,color:#ad1457,font-weight:bold,font-size:14px
-    classDef security fill:#f1f8e9,stroke:#689f38,stroke-width:4px,color:#558b2f,font-weight:bold,font-size:14px
+  %% Connections
+  TITLE --> UI
+  TITLE --> AVATAR
+  TITLE --> MOBILE
 
-    class TITLE mainTitle
-    class UI,AV,MOB userInterface
-    class APP,ROUTES,SOCKET,QT,QT_WEB application
-    class NER,SENT,SUM,GPT,MED_NLP,IMG_ANAL,DIAG,AI_BOT,VOICE,AVATAR aiLayer
-    class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MED_KB,EHR_DATA dataLayer
-    class OPENAI,ELEVEN,RAPID,GOOGLE external
-    class ENV,CORS,CACHE security
+  UI --> FLASK
+  AVATAR --> FLASK
+  MOBILE -.-> FLASK
+
+  FLASK --> ROUTES
+  ROUTES --> SOCKET
+  FLASK --> PYQT
+
+  ROUTES --> NLP
+  ROUTES --> IMG
+  ROUTES --> DIAG
+  ROUTES --> BOT
+
+  NLP --> MEDKB
+  NLP --> EHR
+  IMG --> MODELS
+  DIAG --> REPORTS
+  BOT --> VOICE
+  BOT --> AVGEN
+
+  FLASK --> SQLITE
+  FLASK --> FIREBASE
+  FLASK --> UPLOADS
+  FLASK --> REPORTS
+  FLASK --> VIDEOS
+
+  BOT --> OPENAI
+  VOICE --> GOOGLE
+  AVGEN --> ELEVEN
+  ROUTES --> RAPID
+
+  FLASK --> ENV
+  FLASK --> CORS
+  FLASK --> CACHE
+
+  %% Styling
+  classDef mainTitle fill:#1a73e8,stroke:#0d47a1,stroke-width:6px,color:#fff,font-size:22px,font-weight:bold
+  classDef uiBlock fill:#e3f2fd,stroke:#1976d2,stroke-width:4px,color:#1565c0,font-size:15px,font-weight:bold
+  classDef appBlock fill:#f3e5f5,stroke:#7b1fa2,stroke-width:4px,color:#6a1b9a,font-size:15px,font-weight:bold
+  classDef aiBlock fill:#e8f5e9,stroke:#388e3c,stroke-width:4px,color:#2e7d32,font-size:15px,font-weight:bold
+  classDef dataBlock fill:#fff3e0,stroke:#f57c00,stroke-width:4px,color:#e65100,font-size:15px,font-weight:bold
+  classDef extBlock fill:#fce4ec,stroke:#c2185b,stroke-width:4px,color:#ad1457,font-size:15px,font-weight:bold
+  classDef secBlock fill:#f1f8e9,stroke:#689f38,stroke-width:4px,color:#558b2f,font-size:15px,font-weight:bold
+
+  class TITLE mainTitle
+  class UI,AVATAR,MOBILE uiBlock
+  class FLASK,ROUTES,SOCKET,PYQT appBlock
+  class NLP,IMG,DIAG,BOT,VOICE,AVGEN aiBlock
+  class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MEDKB,EHR dataBlock
+  class OPENAI,ELEVEN,RAPID,GOOGLE extBlock
+  class ENV,CORS,CACHE secBlock
 ```
+
+---
+
+### **Layered Highlights**
+
+- **User Interface Layer:**  
+  - 🌐 **Web Portal:** Responsive, intuitive, and accessible.
+  - 👤 **3D Avatar:** Immersive virtual consultations.
+  - 📱 **Mobile App:** Next-gen healthcare on-the-go.
+
+- **Application Layer:**  
+  - 🚀 **Flask Server:** Fast, scalable, and secure.
+  - 💻 **PyQt5 Desktop:** Native desktop experience.
+  - 🔌 **SocketIO:** Real-time updates and communication.
+
+- **AI/ML Layer:**  
+  - 📝 **NLP:** Entity recognition, sentiment, summarization, and generation.
+  - 🩻 **Imaging:** Automated X-ray and scan analysis.
+  - 🤖 **AI Doctor Bot:** Smart, interactive healthcare assistant.
+
+- **Data Layer:**  
+  - 📊 **Databases:** Local and cloud storage for reliability.
+  - 📤 **Uploads:** Secure document management.
+  - 🏥 **Knowledge Base:** Rich clinical data for AI learning.
+
+- **External Services:**  
+  - 🤖 **OpenAI:** Advanced language models.
+  - 🎵 **ElevenLabs:** Voice synthesis for avatars.
+  - ☁️ **Google Cloud:** Speech and cloud services.
+
+- **Security & Config:**  
+  - 🔑 **Environment Variables:** Secure API keys.
+  - 🌍 **CORS:** Strict cross-origin policies.
+  - ⚡ **Caching:** Optimized performance.
+
+---
+
+<p align="center">
+  <b style="font-size:1.2rem;">Every block is engineered for reliability, security, and immersive healthcare experiences.<br>Medivance.AI: Where innovation meets care.</b>
+</p>
+
 
 
 <br>
