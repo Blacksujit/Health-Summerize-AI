@@ -309,84 +309,42 @@ graph TB
 **🏹🎯 Model Pipeline Architecture:**
 
 ```mermaid
-flowchart TD
-    %% Main Header - Standalone and Prominent
-    A["**🏥 AI Doctor Model Pipeline**"]
+graph TB
+    %% Main Header with enhanced styling
+    A["<div style='padding:10px'><h1>🏥 AI Doctor Model Pipeline</h1></div>"]
     
-    %% Input Processing Module
-    B["**📥 Input Processing & NLU Module**"]
-    B1["• Symptom extraction"]
-    B2["• Medical entity recognition"]
-    B3["• Patient intent classification"]
-    B4["• Medical context understanding"]
+    %% Core Processing Modules in a circular arrangement
+    subgraph ProcessingCore["Core AI Processing"]
+        direction TB
+        B["<b>📥 Input & NLU</b><hr><div style='font-size:12px;text-align:left'>• Symptom Analysis<br>• Entity Recognition<br>• Intent Classification<br>• Context Understanding</div>"]
+        C["<b>🔍 Diagnostic Engine</b><hr><div style='font-size:12px;text-align:left'>• Disease Matching<br>• Medical Knowledge<br>• Differential Analysis<br>• Confidence Scoring</div>"]
+        D["<b>💊 Treatment Planning</b><hr><div style='font-size:12px;text-align:left'>• Protocol Selection<br>• Medication Analysis<br>• Lifestyle Planning<br>• Dietary Guidelines</div>"]
+    end
     
-    %% Diagnostic Reasoning Module
-    C["**🔍 Diagnostic Reasoning Module**"]
-    C1["• Symptom-disease matching"]
-    C2["• Medical knowledge retrieval"]
-    C3["• Differential diagnosis generation"]
-    C4["• Confidence scoring"]
+    %% Output & Safety Layer
+    subgraph OutputLayer["Response & Safety"]
+        direction LR
+        E["<b>📋 Response System</b><hr><div style='font-size:12px;text-align:left'>• Report Generation<br>• Patient Communication<br>• Disclaimer Management<br>• Referral Handling</div>"]
+        F["<b>🛡️ Safety Protocols</b><hr><div style='font-size:12px;text-align:left'>• Critical Monitoring<br>• Emergency Alerts<br>• Ethics Compliance<br>• Regulatory Controls</div>"]
+    end
     
-    %% Treatment Recommendation Module
-    D["**💊 Treatment Recommendation Module**"]
-    D1["• Treatment protocol retrieval"]
-    D2["• Medication suggestion"]
-    D3["• Lifestyle recommendation"]
-    D4["• Dietary advice generation"]
-    
-    %% Response Generation Module
-    E["**📋 Response Generation Module**"]
-    E1["• Medical report formatting"]
-    E2["• Patient-friendly explanation"]
-    E3["• Appropriate disclaimer addition"]
-    E4["• Referral generation when needed"]
-    
-    %% Safety & Compliance Module
-    F["**🛡️ Safety & Compliance Module**"]
-    F1["• Critical condition detection"]
-    F2["• Emergency warning generation"]
-    F3["• Medical ethics compliance"]
-    F4["• Regulatory adherence"]
-    
-    %% Flow Connections
-    A --> B
-    B --> B1
-    B --> B2
-    B --> B3
-    B --> B4
+    %% Streamlined Flow Connections
+    A --> ProcessingCore
     B --> C
-    
-    C --> C1
-    C --> C2
-    C --> C3
-    C --> C4
     C --> D
-    
-    D --> D1
-    D --> D2
-    D --> D3
-    D --> D4
-    D --> E
-    
-    E --> E1
-    E --> E2
-    E --> E3
-    E --> E4
+    D --> OutputLayer
     E --> F
     
-    F --> F1
-    F --> F2
-    F --> F3
-    F --> F4
+    %% Enhanced Visual Styling
+    classDef header fill:#1a73e8,stroke:#0d47a1,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:20px
+    classDef core fill:#00bfae,stroke:#008e76,stroke-width:3px,color:#ffffff,font-size:14px
+    classDef output fill:#4a148c,stroke:#12005e,stroke-width:3px,color:#ffffff,font-size:14px
+    classDef container fill:none,stroke:#ccc,stroke-width:2px,color:#333
     
-    %% Enhanced Styling for Better Visibility
-    classDef mainHeader fill:#1a73e8,stroke:#0d47a1,stroke-width:5px,color:#ffffff,font-weight:bold,font-size:18px
-    classDef moduleHeader fill:#00bfae,stroke:#008e76,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:16px
-    classDef featureItem fill:#ffffff,stroke:#00bfae,stroke-width:2px,color:#1a73e8,font-weight:bold,font-size:13px
-    
-    class A mainHeader
-    class B,C,D,E,F moduleHeader
-    class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 featureItem
+    class A header
+    class B,C,D core
+    class E,F output
+    class ProcessingCore,OutputLayer container
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
