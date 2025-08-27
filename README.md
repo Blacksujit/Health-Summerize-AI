@@ -207,12 +207,26 @@ graph TB
     GOOGLE["☁️ **Google Cloud**<br/>Speech Recognition"]
   end
 
-  %% Security & Config
-  subgraph SEC_CONFIG["🔒 **Security & Configuration**"]
-  
-    ENV["🔑 **Environment Variables**<br/>API Keys & Config"]
-    CORS["🌍 **CORS Policy**<br/>Cross-origin Security"]
-    CACHE["⚡ **Flask Caching**<br/>Performance Boost"]
+  %% Security & Configuration Layer
+  subgraph SEC_CONFIG["🔒 **Security & Configuration Layer**"]
+    direction TB
+    ENV[<div style='text-align:center;'>
+      <div style='font-size:16px;'>🔑 Environment Variables</div>
+      <hr style='margin:4px'>
+      <div style='font-size:12px;'>API Keys & Secure Config</div>
+    </div>]
+    
+    CORS[<div style='text-align:center;'>
+      <div style='font-size:16px;'>🌍 CORS Policy</div>
+      <hr style='margin:4px'>
+      <div style='font-size:12px;'>Cross-origin Security</div>
+    </div>]
+    
+    CACHE[<div style='text-align:center;'>
+      <div style='font-size:16px;'>⚡ Flask Caching</div>
+      <hr style='margin:4px'>
+      <div style='font-size:12px;'>Performance Optimization</div>
+    </div>]
   end
 
   %% Connections
