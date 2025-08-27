@@ -315,7 +315,7 @@ graph TB
     
     subgraph Input["Input Layer"]
         B[<div style='text-align:center;'>
-            <div style='font-size:16px;'>📥 Smart Input Engine</div>
+            <div style='font-size:16px;'>📥 Smart NLU Engine</div>
             <hr style='margin:4px'>
             <div style='font-size:12px;text-align:left;'>
                 • Advanced NLU Processing<br>
