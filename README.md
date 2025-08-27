@@ -309,42 +309,39 @@ graph TB
 **🏹🎯 Model Pipeline Architecture:**
 
 ```mermaid
-graph TB
-    %% Main Header with enhanced styling
-    A["<div style='padding:10px'><h1>🏥 AI Doctor Model Pipeline</h1></div>"]
+graph LR
+    %% Main Title
+    A[("🏥 AI Doctor<br>Pipeline")]
     
-    %% Core Processing Modules in a circular arrangement
-    subgraph ProcessingCore["Core AI Processing"]
-        direction TB
-        B["<b>📥 Input & NLU</b><hr><div style='font-size:12px;text-align:left'>• Symptom Analysis<br>• Entity Recognition<br>• Intent Classification<br>• Context Understanding</div>"]
-        C["<b>🔍 Diagnostic Engine</b><hr><div style='font-size:12px;text-align:left'>• Disease Matching<br>• Medical Knowledge<br>• Differential Analysis<br>• Confidence Scoring</div>"]
-        D["<b>💊 Treatment Planning</b><hr><div style='font-size:12px;text-align:left'>• Protocol Selection<br>• Medication Analysis<br>• Lifestyle Planning<br>• Dietary Guidelines</div>"]
-    end
+    %% Smart Input Processing
+    B["📥 Smart Input<br><small>• NLU Processing<br>• Context Analysis</small>"]
     
-    %% Output & Safety Layer
-    subgraph OutputLayer["Response & Safety"]
-        direction LR
-        E["<b>📋 Response System</b><hr><div style='font-size:12px;text-align:left'>• Report Generation<br>• Patient Communication<br>• Disclaimer Management<br>• Referral Handling</div>"]
-        F["<b>🛡️ Safety Protocols</b><hr><div style='font-size:12px;text-align:left'>• Critical Monitoring<br>• Emergency Alerts<br>• Ethics Compliance<br>• Regulatory Controls</div>"]
-    end
+    %% Diagnostic Intelligence
+    C["🔬 Diagnostic AI<br><small>• Disease Patterns<br>• Clinical Insights</small>"]
     
-    %% Streamlined Flow Connections
-    A --> ProcessingCore
-    B --> C
-    C --> D
-    D --> OutputLayer
-    E --> F
+    %% Treatment Innovation
+    D["💊 Treatment Matrix<br><small>• Protocol Engine<br>• Care Planning</small>"]
     
-    %% Enhanced Visual Styling
-    classDef header fill:#1a73e8,stroke:#0d47a1,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:20px
-    classDef core fill:#00bfae,stroke:#008e76,stroke-width:3px,color:#ffffff,font-size:14px
-    classDef output fill:#4a148c,stroke:#12005e,stroke-width:3px,color:#ffffff,font-size:14px
-    classDef container fill:none,stroke:#ccc,stroke-width:2px,color:#333
+    %% Response Orchestration
+    E["📋 Response Hub<br><small>• Report Synthesis<br>• Patient Portal</small>"]
     
-    class A header
-    class B,C,D core
-    class E,F output
-    class ProcessingCore,OutputLayer container
+    %% Safety Guardian
+    F["🛡️ Safety Shield<br><small>• Ethics Guard<br>• Compliance AI</small>"]
+
+    %% Innovative Flow
+    A --> |"Transform"| B
+    B --> |"Analyze"| C
+    C --> |"Optimize"| D
+    D --> |"Deliver"| E
+    E --> |"Protect"| F
+    
+    %% Modern Styling
+    classDef mainNode fill:#1a73e8,stroke:#0d47a1,stroke-width:3px,color:#fff,font-size:16px,text-align:center,rx:50
+    classDef moduleNode fill:none,stroke:#00bfae,stroke-width:2px,color:#2d3436,font-size:14px
+    classDef flowLabel color:#2d3436,font-size:12px
+    
+    class A mainNode
+    class B,C,D,E,F moduleNode
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
