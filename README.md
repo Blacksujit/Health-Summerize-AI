@@ -311,37 +311,79 @@ graph TB
 ```mermaid
 graph TB
     %% Main Title
-    A[("🏥 AI Doctor<br>Pipeline")]
+    A[("🏥 AI Doctor Pipeline")]
     
-    %% Smart Input Processing
-    B["📥 Smart Input<br><small>• NLU Processing<br>• Context Analysis</small>"]
+    subgraph Input["Input Layer"]
+        B[<div style='text-align:center;'>
+            <div style='font-size:16px;'>📥 Smart Input Engine</div>
+            <hr style='margin:4px'>
+            <div style='font-size:12px;text-align:left;'>
+                • Advanced NLU Processing<br>
+                • Medical Context Analysis
+            </div>
+        </div>]
+    end
     
-    %% Diagnostic Intelligence
-    C["🔬 Diagnostic AI<br><small>• Disease Patterns<br>• Clinical Insights</small>"]
+    subgraph Processing["Processing Layer"]
+        C[<div style='text-align:center;'>
+            <div style='font-size:16px;'>🔬 Diagnostic Intelligence</div>
+            <hr style='margin:4px'>
+            <div style='font-size:12px;text-align:left;'>
+                • Pattern Recognition<br>
+                • Clinical Analytics
+            </div>
+        </div>]
+        
+        D[<div style='text-align:center;'>
+            <div style='font-size:16px;'>💊 Treatment Matrix</div>
+            <hr style='margin:4px'>
+            <div style='font-size:12px;text-align:left;'>
+                • Smart Protocol Design<br>
+                • Personalized Care
+            </div>
+        </div>]
+    end
     
-    %% Treatment Innovation
-    D["💊 Treatment Matrix<br><small>• Protocol Engine<br>• Care Planning</small>"]
-    
-    %% Response Orchestration
-    E["📋 Response Hub<br><small>• Report Synthesis<br>• Patient Portal</small>"]
-    
-    %% Safety Guardian
-    F["🛡️ Safety Shield<br><small>• Ethics Guard<br>• Compliance AI</small>"]
+    subgraph Output["Output Layer"]
+        E[<div style='text-align:center;'>
+            <div style='font-size:16px;'>📋 Response System</div>
+            <hr style='margin:4px'>
+            <div style='font-size:12px;text-align:left;'>
+                • Intelligent Reports<br>
+                • Patient Interface
+            </div>
+        </div>]
+        
+        F[<div style='text-align:center;'>
+            <div style='font-size:16px;'>🛡️ Safety Framework</div>
+            <hr style='margin:4px'>
+            <div style='font-size:12px;text-align:left;'>
+                • Ethics & Compliance<br>
+                • Security Controls
+            </div>
+        </div>]
+    end
 
-    %% Innovative Flow
-    A --> |"Transform"| B
+    %% Innovative Flow with Layered Approach
+    A --> |"Initialize"| Input
+    Input --> |"Process"| Processing
+    Processing --> |"Generate"| Output
+    
+    %% Internal Connections
     B --> |"Analyze"| C
-    C --> |"Optimize"| D
-    D --> |"Deliver"| E
-    E --> |"Protect"| F
+    C --> |"Plan"| D
+    D --> |"Report"| E
+    E --> |"Validate"| F
     
     %% Modern Styling
-    classDef mainNode fill:#1a73e8,stroke:#0d47a1,stroke-width:3px,color:#fff,font-size:16px,text-align:center,rx:50
-    classDef moduleNode fill:none,stroke:#00bfae,stroke-width:2px,color:#2d3436,font-size:14px
+    classDef mainNode fill:#1a73e8,stroke:#0d47a1,stroke-width:3px,color:#fff,font-size:18px,text-align:center,rx:50
+    classDef moduleNode fill:#ffffff,stroke:#00bfae,stroke-width:2px,color:#2d3436
+    classDef layer fill:none,stroke:#e1e8ed,stroke-width:1px,color:#2d3436,rx:10
     classDef flowLabel color:#2d3436,font-size:12px
     
     class A mainNode
     class B,C,D,E,F moduleNode
+    class Input,Processing,Output layer
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
