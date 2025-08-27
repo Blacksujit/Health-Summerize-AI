@@ -309,26 +309,84 @@ graph TB
 **🏹🎯 Model Pipeline Architecture:**
 
 ```mermaid
-flowchart LR
-  %% Main Header
-  A["🏥 <b>AI Doctor Model Pipeline</b>"]
-
-  %% Modules as compact blocks
-  B["<b>📥 Input & NLU</b><br><span style='font-size:12px;'>Symptom Extraction<br>Entity Recognition<br>Intent Classification<br>Context Understanding</span>"]
-  C["<b>🔍 Diagnostic Reasoning</b><br><span style='font-size:12px;'>Symptom-Disease Match<br>Knowledge Retrieval<br>Differential Diagnosis<br>Confidence Scoring</span>"]
-  D["<b>💊 Treatment Recommendation</b><br><span style='font-size:12px;'>Protocol Retrieval<br>Medication Suggestion<br>Lifestyle Advice<br>Dietary Guidance</span>"]
-  E["<b>📋 Response Generation</b><br><span style='font-size:12px;'>Report Formatting<br>Patient Explanation<br>Disclaimer<br>Referral</span>"]
-  F["<b>🛡️ Safety & Compliance</b><br><span style='font-size:12px;'>Critical Detection<br>Emergency Warning<br>Ethics<br>Regulation</span>"]
-
-  %% Flow Connections (horizontal, then vertical for last step)
-  A --> B --> C --> D --> E --> F
-
-  %% Styling for compact, bold blocks
-  classDef mainHeader fill:#1a73e8,stroke:#0d47a1,stroke-width:6px,color:#fff,font-weight:bold,font-size:20px
-  classDef moduleBlock fill:#00bfae,stroke:#008e76,stroke-width:4px,color:#fff,font-weight:bold,font-size:16px
-
-  class A mainHeader
-  class B,C,D,E,F moduleBlock
+flowchart TD
+    %% Main Header - Standalone and Prominent
+    A["**🏥 AI Doctor Model Pipeline**"]
+    
+    %% Input Processing Module
+    B["**📥 Input Processing & NLU Module**"]
+    B1["• Symptom extraction"]
+    B2["• Medical entity recognition"]
+    B3["• Patient intent classification"]
+    B4["• Medical context understanding"]
+    
+    %% Diagnostic Reasoning Module
+    C["**🔍 Diagnostic Reasoning Module**"]
+    C1["• Symptom-disease matching"]
+    C2["• Medical knowledge retrieval"]
+    C3["• Differential diagnosis generation"]
+    C4["• Confidence scoring"]
+    
+    %% Treatment Recommendation Module
+    D["**💊 Treatment Recommendation Module**"]
+    D1["• Treatment protocol retrieval"]
+    D2["• Medication suggestion"]
+    D3["• Lifestyle recommendation"]
+    D4["• Dietary advice generation"]
+    
+    %% Response Generation Module
+    E["**📋 Response Generation Module**"]
+    E1["• Medical report formatting"]
+    E2["• Patient-friendly explanation"]
+    E3["• Appropriate disclaimer addition"]
+    E4["• Referral generation when needed"]
+    
+    %% Safety & Compliance Module
+    F["**🛡️ Safety & Compliance Module**"]
+    F1["• Critical condition detection"]
+    F2["• Emergency warning generation"]
+    F3["• Medical ethics compliance"]
+    F4["• Regulatory adherence"]
+    
+    %% Flow Connections
+    A --> B
+    B --> B1
+    B --> B2
+    B --> B3
+    B --> B4
+    B --> C
+    
+    C --> C1
+    C --> C2
+    C --> C3
+    C --> C4
+    C --> D
+    
+    D --> D1
+    D --> D2
+    D --> D3
+    D --> D4
+    D --> E
+    
+    E --> E1
+    E --> E2
+    E --> E3
+    E --> E4
+    E --> F
+    
+    F --> F1
+    F --> F2
+    F --> F3
+    F --> F4
+    
+    %% Enhanced Styling for Better Visibility
+    classDef mainHeader fill:#1a73e8,stroke:#0d47a1,stroke-width:5px,color:#ffffff,font-weight:bold,font-size:18px
+    classDef moduleHeader fill:#00bfae,stroke:#008e76,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:16px
+    classDef featureItem fill:#ffffff,stroke:#00bfae,stroke-width:2px,color:#1a73e8,font-weight:bold,font-size:13px
+    
+    class A mainHeader
+    class B,C,D,E,F moduleHeader
+    class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 featureItem
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
