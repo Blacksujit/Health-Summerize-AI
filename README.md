@@ -300,7 +300,7 @@ graph TB
     class OPENAI,ELEVEN,RAPID,GOOGLE external
     class ENV,CORS,CACHE security
 ```
-```
+
 
 <br>
 <br>
