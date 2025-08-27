@@ -309,7 +309,7 @@ graph TB
 **🏹🎯 Model Pipeline Architecture:**
 
 ```mermaid
-graph LR
+graph TB
     %% Main Title
     A[("🏥 AI Doctor<br>Pipeline")]
     
