@@ -209,7 +209,7 @@ graph TB
 
   %% Security & Config
   subgraph SEC_CONFIG["🔒 **Security & Configuration**"]
-  end
+  
     ENV["🔑 **Environment Variables**<br/>API Keys & Config"]
     CORS["🌍 **CORS Policy**<br/>Cross-origin Security"]
     CACHE["⚡ **Flask Caching**<br/>Performance Boost"]
