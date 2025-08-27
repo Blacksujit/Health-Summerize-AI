@@ -157,85 +157,92 @@ All in a single, modern, and intuitive web application.
 
 ```mermaid
 graph TB
+    %% Main System Title
+    TITLE["**🏥 Medivance.AI System Architecture**"]
+    
     %% User Interface Layer
-    subgraph "User Interface Layer"
-        UI[Web Interface<br/>HTML5/CSS3/JS]
-        AV[3D Avatar Interface<br/>Virtual Consultation]
-        MOB[Mobile Interface<br/>Future Implementation]
+    subgraph "**🖥️ User Interface Layer**"
+        UI["**🌐 Web Interface**<br/>HTML5/CSS3/JavaScript<br/>Bootstrap & Tailwind"]
+        AV["**👤 3D Avatar Interface**<br/>Virtual Consultation<br/>Real-time Interaction"]
+        MOB["**📱 Mobile Interface**<br/>Future Implementation<br/>iOS & Android"]
     end
 
     %% Application Layer
-    subgraph "Application Layer"
-        subgraph "Flask Web Server"
-            APP[Flask Application<br/>Port 600]
-            ROUTES[Route Handlers<br/>Blueprint System]
-            SOCKET[SocketIO<br/>Real-time Communication]
+    subgraph "**⚙️ Application Layer**"
+        subgraph "**🐍 Flask Web Server**"
+            APP["**🚀 Flask Application**<br/>Port 600<br/>Main Server"]
+            ROUTES["**🛣️ Route Handlers**<br/>Blueprint System<br/>API Endpoints"]
+            SOCKET["**🔌 SocketIO**<br/>Real-time Communication<br/>WebSocket Support"]
         end
         
-        subgraph "PyQt5 Desktop App"
-            QT[PyQt5 Application<br/>QWebEngineView]
-            QT_WEB[Embedded Web View<br/>Flask Integration]
+        subgraph "**🖥️ PyQt5 Desktop App**"
+            QT["**💻 PyQt5 Application**<br/>QWebEngineView<br/>Desktop Integration"]
+            QT_WEB["**🌐 Embedded Web View**<br/>Flask Integration<br/>Native Desktop UI"]
         end
     end
 
     %% AI/ML Processing Layer
-    subgraph "AI/ML Processing Layer"
-        subgraph "NLP Pipeline"
-            NER[BioBERT NER Model<br/>Medical Entity Recognition]
-            SENT[Sentiment Analysis<br/>Longformer Model]
-            SUM[T5 Summarization<br/>Text Summarization]
-            GPT[GPT-2 Model<br/>Text Generation]
+    subgraph "**🧠 AI/ML Processing Layer**"
+        subgraph "**📝 NLP Pipeline**"
+            NER["**🔍 BioBERT NER Model**<br/>Medical Entity Recognition<br/>Named Entity Extraction"]
+            SENT["**😊 Sentiment Analysis**<br/>Longformer Model<br/>Emotional Context"]
+            SUM["**📋 T5 Summarization**<br/>Text Summarization<br/>Document Condensation"]
+            GPT["**🤖 GPT-2 Model**<br/>Text Generation<br/>Response Creation"]
         end
         
-        subgraph "Medical Analysis"
-            MED_NLP[Medical NLP Pipeline<br/>Document Processing]
-            IMG_ANAL[Medical Image Analysis<br/>BLIP Model]
-            DIAG[Diagnostic Reasoning<br/>Symptom Matching]
+        subgraph "**🏥 Medical Analysis**"
+            MED_NLP["**📊 Medical NLP Pipeline**<br/>Document Processing<br/>Clinical Text Analysis"]
+            IMG_ANAL["**🩻 Medical Image Analysis**<br/>BLIP Model<br/>X-ray & Scan Processing"]
+            DIAG["**🔬 Diagnostic Reasoning**<br/>Symptom Matching<br/>Disease Prediction"]
         end
         
-        subgraph "AI Bot"
-            AI_BOT[AI Doctor Bot<br/>Virtual Consultation]
-            VOICE[Voice Processing<br/>Speech Recognition]
-            AVATAR[3D Avatar Generation<br/>Video Synthesis]
+        subgraph "**🤖 AI Bot**"
+            AI_BOT["**👨‍⚕️ AI Doctor Bot**<br/>Virtual Consultation<br/>Intelligent Responses"]
+            VOICE["**🎤 Voice Processing**<br/>Speech Recognition<br/>Audio Analysis"]
+            AVATAR["**🎭 3D Avatar Generation**<br/>Video Synthesis<br/>Visual Interface"]
         end
     end
 
     %% Data Layer
-    subgraph "Data Layer"
-        subgraph "Databases"
-            SQLITE[SQLite Database<br/>Appointments]
-            FIREBASE[Firebase Firestore<br/>Real-time Data]
+    subgraph "**💾 Data Layer**"
+        subgraph "**🗄️ Databases**"
+            SQLITE["**📊 SQLite Database**<br/>Appointments<br/>Local Storage"]
+            FIREBASE["**🔥 Firebase Firestore**<br/>Real-time Data<br/>Cloud Database"]
         end
         
-        subgraph "File Storage"
-            UPLOADS[Upload Directory<br/>Medical Documents]
-            MODELS[Model Cache<br/>Hugging Face Models]
-            REPORTS[Report Outputs<br/>Generated Reports]
-            VIDEOS[Avatar Videos<br/>3D Avatar Assets]
+        subgraph "**📁 File Storage**"
+            UPLOADS["**📤 Upload Directory**<br/>Medical Documents<br/>File Management"]
+            MODELS["**🤖 Model Cache**<br/>Hugging Face Models<br/>AI Model Storage"]
+            REPORTS["**📄 Report Outputs**<br/>Generated Reports<br/>Analysis Results"]
+            VIDEOS["**🎬 Avatar Videos**<br/>3D Avatar Assets<br/>Media Storage"]
         end
         
-        subgraph "Knowledge Base"
-            MED_KB[Medical Knowledge Base<br/>Conditions & Treatments]
-            EHR_DATA[EHR Datasets<br/>Training Data]
+        subgraph "**📚 Knowledge Base**"
+            MED_KB["**🏥 Medical Knowledge Base**<br/>Conditions & Treatments<br/>Clinical Database"]
+            EHR_DATA["**📋 EHR Datasets**<br/>Training Data<br/>Model Learning"]
         end
     end
 
     %% External Services
-    subgraph "External Services"
-        OPENAI[OpenAI API<br/>GPT Models]
-        ELEVEN[ElevenLabs API<br/>Voice Synthesis]
-        RAPID[RapidAPI<br/>Medical APIs]
-        GOOGLE[Google Cloud<br/>Speech Recognition]
+    subgraph "**🌐 External Services**"
+        OPENAI["**🤖 OpenAI API**<br/>GPT Models<br/>Advanced AI"]
+        ELEVEN["**🎵 ElevenLabs API**<br/>Voice Synthesis<br/>Audio Generation"]
+        RAPID["**⚡ RapidAPI**<br/>Medical APIs<br/>External Data"]
+        GOOGLE["**☁️ Google Cloud**<br/>Speech Recognition<br/>Cloud Services"]
     end
 
     %% Security & Configuration
-    subgraph "Security & Config"
-        ENV[Environment Variables<br/>API Keys & Config]
-        CORS[CORS Configuration<br/>Cross-origin Access]
-        CACHE[Flask Caching<br/>Performance Optimization]
+    subgraph "**🔒 Security & Config**"
+        ENV["**🔑 Environment Variables**<br/>API Keys & Config<br/>Secure Settings"]
+        CORS["**🌍 CORS Configuration**<br/>Cross-origin Access<br/>Security Policy"]
+        CACHE["**⚡ Flask Caching**<br/>Performance Optimization<br/>Speed Enhancement"]
     end
 
     %% Data Flow Connections
+    TITLE --> UI
+    TITLE --> AV
+    TITLE --> MOB
+    
     UI --> APP
     AV --> APP
     MOB -.-> APP
@@ -276,20 +283,23 @@ graph TB
     APP --> CORS
     APP --> CACHE
 
-    %% Styling
-    classDef userInterface fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef application fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef aiLayer fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef dataLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef external fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    classDef security fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    %% Enhanced Styling with Bold Elements
+    classDef mainTitle fill:#1a73e8,stroke:#0d47a1,stroke-width:6px,color:#ffffff,font-weight:bold,font-size:20px
+    classDef userInterface fill:#e3f2fd,stroke:#1976d2,stroke-width:4px,color:#1565c0,font-weight:bold,font-size:14px
+    classDef application fill:#f3e5f5,stroke:#7b1fa2,stroke-width:4px,color:#6a1b9a,font-weight:bold,font-size:14px
+    classDef aiLayer fill:#e8f5e8,stroke:#388e3c,stroke-width:4px,color:#2e7d32,font-weight:bold,font-size:14px
+    classDef dataLayer fill:#fff3e0,stroke:#f57c00,stroke-width:4px,color:#e65100,font-weight:bold,font-size:14px
+    classDef external fill:#fce4ec,stroke:#c2185b,stroke-width:4px,color:#ad1457,font-weight:bold,font-size:14px
+    classDef security fill:#f1f8e9,stroke:#689f38,stroke-width:4px,color:#558b2f,font-weight:bold,font-size:14px
 
+    class TITLE mainTitle
     class UI,AV,MOB userInterface
     class APP,ROUTES,SOCKET,QT,QT_WEB application
     class NER,SENT,SUM,GPT,MED_NLP,IMG_ANAL,DIAG,AI_BOT,VOICE,AVATAR aiLayer
     class SQLITE,FIREBASE,UPLOADS,MODELS,REPORTS,VIDEOS,MED_KB,EHR_DATA dataLayer
     class OPENAI,ELEVEN,RAPID,GOOGLE external
     class ENV,CORS,CACHE security
+```
 ```
 
 <br>
