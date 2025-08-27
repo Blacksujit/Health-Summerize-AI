@@ -208,8 +208,9 @@ graph TB
   end
 
   %% Security & Configuration Layer
-  subgraph SEC_CONFIG["🔒 **Security & Configuration Layer**"]
-    direction TB
+  subgraph SEC_CONFIG[" "]
+    SEC_TITLE["🔒 Security & Configuration Layer"]
+    
     ENV[<div style='text-align:center;'>
       <div style='font-size:16px;'>🔑 Environment Variables</div>
       <hr style='margin:4px'>
@@ -227,7 +228,15 @@ graph TB
       <hr style='margin:4px'>
       <div style='font-size:12px;'>Performance Optimization</div>
     </div>]
+
+    %% Layout and connections
+    SEC_TITLE --> ENV
+    SEC_TITLE --> CORS
+    SEC_TITLE --> CACHE
   end
+
+  %% Add specific styling for security title
+  classDef securityTitle fill:#f1f8e9,stroke:#558b2f,stroke-width:3px,color:#33691e,font-size:16px,font-weight:bold,padding:10px
 
   %% Connections
   TITLE --> UI
