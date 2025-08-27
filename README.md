@@ -273,50 +273,7 @@ graph TB
 ```
 
 ---
-
-### **Layered Highlights**
-
-- **User Interface Layer:**  
-  - 🌐 **Web Portal:** Responsive, intuitive, and accessible.
-  - 👤 **3D Avatar:** Immersive virtual consultations.
-  - 📱 **Mobile App:** Next-gen healthcare on-the-go.
-
-- **Application Layer:**  
-  - 🚀 **Flask Server:** Fast, scalable, and secure.
-  - 💻 **PyQt5 Desktop:** Native desktop experience.
-  - 🔌 **SocketIO:** Real-time updates and communication.
-
-- **AI/ML Layer:**  
-  - 📝 **NLP:** Entity recognition, sentiment, summarization, and generation.
-  - 🩻 **Imaging:** Automated X-ray and scan analysis.
-  - 🤖 **AI Doctor Bot:** Smart, interactive healthcare assistant.
-
-- **Data Layer:**  
-  - 📊 **Databases:** Local and cloud storage for reliability.
-  - 📤 **Uploads:** Secure document management.
-  - 🏥 **Knowledge Base:** Rich clinical data for AI learning.
-
-- **External Services:**  
-  - 🤖 **OpenAI:** Advanced language models.
-  - 🎵 **ElevenLabs:** Voice synthesis for avatars.
-  - ☁️ **Google Cloud:** Speech and cloud services.
-
-- **Security & Config:**  
-  - 🔑 **Environment Variables:** Secure API keys.
-  - 🌍 **CORS:** Strict cross-origin policies.
-  - ⚡ **Caching:** Optimized performance.
-
 ---
-
-<p align="center">
-  <b style="font-size:1.2rem;">Every block is engineered for reliability, security, and immersive healthcare experiences.<br>Medivance.AI: Where innovation meets care.</b>
-</p>
-
-
-
-<br>
-<br>
-<br>
 
 **🏹🎯 Model Pipeline Architecture:**
 
