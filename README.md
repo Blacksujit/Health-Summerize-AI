@@ -296,71 +296,53 @@ graph TB
 <br>
 <br>
 
-**🏹🎯 Model Pipeline Arcitecture:**
+**🏹🎯 Model Pipeline Architecture:**
 
-```
-
-┌───────────────────────────────────────────────────────────────────────────┐
-│                                                                           │
-│                         AI Doctor Model Pipeline                          │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                       Input Processing & NLU Module                       │
-│                                                                           │
-│  - Symptom extraction                                                     │
-│  - Medical entity recognition                                             │
-│  - Patient intent classification                                          │
-│  - Medical context understanding                                          │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                        Diagnostic Reasoning Module                        │
-│                                                                           │
-│  - Symptom-disease matching                                               │
-│  - Medical knowledge retrieval                                            │
-│  - Differential diagnosis generation                                      │
-│  - Confidence scoring                                                     │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                      Treatment Recommendation Module                      │
-│                                                                           │
-│  - Treatment protocol retrieval                                           │
-│  - Medication suggestion                                                  │
-│  - Lifestyle recommendation                                               │
-│  - Dietary advice generation                                              │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                       Response Generation Module                          │
-│                                                                           │
-│  - Medical report formatting                                              │
-│  - Patient-friendly explanation                                           │
-│  - Appropriate disclaimer addition                                        │
-│  - Referral generation when needed                                        │
-│                                                                           │
-└────────────────────────────────────┬──────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                        Safety & Compliance Module                         │
-│                                                                           │
-│  - Critical condition detection                                           │
-│  - Emergency warning generation                                           │
-│  - Medical ethics compliance                                              │
-│  - Regulatory adherence                                                   │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
-
+```mermaid
+flowchart TD
+    A[AI Doctor Model Pipeline] --> B[Input Processing & NLU Module]
+    
+    B --> B1[Symptom extraction]
+    B --> B2[Medical entity recognition]
+    B --> B3[Patient intent classification]
+    B --> B4[Medical context understanding]
+    
+    B --> C[Diagnostic Reasoning Module]
+    
+    C --> C1[Symptom-disease matching]
+    C --> C2[Medical knowledge retrieval]
+    C --> C3[Differential diagnosis generation]
+    C --> C4[Confidence scoring]
+    
+    C --> D[Treatment Recommendation Module]
+    
+    D --> D1[Treatment protocol retrieval]
+    D --> D2[Medication suggestion]
+    D --> D3[Lifestyle recommendation]
+    D --> D4[Dietary advice generation]
+    
+    D --> E[Response Generation Module]
+    
+    E --> E1[Medical report formatting]
+    E --> E2[Patient-friendly explanation]
+    E --> E3[Appropriate disclaimer addition]
+    E --> E4[Referral generation when needed]
+    
+    E --> F[Safety & Compliance Module]
+    
+    F --> F1[Critical condition detection]
+    F --> F2[Emergency warning generation]
+    F --> F3[Medical ethics compliance]
+    F --> F4[Regulatory adherence]
+    
+    %% Styling
+    classDef mainModule fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
+    classDef subModule fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef feature fill:#e8f5e8,stroke:#388e3c,stroke-width:1px
+    
+    class A mainModule
+    class B,C,D,E,F subModule
+    class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 feature
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
