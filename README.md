@@ -300,49 +300,64 @@ graph TB
 
 ```mermaid
 flowchart TD
-    A[AI Doctor Model Pipeline] --> B[Input Processing & NLU Module]
+    subgraph "AI Doctor Model Pipeline"
+        A["**🏥 AI Doctor Model Pipeline**"]
+    end
     
-    B --> B1[Symptom extraction]
-    B --> B2[Medical entity recognition]
-    B --> B3[Patient intent classification]
-    B --> B4[Medical context understanding]
+    subgraph "Input Processing & NLU Module"
+        B["**📥 Input Processing & NLU Module**"]
+        B1["• Symptom extraction"]
+        B2["• Medical entity recognition"]
+        B3["• Patient intent classification"]
+        B4["• Medical context understanding"]
+    end
     
-    B --> C[Diagnostic Reasoning Module]
+    subgraph "Diagnostic Reasoning Module"
+        C["**🔍 Diagnostic Reasoning Module**"]
+        C1["• Symptom-disease matching"]
+        C2["• Medical knowledge retrieval"]
+        C3["• Differential diagnosis generation"]
+        C4["• Confidence scoring"]
+    end
     
-    C --> C1[Symptom-disease matching]
-    C --> C2[Medical knowledge retrieval]
-    C --> C3[Differential diagnosis generation]
-    C --> C4[Confidence scoring]
+    subgraph "Treatment Recommendation Module"
+        D["**💊 Treatment Recommendation Module**"]
+        D1["• Treatment protocol retrieval"]
+        D2["• Medication suggestion"]
+        D3["• Lifestyle recommendation"]
+        D4["• Dietary advice generation"]
+    end
     
-    C --> D[Treatment Recommendation Module]
+    subgraph "Response Generation Module"
+        E["**📋 Response Generation Module**"]
+        E1["• Medical report formatting"]
+        E2["• Patient-friendly explanation"]
+        E3["• Appropriate disclaimer addition"]
+        E4["• Referral generation when needed"]
+    end
     
-    D --> D1[Treatment protocol retrieval]
-    D --> D2[Medication suggestion]
-    D --> D3[Lifestyle recommendation]
-    D --> D4[Dietary advice generation]
+    subgraph "Safety & Compliance Module"
+        F["**🛡️ Safety & Compliance Module**"]
+        F1["• Critical condition detection"]
+        F2["• Emergency warning generation"]
+        F3["• Medical ethics compliance"]
+        F4["• Regulatory adherence"]
+    end
     
-    D --> E[Response Generation Module]
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
     
-    E --> E1[Medical report formatting]
-    E --> E2[Patient-friendly explanation]
-    E --> E3[Appropriate disclaimer addition]
-    E --> E4[Referral generation when needed]
+    %% Styling with bold fonts and clear visibility
+    classDef mainTitle fill:#1a73e8,stroke:#0d47a1,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:16px
+    classDef moduleTitle fill:#00bfae,stroke:#008e76,stroke-width:3px,color:#ffffff,font-weight:bold,font-size:14px
+    classDef featureItem fill:#f8f9fa,stroke:#dee2e6,stroke-width:2px,color:#212529,font-weight:bold,font-size:12px
     
-    E --> F[Safety & Compliance Module]
-    
-    F --> F1[Critical condition detection]
-    F --> F2[Emergency warning generation]
-    F --> F3[Medical ethics compliance]
-    F --> F4[Regulatory adherence]
-    
-    %% Styling
-    classDef mainModule fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    classDef subModule fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef feature fill:#e8f5e8,stroke:#388e3c,stroke-width:1px
-    
-    class A mainModule
-    class B,C,D,E,F subModule
-    class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 feature
+    class A mainTitle
+    class B,C,D,E,F moduleTitle
+    class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 featureItem
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
