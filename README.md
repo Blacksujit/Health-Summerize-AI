@@ -308,41 +308,81 @@ graph TB
 
 **🏹🎯 Model Pipeline Architecture:**
 
-
-
 ```mermaid
 flowchart TB
   %% Main Header - Standalone and Prominent
-  A["🏥 **AI Doctor Model Pipeline**"]
+  A["<b style='font-size:22px;'>🏥 AI Doctor Model Pipeline</b>"]
 
-  %% Input Processing & NLU Module (Block)
-  B["<b>📥 Input Processing & NLU</b><br><span style='font-size:13px;'>Symptom Extraction<br>Medical Entity Recognition<br>Patient Intent Classification<br>Medical Context Understanding</span>"]
+  %% Input Processing Module
+  B["<b>📥 Input Processing & NLU Module</b>"]
+  B1["<b>• Symptom extraction</b>"]
+  B2["<b>• Medical entity recognition</b>"]
+  B3["<b>• Patient intent classification</b>"]
+  B4["<b>• Medical context understanding</b>"]
 
-  %% Diagnostic Reasoning Module (Block)
-  C["<b>🔍 Diagnostic Reasoning</b><br><span style='font-size:13px;'>Symptom-Disease Matching<br>Medical Knowledge Retrieval<br>Differential Diagnosis Generation<br>Confidence Scoring</span>"]
+  %% Diagnostic Reasoning Module
+  C["<b>🔍 Diagnostic Reasoning Module</b>"]
+  C1["<b>• Symptom-disease matching</b>"]
+  C2["<b>• Medical knowledge retrieval</b>"]
+  C3["<b>• Differential diagnosis generation</b>"]
+  C4["<b>• Confidence scoring</b>"]
 
-  %% Treatment Recommendation Module (Block)
-  D["<b>💊 Treatment Recommendation</b><br><span style='font-size:13px;'>Treatment Protocol Retrieval<br>Medication Suggestion<br>Lifestyle Recommendation<br>Dietary Advice Generation</span>"]
+  %% Treatment Recommendation Module
+  D["<b>💊 Treatment Recommendation Module</b>"]
+  D1["<b>• Treatment protocol retrieval</b>"]
+  D2["<b>• Medication suggestion</b>"]
+  D3["<b>• Lifestyle recommendation</b>"]
+  D4["<b>• Dietary advice generation</b>"]
 
-  %% Response Generation Module (Block)
-  E["<b>📋 Response Generation</b><br><span style='font-size:13px;'>Medical Report Formatting<br>Patient-Friendly Explanation<br>Disclaimer Addition<br>Referral Generation</span>"]
+  %% Response Generation Module
+  E["<b>📋 Response Generation Module</b>"]
+  E1["<b>• Medical report formatting</b>"]
+  E2["<b>• Patient-friendly explanation</b>"]
+  E3["<b>• Appropriate disclaimer addition</b>"]
+  E4["<b>• Referral generation when needed</b>"]
 
-  %% Safety & Compliance Module (Block)
-  F["<b>🛡️ Safety & Compliance</b><br><span style='font-size:13px;'>Critical Condition Detection<br>Emergency Warning<br>Medical Ethics Compliance<br>Regulatory Adherence</span>"]
+  %% Safety & Compliance Module
+  F["<b>🛡️ Safety & Compliance Module</b>"]
+  F1["<b>• Critical condition detection</b>"]
+  F2["<b>• Emergency warning generation</b>"]
+  F3["<b>• Medical ethics compliance</b>"]
+  F4["<b>• Regulatory adherence</b>"]
 
-  %% Vertical Streamlined Flow
+  %% Vertical Flow Connections
   A --> B
-  B --> C
-  C --> D
-  D --> E
-  E --> F
+  B --> B1
+  B1 --> B2
+  B2 --> B3
+  B3 --> B4
+  B4 --> C
+  C --> C1
+  C1 --> C2
+  C2 --> C3
+  C3 --> C4
+  C4 --> D
+  D --> D1
+  D1 --> D2
+  D2 --> D3
+  D3 --> D4
+  D4 --> E
+  E --> E1
+  E1 --> E2
+  E2 --> E3
+  E3 --> E4
+  E4 --> F
+  F --> F1
+  F1 --> F2
+  F2 --> F3
+  F3 --> F4
 
   %% Enhanced Styling for Vertical, Bold, Blocked Layout
   classDef mainHeader fill:#1a73e8,stroke:#0d47a1,stroke-width:6px,color:#fff,font-weight:bold,font-size:22px
-  classDef moduleBlock fill:#00bfae,stroke:#008e76,stroke-width:4px,color:#fff,font-weight:bold,font-size:18px
+  classDef moduleHeader fill:#00bfae,stroke:#008e76,stroke-width:4px,color:#fff,font-weight:bold,font-size:18px
+  classDef featureItem fill:#ffffff,stroke:#00bfae,stroke-width:2px,color:#1a73e8,font-weight:bold,font-size:15px
 
   class A mainHeader
-  class B,C,D,E,F moduleBlock
+  class B,C,D,E,F moduleHeader
+  class B1,B2,B3,B4,C1,C2,C3,C4,D1,D2,D3,D4,E1,E2,E3,E4,F1,F2,F3,F4 featureItem
 ```
 
 - **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
