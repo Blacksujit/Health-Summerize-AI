@@ -1,0 +1,21 @@
+
+    Patient Info:
+    - Name: Unknown
+    - Age: Unknown
+    - Gender: Unknown
+
+    Diagnoses:
+    No diagnoses provided.
+
+    Medications:
+    No medications prescribed.
+
+    Lab Results:
+    No lab results available.
+
+    Recommendations:
+    No recommendations provided.
+
+    Notes:
+    in this folder all the outputs will be stored in the folder. the files will also be able to be saved in a folder that contains all inputs from the file.
+    
