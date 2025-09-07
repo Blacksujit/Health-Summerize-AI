@@ -131,7 +131,7 @@ Medivance.AI addresses these challenges by providing an all-in-one AI-powered pl
 </p>
 
 <p align="center">
-  <b>Experience the full platform walkthrough, features demonstration, and real-world usage scenarios.</b>
+  <b>Experience the full platform walkthrough, features demonstration, and real-world usage scenarios.(click below image)</b>
 </p>
 
 <div align="center">
