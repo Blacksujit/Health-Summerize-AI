@@ -53,6 +53,10 @@
 
 ---
 
+## Platorm Frontend :
+
+![image](./assets-of-app/frontend_image.png)
+
 ## ❗🏥 Problem Statement :
 
 
