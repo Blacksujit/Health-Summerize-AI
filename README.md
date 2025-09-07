@@ -25,6 +25,25 @@
 
 ---
 
+## 📋 Table of Contents
+
+- [❗🏥 Problem Statement](#-problem-statement-)
+- [🩻💉💡 What Are We Solving?](#-what-are-we-solving-)
+- [🎬 Video Walkthrough](#-video-walkthrough)
+- [🌟 What is Medivance.AI?](#-what-is-medivanceai)
+- [✨ Key Features](#-key-features)
+- [🏗️ System Architecture](#️-system-architecture)
+- [👤 Who Is Medivance.AI For?](#-who-is-medivanceai-for)
+- [🚦 Complete Workflow](#-complete-workflow)
+- [🛠️ Getting Started](#️-getting-started)
+- [🧠 Tech Stack](#-tech-stack)
+- [📱 Roadmap & Upcoming Features](#-roadmap--upcoming-features)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [📬 Contact & Support](#-contact--support)
+
+---
+
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge&logo=github">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
@@ -98,7 +117,23 @@ Medivance.AI addresses these challenges by providing an all-in-one AI-powered pl
 
 ## 🎬 Video Walkthrough
 
-> **Coming Soon:** A full video demo will be available to showcase Medivance.AI in action!
+> **🎥 Watch Medivance.AI in Action!**
+
+<p align="center">
+  <a href="https://youtu.be/eBsirpiF8H8" target="_blank">
+    <img src="https://img.shields.io/badge/YouTube-Watch%20Demo-red?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo on YouTube">
+  </a>
+</p>
+
+<p align="center">
+  <b>Experience the full platform walkthrough, features demonstration, and real-world usage scenarios.</b>
+</p>
+
+<div align="center">
+  <a href="https://youtu.be/eBsirpiF8H8" target="_blank">
+    <img src="./assets-of-app/frontend_image.png" alt="Medivance.AI Demo Video" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 100%; height: auto;">
+  </a>
+</div>
 
 ---
 
@@ -379,12 +414,6 @@ graph TB
     class Input,Processing,Output layer
 ```
 
-- **Frontend:** HTML5, CSS3 (Bootstrap, Tailwind), JavaScript, Animate.css, AOS
-- **Backend:** Python 3.x, Flask, RESTful APIs, SocketIO
-- **AI/ML:** Hugging Face Transformers (BioBERT, T5, GPT-2, Longformer), BLIP for image analysis, spaCy
-- **Database:** Firebase Firestore (real-time), SQLite (local)
-- **Cloud & APIs:** Google Cloud, OpenAI, ElevenLabs, RapidAPI
-
 > For a detailed architecture, see [System Architecture Diagram](Flow-Diagrams/system_architecture_diagram.md)
 
 ---
@@ -445,7 +474,83 @@ graph TB
 
 ---
 
-## 🧠 Technologies Used
+## 🧠 Tech Stack
+
+### 🎨 Frontend Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|----------|
+| **HTML5** | Latest | Semantic markup and structure |
+| **CSS3** | Latest | Advanced styling and animations |
+| **Bootstrap** | 5.3+ | Responsive UI framework |
+| **Tailwind CSS** | 3.x | Utility-first CSS framework |
+| **JavaScript (ES6+)** | Latest | Interactive functionality |
+| **Animate.css** | Latest | CSS animations library |
+| **AOS (Animate On Scroll)** | Latest | Scroll-triggered animations |
+
+### ⚙️ Backend Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|----------|
+| **Python** | 3.x | Core programming language |
+| **Flask** | Latest | Web framework and API server |
+| **RESTful APIs** | - | API architecture |
+| **SocketIO** | Latest | Real-time communication |
+| **PyQt5** | Latest | Desktop application framework |
+
+### 🤖 AI/ML Technologies
+
+| Technology | Model/Version | Purpose |
+|------------|---------------|----------|
+| **Hugging Face Transformers** | Latest | Pre-trained language models |
+| **BioBERT** | - | Medical text understanding |
+| **T5 (Text-to-Text Transfer)** | - | Text summarization |
+| **GPT-2** | - | Text generation |
+| **Longformer** | - | Long document processing |
+| **BLIP** | - | Image analysis and captioning |
+| **spaCy** | Latest | Natural language processing |
+
+### 💾 Database & Storage
+
+| Technology | Type | Purpose |
+|------------|------|----------|
+| **Firebase Firestore** | NoSQL | Real-time cloud database |
+| **SQLite** | SQL | Local database storage |
+| **File System** | - | Document and media storage |
+
+### ☁️ Cloud & External Services
+
+| Service | Purpose |
+|---------|----------|
+| **Google Cloud Platform** | Cloud infrastructure and services |
+| **OpenAI API** | Advanced language models |
+| **ElevenLabs API** | Voice synthesis and generation |
+| **RapidAPI** | Medical data and healthcare APIs |
+| **Google Speech Recognition** | Voice-to-text conversion |
+
+### 🔒 Security & Compliance
+
+| Technology | Purpose |
+|------------|----------|
+| **Environment Variables** | Secure configuration management |
+| **CORS Policy** | Cross-origin security |
+| **Flask Caching** | Performance optimization |
+| **HIPAA Compliance** | Healthcare data protection |
+| **Data Encryption** | Secure data transmission and storage |
+
+### 🛠️ Development Tools
+
+| Tool | Purpose |
+|------|----------|
+| **Git** | Version control |
+| **GitHub** | Code repository and collaboration |
+| **VS Code** | Development environment |
+| **Jupyter Notebooks** | AI model development and testing |
+| **Docker** | Containerization (upcoming) |
+
+---
+
+### 🏷️ Technology Badges
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white">
@@ -455,6 +560,8 @@ graph TB
   <img src="https://img.shields.io/badge/Google%20Cloud-%234285F4.svg?logo=googlecloud&logoColor=white">
   <img src="https://img.shields.io/badge/Bootstrap-5.3-blueviolet?logo=bootstrap">
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38bdf8?logo=tailwindcss">
+  <img src="https://img.shields.io/badge/OpenAI-GPT%20Models-green?logo=openai">
+  <img src="https://img.shields.io/badge/ElevenLabs-Voice%20AI-purple?logo=elevenlabs">
 </p>
 
 ---
