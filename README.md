@@ -28,7 +28,7 @@
 ## 📋 Table of Contents
 
 - [❗🏥 Problem Statement](#-problem-statement-)
-- [🌄 Platorm Frontend](#platorm-frontend-)
+- [🌄 Platform Frontend](#platform-frontend-)
 - [🩻💉💡 What Are We Solving?](#-what-are-we-solving-)
 - [🎬 Video Walkthrough](#-video-walkthrough)
 - [🌟 What is Medivance.AI?](#-what-is-medivanceai)
@@ -54,7 +54,7 @@
 
 ---
 
-## Platorm Frontend :
+## Platform Frontend :
 
 ![image](./assets-of-app/frontend_image.png)
 
